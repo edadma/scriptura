@@ -11,8 +11,7 @@ enablePlugins(ScalaNativePlugin)
 lazy val root = (project in file("."))
   .dependsOn(compositor, texish) // typesetter is included transitively through compositor
   .settings(
-    name := "scriptura", // Root project generates the executable
-    Compile / mainClass := Some("scriptura.Main"), // Define your main class
+    name := "io/github/edadma/scriptura", // Root project generates the executable
     libraryDependencies ++= Seq(
       "com.github.scopt" %%% "scopt" % "4.1.0",
       "com.lihaoyi" %%% "pprint" % "0.9.0",
