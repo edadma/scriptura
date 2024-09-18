@@ -1,11 +1,10 @@
 package io.github.edadma.scriptura
 
 import io.github.edadma.char_reader.CharReader
+import pprint.pprintln
 
 import scala.collection.mutable
 import scala.io
-
-import pprint.pprintln
 
 @main def run(): Unit =
   val config =
