@@ -5,6 +5,8 @@ import io.github.edadma.char_reader.CharReader
 import scala.collection.mutable
 import scala.io
 
+import pprint.pprintln
+
 @main def run(): Unit =
   val config =
     Map(

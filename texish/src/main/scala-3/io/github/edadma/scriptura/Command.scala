@@ -9,6 +9,7 @@ import java.time.temporal.TemporalAccessor
 import java.time.{Instant, ZoneOffset, ZonedDateTime}
 import java.util.regex.Matcher
 import scala.io
+import scala.language.postfixOps
 
 abstract class Command(val name: String, val arity: Int, val eval: Boolean = true)
     extends ((CharReader, Renderer, List[Any], Map[String, Any], Any) => Any) {
@@ -81,7 +82,7 @@ object Command {
         ): Any =
           args match {
             case List(a: BigDecimal, b: BigDecimal)                     => a + b
-            case List(a: collection.Map[_, _], b: collection.Map[_, _]) => (a ++ b) toMap
+            case List(a: collection.Map[_, _], b: collection.Map[_, _]) => (a ++ b).toMap
             case List(a: Seq[_], b: Seq[_])                             => a ++ b
             case List(a: Seq[_], b: Any)                                => a :+ b
             case List(a: Any, b: Seq[_])                                => a +: b
@@ -376,7 +377,7 @@ object Command {
         }
       },
       new Command("escapeOnce", 1) {
-        val regex = """&#?\w+;""" r
+        val regex = """&#?\w+;""".r
 
         def apply(
             pos: CharReader,
@@ -479,9 +480,9 @@ object Command {
             context: Any,
         ): Any = {
           args.head match {
-            case s: String               => s isEmpty
-            case m: collection.Map[_, _] => m isEmpty
-            case s: Seq[_]               => s isEmpty
+            case s: String               => s.isEmpty
+            case m: collection.Map[_, _] => m.isEmpty
+            case s: Seq[_]               => s.isEmpty
             case a                       => problem(pos, s"expected string, map or sequence argument: $a")
           }
         }
@@ -508,8 +509,8 @@ object Command {
             context: Any,
         ): Any =
           args match {
-            case List(s: String) => s last
-            case List(s: Seq[_]) => s last
+            case List(s: String) => s.last
+            case List(s: Seq[_]) => s.last
             case List(a)         => problem(pos, s"expected string or sequence argument: $a")
           }
       },
@@ -599,9 +600,9 @@ object Command {
             context: Any,
         ): Any = {
           args.head match {
-            case s: String               => s nonEmpty
-            case m: collection.Map[_, _] => m nonEmpty
-            case s: Seq[_]               => s nonEmpty
+            case s: String               => s.nonEmpty
+            case m: collection.Map[_, _] => m.nonEmpty
+            case s: Seq[_]               => s.nonEmpty
             case a                       => problem(pos, s"expected string, map or sequence argument: $a")
           }
         }
@@ -713,8 +714,8 @@ object Command {
             context: Any,
         ): Any =
           args match {
-            case List(s: String) => s reverse
-            case List(s: Seq[_]) => s reverse
+            case List(s: String) => s.reverse
+            case List(s: Seq[_]) => s.reverse
             case List(a)         => problem(pos, s"expected string or sequence argument: $a")
           }
       },
@@ -741,9 +742,9 @@ object Command {
             context: Any,
         ): Any =
           args match {
-            case List(s: String)               => s length
-            case List(s: Seq[_])               => s length
-            case List(s: collection.Map[_, _]) => s size
+            case List(s: String)               => s.length
+            case List(s: Seq[_])               => s.length
+            case List(s: collection.Map[_, _]) => s.size
             case List(a)                       => problem(pos, s"expected string or sequence argument: $a")
           }
       },
@@ -785,7 +786,7 @@ object Command {
             }
 
           args match {
-            case List(s: Seq[_]) if on isDefined =>
+            case List(s: Seq[_]) if on.isDefined =>
               s.asInstanceOf[Seq[Map[String, Any]]] sortWith ((a, b) => comp(a(on.get), b(on.get)))
             case List(s: Seq[_]) => s sortWith comp
             case List(a)         => problem(pos, s"expected sequence argument: $a")
@@ -814,8 +815,8 @@ object Command {
             context: Any,
         ): Any =
           args match {
-            case List(s: String) => s tail
-            case List(s: Seq[_]) => s tail
+            case List(s: String) => s.tail
+            case List(s: Seq[_]) => s.tail
             case List(a)         => problem(pos, s"expected string or sequence argument: $a")
           }
       },
@@ -844,7 +845,7 @@ object Command {
         ): Any =
           args match {
             case List(s: String) => ZonedDateTime parse s
-            case List(millis: BigDecimal) if millis isValidLong =>
+            case List(millis: BigDecimal) if millis.isValidLong =>
               Instant ofEpochMilli millis.longValue atOffset ZoneOffset.UTC toZonedDateTime
             case List(a) => problem(pos, s"expected string or integer argument: $a")
           }
@@ -941,7 +942,7 @@ object Command {
             context: Any,
         ): Any =
           args match {
-            case List(s: String) => s toUpperCase
+            case List(s: String) => s.toUpperCase
             case List(a)         => problem(pos, s"expected string argument: $a")
             case _               => problem(pos, "expected string argument")
           }
