@@ -57,23 +57,6 @@ abstract class Renderer(
       case GroupAST(b) => b foreach output
       case v           => output(v)
 
-  /*
-  def render(ast: AST, redirect: Any => Unit = null): Unit =
-    def output(ast: AST): Unit = Option(redirect).getOrElse(out)(deval(ast))
-
-    ast match
-      case GroupAST(b) => b foreach output
-      case _           => output(ast)
-
-  // todo: think about whether the implicit codec is needed
-  def capture(ast: AST)(implicit codec: io.Codec): String = {
-    val bytes = new ByteArrayOutputStream
-
-    render(ast, new PrintStream(bytes, false, codec.name).print)
-    bytes.toString
-  }
-   */
-
   def deval(ast: AST): String = display(eval(ast))
 
   def teval(ast: AST): Boolean = truthy(eval(ast))
