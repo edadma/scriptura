@@ -37,7 +37,7 @@ object Command {
 
   def invoke(renderer: Renderer, lambda: AST, arg: Any): Any = {
     renderer.enterScope()
-    renderer.scopes.top("_") = arg
+    renderer.set("_", arg)
 
     val res = renderer.eval(lambda)
 

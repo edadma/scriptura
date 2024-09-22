@@ -8,6 +8,8 @@ package object texish {
 
   val numberRegex = """-?\d+(\.\d+)?|0x[0-9a-fA-F]+""".r
 
+  case object UNDEFINED { override def toString = "undefined" }
+
 //  def problem( r: Reader, error: String ): Nothing = problem( r.pos, error )
 
   def problem(pos: CharReader, error: String) =
@@ -16,9 +18,7 @@ package object texish {
     else
       sys.error(s"${pos.line}, ${pos.col}: $error" + "\n" + pos.lineText)
 
-  case object nil {
-    override def toString = ""
-  }
+  case object nil { override def toString = "" }
 
   def docroot(name: String, settings: Map[Symbol, Any]) = new File(settings(Symbol("docroot")).toString, name)
 

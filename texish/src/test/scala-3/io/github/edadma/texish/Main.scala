@@ -34,7 +34,11 @@ import pprint.pprintln
             case _               => problem(pos, "expected arguments <string>"),
     )
   val parser = new Parser(Command.builtins ++ commands, actives, blanks = true)
-  val renderer = new Renderer(parser, config, _.mkString, null, x => pprintln(x))
+  val scopes = new mutable.Stack[Map[String, Any]]
+  val renderer =
+    new Renderer(parser, config, _.mkString, null, x => pprintln(x)):
+      override def get(name: String): Any = scopes.top
+
   val src =
     """
     |\verses{asdf qwer}

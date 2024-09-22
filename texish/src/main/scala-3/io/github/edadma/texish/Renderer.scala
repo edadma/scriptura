@@ -5,7 +5,7 @@ import scala.collection.mutable
 import scala.io
 import scala.language.postfixOps
 
-class Renderer(
+abstract class Renderer(
     val parser: Parser,
     val config: Map[String, Any],
     group: Seq[Any] => Any,
@@ -13,32 +13,44 @@ class Renderer(
     val out: Any => Unit,
 ) {
 
-  val scopes = new mutable.Stack[mutable.HashMap[String, Any]]
+  def set(name: String, value: Any): Unit
 
-  def setVar(name: String, value: Any): Unit =
-    scopes find (_ contains name) match {
-      case None        => sys.error(s"variable '$name' not found") // globals(name) = value
-      case Some(scope) => scope(name) = value
-    }
+  def get(name: String): Any
 
-  def getVar(name: String, locals: Map[String, Any]): Any =
-    scopes find (_ contains name) match {
-      case None =>
-        locals get name match {
-          case None =>
-            problem(null, s"variable '$name' not found")
-//            globals get name match {
-//              case None    => problem(null, s"variable '$name' not found") // nil
-//              case Some(v) => v
-//            }
-          case Some(v) => v
-        }
-      case Some(scope) => scope(name)
-    }
+  def set(vars: Seq[(String, Any)]): Unit = vars foreach { (k, v) => set(k, v) }
 
-  def enterScope(): Unit = scopes push new mutable.HashMap
+  val undefined: UNDEFINED.type = UNDEFINED
 
-  def exitScope(): Unit = scopes.pop
+  def enterScope(): Unit
+
+  def exitScope(): Unit
+
+//  val scopes = new mutable.Stack[mutable.HashMap[String, Any]]
+//
+//  def setVar(name: String, value: Any): Unit =
+//    scopes find (_ contains name) match {
+//      case None        => sys.error(s"variable '$name' not found") // globals(name) = value
+//      case Some(scope) => scope(name) = value
+//    }
+//
+//  def getVar(name: String, locals: Map[String, Any]): Any =
+//    scopes find (_ contains name) match {
+//      case None =>
+//        locals get name match {
+//          case None =>
+//            problem(null, s"variable '$name' not found")
+////            globals get name match {
+////              case None    => problem(null, s"variable '$name' not found") // nil
+////              case Some(v) => v
+////            }
+//          case Some(v) => v
+//        }
+//      case Some(scope) => scope(name)
+//    }
+//
+//  def enterScope(): Unit = scopes push new mutable.HashMap
+//
+//  def exitScope(): Unit = scopes.pop
 
   def render(ast: AST, redirect: Any => Unit = null): Unit =
     def output(ast: AST): Unit = Option(redirect).getOrElse(out)(deval(ast))
@@ -62,12 +74,12 @@ class Renderer(
   def eval(ast: AST): Any =
     ast match {
       case SetAST(v, expr) =>
-        setVar(v, eval(expr))
+        set(v, eval(expr))
         nil
       case InAST(cpos, v, epos, expr) =>
         eval(expr) match {
           case s: Seq[_] =>
-            if (scopes.isEmpty) problem(cpos, "not inside a loop")
+//            if (scopes.isEmpty) problem(cpos, "not inside a loop") // todo: need a better way to check if inside a loop
 
             ForGenerator(v, s)
           case a => problem(epos, s"expected a sequence: $a")
@@ -105,7 +117,7 @@ class Renderer(
         }
       case MacroAST(Macro(parms, body), args) =>
         enterScope()
-        scopes.top ++= parms zip args map { case (k, v) => (k, eval(v)) }
+        set(parms zip args map { (k, v) => (k, eval(v)) })
 
         val res = eval(body)
 
@@ -160,15 +172,15 @@ class Renderer(
                   "rindexz" -> (len - idx - 1),
                   "element" -> e,
                 )
-              scopes.top("forloop") = forloop
+              set("forloop", forloop)
 
               in match {
                 case None if e.isInstanceOf[collection.Map[_, _]] =>
                   e.asInstanceOf[collection.Map[String, Any]] foreach { case (k, v) =>
-                    scopes.top(k) = v
+                    set(k, v)
                   }
                 case None    =>
-                case Some(v) => scopes.top(v) = e
+                case Some(v) => set(v, e)
               }
 
               buf ++= deval(body)
@@ -188,13 +200,13 @@ class Renderer(
         exitScope()
         buf.toString
       case BreakAST(pos) =>
-        if (scopes isEmpty)
-          problem(pos, s"not inside a 'for' loop")
+//        if (scopes isEmpty) // todo: inside a loop
+//          problem(pos, s"not inside a 'for' loop")
 
         throw new BreakException
       case ContinueAST(pos) =>
-        if (scopes isEmpty)
-          problem(pos, s"not inside a 'for' loop")
+//        if (scopes isEmpty) // todo: inside a loop
+//          problem(pos, s"not inside a 'for' loop")
 
         throw new ContinueException
       case IfAST(cond, els) =>
@@ -214,7 +226,7 @@ class Renderer(
             case None      => nil
             case Some(yes) => eval(yes)
           }
-      case VariableAST(v) => getVar(v, Map())
+      case VariableAST(v) => get(v)
     }
 
   private class BreakException extends RuntimeException
