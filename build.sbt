@@ -1,7 +1,7 @@
-ThisBuild / organization  := "io.github.edadma"
-ThisBuild / version       := "0.0.1"
-ThisBuild / scalaVersion  := "3.5.0"
-ThisBuild / licenses      += "ISC" -> url("https://opensource.org/licenses/ISC")
+ThisBuild / organization := "io.github.edadma"
+ThisBuild / version := "0.0.1"
+ThisBuild / scalaVersion := "3.5.0"
+ThisBuild / licenses += "ISC" -> url("https://opensource.org/licenses/ISC")
 ThisBuild / versionScheme := Some("semver-spec")
 
 ThisBuild / githubOwner := "edadma"
@@ -18,7 +18,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "com.github.scopt" %% "scopt" % "4.1.0",
       "com.lihaoyi" %% "pprint" % "0.9.0",
-    )
+    ),
   )
 
 lazy val compositor = (project in file("compositor"))
@@ -26,7 +26,7 @@ lazy val compositor = (project in file("compositor"))
   .settings(
     name := "compositor",
     libraryDependencies ++= Seq(
-      //"io.github.edadma" %%% "libcairo" % "0.0.7", // Your custom Cairo facade
+      // "io.github.edadma" %%% "libcairo" % "0.0.7", // Your custom Cairo facade
       "com.lihaoyi" %% "pprint" % "0.9.0",
     ),
     githubOwner := "edadma",
@@ -40,7 +40,7 @@ lazy val texish = (project in file("texish"))
       "org.scalatest" %% "scalatest" % "3.2.19" % "test",
       "io.github.edadma" %% "char-reader" % "0.1.12",
       "com.lihaoyi" %% "pprint" % "0.9.0",
-    )
+    ),
   )
 
 lazy val typesetter = (project in file("typesetter"))
@@ -49,6 +49,5 @@ lazy val typesetter = (project in file("typesetter"))
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % "3.2.19" % "test",
       "com.lihaoyi" %% "pprint" % "0.9.0",
-    )
+    ),
   )
- 

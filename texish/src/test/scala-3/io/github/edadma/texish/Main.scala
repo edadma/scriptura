@@ -1,6 +1,8 @@
 package io.github.edadma.texish
 
 import io.github.edadma.char_reader.CharReader
+import scala.collection.mutable
+
 import pprint.pprintln
 
 @main def run(): Unit =
@@ -36,12 +38,19 @@ import pprint.pprintln
   val parser = new Parser(Command.builtins ++ commands, actives, blanks = true)
   val scopes = new mutable.Stack[Map[String, Any]]
   val renderer =
-    new Renderer(parser, config, _.mkString, null, x => pprintln(x)):
-      override def get(name: String): Any = scopes.top
+    new Renderer(parser, config, null, x => pprintln(x)):
+      def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
 
+      def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
+
+      def enterScope(): Unit = scopes push scopes.top
+
+      def exitScope(): Unit = scopes.pop
   val src =
     """
-    |\verses{asdf qwer}
+    |asdf
+    |
+    |zxcv
     """.trim.stripMargin
   val ast = parser.parse(src)
 
