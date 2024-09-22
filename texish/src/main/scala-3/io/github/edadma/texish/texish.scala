@@ -38,9 +38,9 @@ package object texish {
   def round(n: BigDecimal, scale: Int, config: Map[String, Any]): BigDecimal =
     n.setScale(scale, BigDecimal.RoundingMode.withName(config("rounding").toString))
 
-  def truthy(a: Any): Boolean = a != nil && a != false
+  def truthy(a: Any): Boolean = !falsy(a)
 
-  def falsy(a: Any): Boolean = !truthy(a)
+  def falsy(a: Any): Boolean = a == false || a == nil || a == UNDEFINED || a == null
 
   def display(a: Any): String =
     a match {
