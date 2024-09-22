@@ -38,7 +38,9 @@ import pprint.pprintln
   val parser = new Parser(Command.builtins ++ commands, actives, blanks = true)
   val scopes = new mutable.Stack[Map[String, Any]]
   val renderer =
-    new Renderer(parser, config, null, x => pprintln(x)):
+    new Renderer(parser, config, null):
+      def output(v: Any): Unit = print(display(v))
+
       def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
 
       def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
