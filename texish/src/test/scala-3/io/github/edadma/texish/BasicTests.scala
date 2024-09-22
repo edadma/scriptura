@@ -4,4 +4,7 @@ import org.scalatest._
 import org.scalatest.freespec.AnyFreeSpec
 import org.scalatest.matchers.should.Matchers
 
-class BasicTests extends AnyFreeSpec with Matchers with Testing
+class BasicTests extends AnyFreeSpec with Matchers with Testing:
+  "characters" in {
+    test("asdf") shouldBe "asdf"
+  }
