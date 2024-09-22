@@ -1,5 +1,5 @@
 //@
-package io.github.edadma.scriptura
+package io.github.edadma.texish
 
 import io.github.edadma.char_reader.CharReader
 

@@ -1,4 +1,4 @@
-package io.github.edadma.scriptura
+package io.github.edadma.texish
 
 import java.io.{ByteArrayOutputStream, PrintStream}
 import scala.collection.mutable

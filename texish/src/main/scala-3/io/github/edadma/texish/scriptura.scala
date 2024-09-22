@@ -4,7 +4,7 @@ import io.github.edadma.char_reader.CharReader
 
 import java.io.File
 
-package object scriptura {
+package object texish {
 
   val numberRegex = """-?\d+(\.\d+)?|0x[0-9a-fA-F]+""".r
 
