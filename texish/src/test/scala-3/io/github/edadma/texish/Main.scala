@@ -35,7 +35,7 @@ import pprint.pprintln
             case List(a)         => problem(pos, s"expected arguments <string>: $a")
             case _               => problem(pos, "expected arguments <string>"),
     )
-  val parser = new Parser(Command.builtins ++ commands, actives, blanks = true)
+  val parser = new Parser(commands, actives, blanks = true)
   val scopes = new mutable.Stack[Map[String, Any]]
   val renderer =
     new Renderer(parser, config, null):
