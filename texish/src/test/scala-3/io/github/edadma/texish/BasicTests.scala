@@ -10,5 +10,8 @@ class BasicTests extends AnyFreeSpec with Matchers with Testing:
   }
 
   "simple text" in {
-    test("asdf zxcv") shouldBe "asdf"
+    test("asdf zxcv") shouldBe
+      """
+        |["asdf",  , "zxcv"]
+      """.trim.stripMargin
   }
