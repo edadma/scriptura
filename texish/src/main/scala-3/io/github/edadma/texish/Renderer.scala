@@ -78,7 +78,7 @@ abstract class Renderer(
 
   def teval(ast: AST): Boolean = truthy(eval(ast))
 
-  def eval(ast: AST): Any =
+  infix def eval(ast: AST): Any =
     ast match {
       case SetAST(v, expr) =>
         set(v, eval(expr))
@@ -180,7 +180,7 @@ abstract class Renderer(
               set("forloop", forloop)
 
               in match {
-                case None if e.isInstanceOf[collection.Map[_, _]] =>
+                case None if e.isInstanceOf[collection.Map[?, ?]] =>
                   e.asInstanceOf[collection.Map[String, Any]] foreach { case (k, v) =>
                     set(k, v)
                   }

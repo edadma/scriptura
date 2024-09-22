@@ -39,7 +39,7 @@ import pprint.pprintln
   val scopes = new mutable.Stack[Map[String, Any]]
   val renderer =
     new Renderer(parser, config, null):
-      def output(v: Any): Unit = print(display(v))
+      def output(v: Any): Unit = println(display(v))
 
       def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
 
