@@ -19,11 +19,11 @@ abstract class Renderer(
 
   def set(vars: Seq[(String, Any)]): Unit = vars foreach { (k, v) => set(k, v) }
 
-  val undefined: UNDEFINED.type = UNDEFINED
-
   def enterScope(): Unit
 
   def exitScope(): Unit
+
+  val undefined: UNDEFINED.type = UNDEFINED
 
   def render(ast: AST): Unit =
     eval(ast) match
