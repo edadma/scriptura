@@ -51,6 +51,9 @@ import pprint.pprintln
   val src =
     """
     |asdf
+    |
+    |
+    |zxcv
     """.trim.stripMargin
   val ast = parser.parse(src)
 

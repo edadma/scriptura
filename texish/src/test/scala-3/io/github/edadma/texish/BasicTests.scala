@@ -9,9 +9,30 @@ class BasicTests extends AnyFreeSpec with Matchers with Testing:
     test("asdf") shouldBe "asdf"
   }
 
-  "simple text" in {
+  "simple text 1" in {
     test("asdf zxcv") shouldBe
       """
-      |["asdf",  , "zxcv"]
+      |["asdf", " ", "zxcv"]
+      """.trim.stripMargin
+  }
+
+  "simple text 2" in {
+    test(
+      """asdf
+        |zxcv""".stripMargin,
+    ) shouldBe
+      """
+      |["asdf", "\n", "zxcv"]
+      """.trim.stripMargin
+  }
+
+  "simple text 3" in {
+    test(
+      """asdf
+        |
+        |zxcv""".stripMargin,
+    ) shouldBe
+      """
+      |["asdf", "\n", "\n", "zxcv"]
       """.trim.stripMargin
   }

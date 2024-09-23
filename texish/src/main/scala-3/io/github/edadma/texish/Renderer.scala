@@ -25,33 +25,6 @@ abstract class Renderer(
 
   def exitScope(): Unit
 
-//  val scopes = new mutable.Stack[mutable.HashMap[String, Any]]
-//
-//  def setVar(name: String, value: Any): Unit =
-//    scopes find (_ contains name) match {
-//      case None        => sys.error(s"variable '$name' not found") // globals(name) = value
-//      case Some(scope) => scope(name) = value
-//    }
-//
-//  def getVar(name: String, locals: Map[String, Any]): Any =
-//    scopes find (_ contains name) match {
-//      case None =>
-//        locals get name match {
-//          case None =>
-//            problem(null, s"variable '$name' not found")
-////            globals get name match {
-////              case None    => problem(null, s"variable '$name' not found") // nil
-////              case Some(v) => v
-////            }
-//          case Some(v) => v
-//        }
-//      case Some(scope) => scope(name)
-//    }
-//
-//  def enterScope(): Unit = scopes push new mutable.HashMap
-//
-//  def exitScope(): Unit = scopes.pop
-
   def render(ast: AST): Unit =
     eval(ast) match
       case GroupAST(b) => b foreach output

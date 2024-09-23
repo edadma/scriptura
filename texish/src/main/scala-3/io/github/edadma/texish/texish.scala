@@ -59,6 +59,7 @@ package object texish {
       case null      => "<null>"
       case `nil`     => "<nil>"
       case '\n'      => """"\n""""
+      case ' '       => """" """"
       case _         => display(a)
     }
 
