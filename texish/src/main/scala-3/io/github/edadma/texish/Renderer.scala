@@ -1,7 +1,5 @@
 package io.github.edadma.texish
 
-import java.io.{ByteArrayOutputStream, PrintStream}
-import scala.io
 import scala.language.postfixOps
 
 import pprint.pprintln
