@@ -27,8 +27,8 @@ package object texish {
   def number(a: Any): Option[BigDecimal] =
     a match {
       case s: String if isNumber(s) =>
-        if (s startsWith "0x")
-          Some(BigDecimal(Integer.parseInt(s substring 2, 16)))
+        if (s.startsWith("0x"))
+          Some(BigDecimal(Integer.parseInt(s.substring(2), 16)))
         else
           Some(BigDecimal(s))
       case n: BigDecimal => Some(n)

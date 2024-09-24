@@ -385,7 +385,7 @@ class Parser(
           }
       }
 
-    v indexOf '.' match {
+    v.indexOf('.') match {
       case -1 => VariableAST(v)
 //      case 0 => problem( pos, "illegal variable reference" )
       case dot => fields(dot, VariableAST(v.substring(0, dot)))

@@ -7,6 +7,8 @@ ThisBuild / versionScheme := Some("semver-spec")
 ThisBuild / githubOwner := "edadma"
 ThisBuild / githubRepository := name.value
 
+//ThisBuild / trackInternalDependencies := TrackLevel.TrackIfMissing
+
 publish / skip := true
 
 //enablePlugins(ScalaNativePlugin)
@@ -18,6 +20,7 @@ lazy val root = (project in file("."))
     libraryDependencies ++= Seq(
       "com.github.scopt" %% "scopt" % "4.1.0",
       "com.lihaoyi" %% "pprint" % "0.9.0",
+      "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
     ),
   )
 
