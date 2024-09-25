@@ -14,26 +14,14 @@ publish / skip := true
 //enablePlugins(ScalaNativePlugin)
 
 lazy val root = (project in file("."))
-  .dependsOn(compositor, texish) // typesetter is included transitively through compositor
+  .dependsOn(typesetter, texish)
   .settings(
-    name := "scriptura", // Root project generates the executable
+    name := "scriptura",
     libraryDependencies ++= Seq(
       "com.github.scopt" %% "scopt" % "4.1.0",
       "com.lihaoyi" %% "pprint" % "0.9.0",
       "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
     ),
-  )
-
-lazy val compositor = (project in file("compositor"))
-  .dependsOn(typesetter) // compositor explicitly depends on typesetter
-  .settings(
-    name := "compositor",
-    libraryDependencies ++= Seq(
-      // "io.github.edadma" %%% "libcairo" % "0.0.7", // Your custom Cairo facade
-      "com.lihaoyi" %% "pprint" % "0.9.0",
-    ),
-    githubOwner := "edadma",
-    githubRepository := name.value,
   )
 
 lazy val texish = (project in file("texish"))
