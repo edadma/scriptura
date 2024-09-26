@@ -5,8 +5,8 @@ trait Box {
   def descent: Double
   def height: Double = ascent + descent
   def width: Double
-  def xshift: Double
-  def yshift: Double
+  def hshift: Double
+  def vshift: Double
 
   def draw(t: Typesetter): Unit
 }

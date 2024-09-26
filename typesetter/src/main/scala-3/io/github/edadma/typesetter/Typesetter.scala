@@ -1,6 +1,6 @@
 package io.github.edadma.typesetter
 
-abstract class Typesetter(layout: LayoutManager):
+abstract class Typesetter(doc: Document):
   def setFont(font: Any): Unit
 
   def setColor(color: Color): Unit
