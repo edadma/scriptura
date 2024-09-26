@@ -5,6 +5,13 @@ private val RGBRegex = "#?([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})".r
 case class Color(red: Double, green: Double, blue: Double, alpha: Double):
   def this(r: Int, g: Int, b: Int, a: Int) = this(r / 255.0, g / 255.0, b / 255.0, a / 255.0)
 
+  private def toInt(v: Double) = (v * 255).toInt
+
+  def redInt: Int = toInt(red)
+  def greenInt: Int = toInt(green)
+  def blueInt: Int = toInt(blue)
+  def alphaInt: Int = toInt(alpha)
+
 object Color:
   def hsl(hue: Double, saturation: Double, lightness: Double, alpha: Double): Color =
     /* https://www.w3.org/TR/css-color-3/#hsl-color

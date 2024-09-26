@@ -1,7 +1,9 @@
 package io.github.edadma.typesetter
 
-abstract class Typesetter(doc: Document):
-  def setFont(font: Any): Unit
+abstract class Typesetter:
+  val doc: Document
+
+//  def setFont(font: Any): Unit
 
   def setColor(color: Color): Unit
 
