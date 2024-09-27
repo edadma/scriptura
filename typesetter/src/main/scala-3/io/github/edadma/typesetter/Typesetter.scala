@@ -16,3 +16,14 @@ abstract class Typesetter:
   def fillRect(x: Double, y: Double, width: Double, height: Double): Unit
 
   def loadFont(path: String, size: Float): Any
+
+  def getTextExtents(text: String): TextExtents
+
+case class TextExtents(
+    xBearing: Double,
+    yBearing: Double,
+    width: Double,
+    height: Double,
+    xAdvance: Double,
+    yAdvance: Double,
+)
