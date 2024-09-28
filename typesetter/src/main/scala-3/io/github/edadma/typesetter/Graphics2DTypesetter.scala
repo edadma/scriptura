@@ -1,11 +1,23 @@
 package io.github.edadma.typesetter
 
-import java.awt.Graphics2D
+import java.awt.{Font, Graphics2D, RenderingHints}
 import java.awt.font.{FontRenderContext, TextLayout}
 import java.awt.geom.AffineTransform
+import java.io.File
 
 class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
 //  def setFont(font: java.awt.Font): Unit = g.setFont(font)
+
+  g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+  g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+
+  private var font =
+    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
+//    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/GreatVibes-Regular.ttf")).deriveFont(50f)
+
+  g.setFont(font)
+
+  private val frc = g.getFontRenderContext
 
   def setColor(color: Color): Unit =
     g.setColor(new java.awt.Color(color.redInt, color.greenInt, color.blueInt, color.alphaInt))
@@ -25,12 +37,20 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   }
 
   def getTextExtents(text: String): TextExtents =
-    val frc = new FontRenderContext(new AffineTransform(), true, true)
-    val layout = new TextLayout(text, g.getFont, frc)
+//    val glyphs = font.createGlyphVector(frc, text)
+//    val lb = glyphs.getLogicalBounds
+//    val vb = glyphs.getVisualBounds
+//
+//    println(lb.getX)
+//    println(lb.getWidth)
+//    println(vb.getWidth)
+//    TextExtents(lb.getX, vb.getY, vb.getWidth, vb.getHeight, lb.getWidth, 0)
+
+    val layout = new TextLayout(text, font, frc)
     val bounds = layout.getBounds
 
-    val ascent = layout.getAscent
-    val descent = layout.getDescent
+    val ascent = -bounds.getY
+//    val descent = layout.getDescent
     val width = bounds.getWidth
     val height = bounds.getHeight
     val advance = layout.getAdvance
