@@ -21,7 +21,7 @@ object Main extends SimpleSwingApplication:
 
         builder
           .addBox(new CharBox(t, "Hello", null, Color("black")))
-          .addGlue()
+          .addGlue(5, stretch = 10)
           .addBox(
             new CharBox(
               t,
@@ -31,7 +31,7 @@ object Main extends SimpleSwingApplication:
             ),
           )
 
-        val line = builder.buildTo(270)
+        val line = builder.buildTo(290)
 
         line.draw(t, 10, 10 + line.ascent)
         println(line.width)
