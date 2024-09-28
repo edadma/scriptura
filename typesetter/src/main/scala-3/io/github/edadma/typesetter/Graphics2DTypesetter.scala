@@ -12,8 +12,8 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
 
   private var font =
-    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
-//    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/GreatVibes-Regular.ttf")).deriveFont(50f)
+    //    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
+    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/GreatVibes-Regular.ttf")).deriveFont(50f)
 
   g.setFont(font)
 
