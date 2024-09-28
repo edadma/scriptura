@@ -1,3 +1,8 @@
 package io.github.edadma.typesetter
 
-class Document(t: Typesetter)
+import scala.compiletime.uninitialized
+
+abstract class Document:
+  protected var t: Typesetter = uninitialized
+
+  def setTypesetter(typesetter: Typesetter): Unit = t = typesetter

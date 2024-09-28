@@ -40,5 +40,6 @@ lazy val typesetter = (project in file("typesetter"))
     libraryDependencies ++= Seq(
       "org.scalatest" %% "scalatest" % "3.2.19" % "test",
       "com.lihaoyi" %% "pprint" % "0.9.0",
+      "org.scala-lang.modules" %% "scala-swing" % "3.0.0",
     ),
   )

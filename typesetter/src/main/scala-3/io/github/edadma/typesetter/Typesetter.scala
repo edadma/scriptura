@@ -19,6 +19,8 @@ abstract class Typesetter:
 
   def getTextExtents(text: String): TextExtents
 
+  doc.setTypesetter(this)
+
 case class TextExtents(
     xBearing: Double,
     yBearing: Double,
