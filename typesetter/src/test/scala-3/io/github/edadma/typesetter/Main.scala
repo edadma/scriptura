@@ -21,7 +21,7 @@ object Main extends SimpleSwingApplication:
 
         builder
           .addBox(new CharBox(t, "Hello", null, Color("black")))
-          .addGlue(5, stretch = 10)
+          .addGlue(5, stretch = 30)
           .addBox(
             new CharBox(
               t,
