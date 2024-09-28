@@ -16,15 +16,17 @@ object Main extends SimpleSwingApplication:
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
-        // Pass the Graphics2D to your custom Graphics2DTypesetter
         val t = new Graphics2DTypesetter(new TestDocument, g)
+        val builder = new HBoxBuilder
 
-        // Example CharBox rendering
-        val hello = new CharBox(t, "Hello", null, Color("black"))
-        val world = new CharBox(t, "World", null, Color("black"))
-        val line = HBox(List(hello, HSkipBox(10), world))
+        builder addBox new CharBox(t, "Hello", null, Color("black"))
+        builder.addGlue()
+        builder addBox new CharBox(t, "World", null, Color("black"))
+
+        val line = builder.buildTo(270)
 
         line.draw(t, 10, 10 + line.ascent)
+        println(line.width)
       }
     }
 
