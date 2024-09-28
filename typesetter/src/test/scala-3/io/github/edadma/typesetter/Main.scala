@@ -20,6 +20,7 @@ object Main extends SimpleSwingApplication:
         val builder = new HBoxBuilder
 
         builder
+          .addBox(FilGlueBox(0))
           .addBox(new CharBox(t, "Hello", null, Color("black")))
           .addGlue(5, stretch = 30)
           .addBox(
