@@ -20,10 +20,11 @@ object Main extends SimpleSwingApplication:
         val t = new Graphics2DTypesetter(new TestDocument, g)
 
         // Example CharBox rendering
-        val charBox = new CharBox(t, "Testing", null, Color("black"))
+        val hello = new CharBox(t, "Hello", null, Color("black"))
+        val world = new CharBox(t, "World", null, Color("black"))
+        val line = HBox(List(hello, HSkipBox(10), world))
 
-        // Draw the CharBox
-        charBox.draw(t, 10, 10 + charBox.ascent)
+        line.draw(t, 10, 10 + line.ascent)
       }
     }
 

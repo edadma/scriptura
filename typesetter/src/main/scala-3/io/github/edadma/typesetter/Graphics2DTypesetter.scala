@@ -37,15 +37,6 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   }
 
   def getTextExtents(text: String): TextExtents =
-//    val glyphs = font.createGlyphVector(frc, text)
-//    val lb = glyphs.getLogicalBounds
-//    val vb = glyphs.getVisualBounds
-//
-//    println(lb.getX)
-//    println(lb.getWidth)
-//    println(vb.getWidth)
-//    TextExtents(lb.getX, vb.getY, vb.getWidth, vb.getHeight, lb.getWidth, 0)
-
     val layout = new TextLayout(text, font, frc)
     val bounds = layout.getBounds
 
@@ -63,3 +54,12 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
       xAdvance = advance,
       yAdvance = 0, // In horizontal typesetting, yAdvance is 0
     )
+
+//    val glyphs = font.createGlyphVector(frc, text)
+//    val lb = glyphs.getLogicalBounds
+//    val vb = glyphs.getVisualBounds
+//
+//    println(lb.getX)
+//    println(lb.getWidth)
+//    println(vb.getWidth)
+//    TextExtents(lb.getX, vb.getY, vb.getWidth, vb.getHeight, lb.getWidth, 0)
