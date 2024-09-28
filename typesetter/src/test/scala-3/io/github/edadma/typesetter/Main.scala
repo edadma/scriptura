@@ -19,9 +19,17 @@ object Main extends SimpleSwingApplication:
         val t = new Graphics2DTypesetter(new TestDocument, g)
         val builder = new HBoxBuilder
 
-        builder addBox new CharBox(t, "Hello", null, Color("black"))
-        builder.addGlue()
-        builder addBox new CharBox(t, "World", null, Color("black"))
+        builder
+          .addBox(new CharBox(t, "Hello", null, Color("black")))
+          .addGlue()
+          .addBox(
+            new CharBox(
+              t,
+              "World",
+              null,
+              Color("black"),
+            ),
+          )
 
         val line = builder.buildTo(270)
 
