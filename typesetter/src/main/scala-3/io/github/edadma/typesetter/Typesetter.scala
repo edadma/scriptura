@@ -1,7 +1,15 @@
 package io.github.edadma.typesetter
 
+import scala.compiletime.uninitialized
+
 abstract class Typesetter:
   val doc: Document
+
+  var currentFontSize: Double = uninitialized
+  var currentFontXHeight: Double = uninitialized
+  var currentDPI: Double = uninitialized
+
+  UnitConverter.t = this
 
 //  def setFont(font: Any): Unit
 

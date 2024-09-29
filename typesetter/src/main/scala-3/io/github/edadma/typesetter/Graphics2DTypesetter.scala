@@ -1,12 +1,14 @@
 package io.github.edadma.typesetter
 
-import java.awt.{Font, Graphics2D, RenderingHints}
+import java.awt.{Font, Graphics2D, RenderingHints, Toolkit}
 import java.awt.font.{FontRenderContext, TextLayout}
 import java.awt.geom.AffineTransform
 import java.io.File
 
 class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
 //  def setFont(font: java.awt.Font): Unit = g.setFont(font)
+
+  currentDPI = Toolkit.getDefaultToolkit.getScreenResolution
 
   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
   g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
@@ -17,6 +19,7 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   // Font.createFont(Font.TRUETYPE_FONT, new File("fonts/cm/cmunrm.ttf")).deriveFont(30f)
 
   g.setFont(font)
+  currentFontSize = 24
 
   private val frc = g.getFontRenderContext
 
