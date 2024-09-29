@@ -7,8 +7,8 @@ class HBoxBuilder:
   private val boxes = new ArrayBuffer[Box]
 
   // Add a box to the builder
-  def addBox(box: Box): HBoxBuilder =
-    boxes += box
+  def addBox(b: Box): HBoxBuilder =
+    boxes += b
     this // Return the builder for chaining
 
   // Add a flexible GlueBox
@@ -33,18 +33,18 @@ class HBoxBuilder:
       if (delta != 0) {
         println("Warning: No glue available to adjust the width.")
       }
-      return HBox(boxes.toList)
+      return HBox(boxes.toList.asInstanceOf[List[Box]])
     }
 
     // Step 3: Determine the maximum glue order present
-    val maxOrder = glueBoxesWithIndices.map(_._1.typ.order).max
+    val maxOrder = glueBoxesWithIndices.map(_._1.order).max
 
     // Function to distribute space (stretch or shrink)
     def distributeSpace(
-        remaining: Double,
-        glueBoxes: scala.collection.Seq[(GlueBox, Int)],
-        totalFlex: Double,
-        adjust: (GlueBox, Double) => Double,
+                         remaining: Double,
+                         glueBoxes: scala.collection.Seq[(GlueBox, Int)],
+                         totalFlex: Double,
+                         adjust: (GlueBox, Double) => Double,
     ): Double = {
       if (totalFlex == 0) remaining
       else {
@@ -63,7 +63,7 @@ class HBoxBuilder:
     var currentOrder = maxOrder
 
     while ((remaining > 1e-6 || remaining < -1e-6) && currentOrder >= 0) {
-      val currentGlueBoxes = glueBoxesWithIndices.filter(_._1.typ.order == currentOrder)
+      val currentGlueBoxes = glueBoxesWithIndices.filter(_._1.order == currentOrder)
 
       if (delta > 0) {
         // Stretching

@@ -1,14 +1,8 @@
 package io.github.edadma.typesetter
 
-enum GlueType(val order: Int, val name: String):
-  case Ordinary extends GlueType(0, "Ordinary")
-  case Fil extends GlueType(1, "Fil")
-  case Fill extends GlueType(2, "Fill")
-  case Filll extends GlueType(3, "Filll")
-
 abstract class GlueBox(val naturalWidth: Double, val stretch: Double, val shrink: Double) extends Box:
-
-  val typ: GlueType
+  val order: Int
+  val name: String
 
   val ascent: Double = 0
   val descent: Double = 0
@@ -20,17 +14,24 @@ abstract class GlueBox(val naturalWidth: Double, val stretch: Double, val shrink
     // No drawing needed for glue
     ()
 
-  override def toString: String = s"${typ.name}Box(naturalWidth=$naturalWidth, stretch=$stretch, shrink=$shrink)"
+  override def toString: String = s"${name}Glue(naturalWidth=$naturalWidth, stretch=$stretch, shrink=$shrink)"
 
 class OrdinaryGlueBox(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0)
     extends GlueBox(naturalWidth, stretch, shrink):
-  val typ: GlueType = GlueType.Ordinary
+  val order: Int = 0
+  val name: String = "Ordinary"
 
-class FilGlueBox(naturalWidth: Double = 0) extends GlueBox(naturalWidth, 1, 1):
-  val typ: GlueType = GlueType.Fil
+class FilGlueBox(naturalWidth: Double = 0, stretch: Double = 1, shrink: Double = 1)
+    extends GlueBox(naturalWidth, stretch, shrink):
+  val order: Int = 1
+  val name: String = "Fil"
 
-class FillGlueBox(naturalWidth: Double = 0) extends GlueBox(naturalWidth, 1, 1):
-  val typ: GlueType = GlueType.Fill
+class FillGlueBox(naturalWidth: Double = 0, stretch: Double = 1, shrink: Double = 1)
+    extends GlueBox(naturalWidth, stretch, shrink):
+  val order: Int = 2
+  val name: String = "Fill"
 
-class FilllGlueBox(naturalWidth: Double = 0) extends GlueBox(naturalWidth, 1, 1):
-  val typ: GlueType = GlueType.Filll
+class FilllGlueBox(naturalWidth: Double = 0, stretch: Double = 1, shrink: Double = 1)
+    extends GlueBox(naturalWidth, stretch, shrink):
+  val order: Int = 3
+  val name: String = "Filll"
