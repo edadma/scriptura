@@ -26,11 +26,11 @@ class OrdinaryGlueBox(naturalWidth: Double, stretch: Double = 0, shrink: Double 
     extends GlueBox(naturalWidth, stretch, shrink):
   val typ: GlueType = GlueType.Ordinary
 
-class FilGlueBox(naturalWidth: Double) extends GlueBox(naturalWidth, Double.MaxValue, Double.MinValue):
+class FilGlueBox(naturalWidth: Double = 0) extends GlueBox(naturalWidth, 1, 1):
   val typ: GlueType = GlueType.Fil
 
-class FillGlueBox(naturalWidth: Double) extends GlueBox(naturalWidth, Double.MaxValue, Double.MinValue):
+class FillGlueBox(naturalWidth: Double = 0) extends GlueBox(naturalWidth, 1, 1):
   val typ: GlueType = GlueType.Fill
 
-class FilllGlueBox(naturalWidth: Double) extends GlueBox(naturalWidth, Double.MaxValue, Double.MinValue):
+class FilllGlueBox(naturalWidth: Double = 0) extends GlueBox(naturalWidth, 1, 1):
   val typ: GlueType = GlueType.Filll

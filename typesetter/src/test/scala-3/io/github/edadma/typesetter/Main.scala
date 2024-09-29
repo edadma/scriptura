@@ -20,9 +20,9 @@ object Main extends SimpleSwingApplication:
         val builder = new HBoxBuilder
 
         builder
-          .addBox(FilGlueBox(0))
+          .addBox(FilGlueBox())
           .addBox(new CharBox(t, "Hello", null, Color("black")))
-          .addGlue(5, stretch = 30)
+          .addGlue(5, 1)
           .addBox(
             new CharBox(
               t,
@@ -31,8 +31,9 @@ object Main extends SimpleSwingApplication:
               Color("black"),
             ),
           )
+          .addBox(FilGlueBox())
 
-        val line = builder.buildTo(290)
+        val line = builder.buildTo(300)
 
         line.draw(t, 10, 10 + line.ascent)
         println(line.width)
