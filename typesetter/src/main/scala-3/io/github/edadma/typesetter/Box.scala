@@ -9,8 +9,8 @@ trait Box:
 
   def draw(t: Typesetter, x: Double, y: Double): Unit
 
-  def box(t: Typesetter, x: Double, y: Double): Unit =
+  def box(t: Typesetter, x: Double, y: Double, color: String = "red"): Unit =
     t.setColor(Color("red"))
     t.drawRect(x, y - ascent, width, height)
-    t.setColor(Color("aqua"))
+    t.setColor(Color("blue"))
     t.drawLine(x, y, x + width, y)

@@ -11,19 +11,19 @@ object Main extends SimpleSwingApplication:
     title = "Simple Swing Example"
 
     contents = new Panel {
-      preferredSize = new Dimension(400, 400)
+      preferredSize = new Dimension(800, 500)
 
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
         val t = new Graphics2DTypesetter(new TestDocument, g)
-        val builder = new HBoxBuilder
+        val b1 = new HBoxBuilder
 
-        builder.addFil
-          .addBox(new CharBox(t, "Hello", null, Color("black")))
+        b1.addFil
+          .addBox(CharBox(t, "Hello", null, Color("black")))
           .addGlue(5, 1)
           .addBox(
-            new CharBox(
+            CharBox(
               t,
               "Scriptura",
               null,
@@ -31,11 +31,23 @@ object Main extends SimpleSwingApplication:
             ),
           )
           .addFil
+        val b2 = new HBoxBuilder
 
-        val line = builder.buildTo(300)
+        b2.addBox(
+          CharBox(
+            t,
+            "line 2",
+            null,
+            Color("black"),
+          ),
+        )
 
-        line.draw(t, 10, 10 + line.ascent)
-        println(line.width)
+        val line1 = b1.buildTo(700)
+        val line2 = b2.buildTo(700)
+        val vb = new VBoxBuilder
+        val vbox = vb.addBox(line1).addBox(line2).build
+
+        vbox.draw(t, 10, 10 + vbox.ascent)
       }
     }
 
