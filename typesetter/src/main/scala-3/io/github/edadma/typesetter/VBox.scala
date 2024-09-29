@@ -11,7 +11,7 @@ class VBox(val boxes: List[Box]) extends Box:
   def draw(t: Typesetter, x: Double, y: Double): Unit =
     box(t, x, y)
 
-    var currentY = y
+    var currentY = if boxes.isEmpty then y else y - ascent + boxes.head.ascent
 
     for box <- boxes do
       box.draw(t, x, currentY)

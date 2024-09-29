@@ -33,14 +33,16 @@ object Main extends SimpleSwingApplication:
           .addFil
         val b2 = new HBoxBuilder
 
-        b2.addBox(
-          CharBox(
-            t,
-            "line 2",
-            null,
-            Color("black"),
-          ),
-        )
+        b2.addFil
+          .addBox(
+            CharBox(
+              t,
+              "line 2",
+              null,
+              Color("black"),
+            ),
+          )
+          .addFil
 
         val line1 = b1.buildTo(700)
         val line2 = b2.buildTo(700)
