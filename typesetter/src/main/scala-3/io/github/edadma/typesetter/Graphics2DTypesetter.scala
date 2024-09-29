@@ -13,7 +13,8 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
 
   private var font =
     //    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
-    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/GreatVibes-Regular.ttf")).deriveFont(50f)
+    // Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MonteCarlo-Regular.ttf")).deriveFont(50f)
+    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/cm/cmunrm.ttf")).deriveFont(30f)
 
   g.setFont(font)
 
