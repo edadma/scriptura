@@ -1,11 +1,12 @@
 package io.github.edadma.typesetter
 
-import java.awt.{Font, Graphics2D, RenderingHints, Toolkit}
-import java.awt.font.{FontRenderContext, TextLayout}
-import java.awt.geom.AffineTransform
+import java.awt.{Font => JFont, Graphics2D, RenderingHints, Toolkit}
+import java.awt.font.TextLayout
 import java.io.File
 
 class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
+  type GenericFont = JFont
+
 //  def setFont(font: java.awt.Font): Unit = g.setFont(font)
 
   currentDPI = Toolkit.getDefaultToolkit.getScreenResolution
@@ -14,9 +15,10 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
 
   private var font =
-    Font.createFont(Font.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
-  // Font.createFont(Font.TRUETYPE_FONT, new File("fonts/MonteCarlo-Regular.ttf")).deriveFont(50f)
+    // JFont.createFont(JFont.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
+    loadFont("fonts/MonteCarlo-Regular.ttf").deriveFont(50f)
   // Font.createFont(Font.TRUETYPE_FONT, new File("fonts/cm/cmunrm.ttf")).deriveFont(30f)
+  //     loadFont("fonts/Roboto-Regular.ttf").deriveFont(24f)
 
   g.setFont(font)
   currentFontSize = 24
@@ -34,11 +36,7 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   def fillRect(x: Double, y: Double, width: Double, height: Double): Unit =
     g.fillRect(x.toInt, y.toInt, width.toInt, height.toInt)
 
-  def loadFont(path: String, size: Float): java.awt.Font = {
-    val fontFile = new java.io.File(path)
-    val font = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile).deriveFont(size)
-    font
-  }
+  def loadFont(path: String): JFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new java.io.File(path))
 
   def getTextExtents(text: String): TextExtents =
     val layout = new TextLayout(text, font, frc)
