@@ -4,7 +4,7 @@ import scala.collection.mutable.{ArrayBuffer, ListBuffer}
 
 class HBoxBuilder:
 
-  private var boxes = new ArrayBuffer[Box]
+  private val boxes = new ArrayBuffer[Box]
 
   // Add a box to the builder
   def addBox(box: Box): HBoxBuilder =
@@ -13,8 +13,9 @@ class HBoxBuilder:
 
   // Add a flexible GlueBox
   def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): HBoxBuilder =
-    boxes += new OrdinaryGlueBox(naturalWidth, stretch, shrink)
-    this
+    addBox(new OrdinaryGlueBox(naturalWidth, stretch, shrink))
+
+  def addFil: HBoxBuilder = addBox(new FilGlueBox())
 
   // Produce an HBox of a specific width
   def buildTo(width: Double): HBox = {
