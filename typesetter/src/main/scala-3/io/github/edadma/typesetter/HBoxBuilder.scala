@@ -1,6 +1,6 @@
 package io.github.edadma.typesetter
 
-import scala.collection.mutable.{ArrayBuffer, ListBuffer}
+import scala.collection.mutable.ArrayBuffer
 
 class HBoxBuilder:
 
@@ -41,10 +41,10 @@ class HBoxBuilder:
 
     // Function to distribute space (stretch or shrink)
     def distributeSpace(
-                         remaining: Double,
-                         glueBoxes: scala.collection.Seq[(GlueBox, Int)],
-                         totalFlex: Double,
-                         adjust: (GlueBox, Double) => Double,
+        remaining: Double,
+        glueBoxes: scala.collection.Seq[(GlueBox, Int)],
+        totalFlex: Double,
+        adjust: (GlueBox, Double) => Double,
     ): Double = {
       if (totalFlex == 0) remaining
       else {
