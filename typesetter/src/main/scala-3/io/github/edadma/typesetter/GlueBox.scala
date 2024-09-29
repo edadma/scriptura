@@ -6,7 +6,7 @@ abstract class GlueBox(val naturalWidth: Double, val stretch: Double, val shrink
 
   val ascent: Double = 0
   val descent: Double = 0
-  val height: Double = 0
+  val height: Double = naturalWidth
   val width: Double = naturalWidth // Initially, it's the natural width
   val xAdvance: Double = naturalWidth // Same as width initially
 
