@@ -3,7 +3,7 @@ package io.github.edadma.typesetter
 import scala.compiletime.uninitialized
 
 object UnitConverter:
-  var t: Typesetter = uninitialized
+  private[typesetter] var t: Typesetter = uninitialized
 
   def pointsToPixels(points: Double): Double = (points / 72.0) * t.currentDPI
 
