@@ -13,9 +13,9 @@ trait ListBoxBuilder:
 
   // Add a flexible GlueBox
   def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): this.type =
-    addBox(new OrdinaryGlueBox(naturalWidth, stretch, shrink))
+    addBox(Glue(naturalWidth, stretch, shrink))
 
-  def addFil: this.type = addBox(new FilGlueBox())
+  def addFil(): this.type = addBox(FilGlue)
 
   protected def buildTo(size: Double, boxes: ArrayBuffer[Box], measure: Box => Double, skip: Double => Box): List[Box] =
     // Step 1: Calculate the natural size of all boxes
@@ -23,7 +23,7 @@ trait ListBoxBuilder:
     val delta = size - naturalSize
 
     // Step 2: Collect all GlueBoxes with their indices
-    val glueBoxesWithIndices = boxes.zipWithIndex.collect { case (g: GlueBox, idx) =>
+    val glueBoxesWithIndices = boxes.zipWithIndex.collect { case (g: Glue, idx) =>
       (g, idx)
     }
 
@@ -41,9 +41,9 @@ trait ListBoxBuilder:
     // Function to distribute space (stretch or shrink)
     def distributeSpace(
         remaining: Double,
-        glueBoxes: scala.collection.Seq[(GlueBox, Int)],
+        glueBoxes: scala.collection.Seq[(Glue, Int)],
         totalFlex: Double,
-        adjust: (GlueBox, Double) => Double,
+        adjust: (Glue, Double) => Double,
     ): Double = {
       if (totalFlex == 0) remaining
       else {

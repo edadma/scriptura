@@ -12,5 +12,5 @@ trait Box:
   def box(t: Typesetter, x: Double, y: Double, color: String = "red"): Unit =
     t.setColor(Color("blue"))
     t.drawLine(x, y, x + width, y)
-    t.setColor(Color("red"))
+    t.setColor(Color(color))
     t.drawRect(x, y - ascent, width, height)

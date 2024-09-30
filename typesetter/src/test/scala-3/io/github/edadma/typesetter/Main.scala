@@ -19,7 +19,7 @@ object Main extends SimpleSwingApplication:
         val t = new Graphics2DTypesetter(new TestDocument, g)
         val b1 = new HBoxBuilder
 
-        b1.addFil
+        b1.addFil()
           .addBox(CharBox(t, "Hello"))
           .addGlue(5, 1)
           .addBox(
@@ -28,17 +28,17 @@ object Main extends SimpleSwingApplication:
               "Scriptura",
             ),
           )
-          .addFil
+          .addFil()
         val b2 = new HBoxBuilder
 
-        b2.addFil
+        b2.addFil()
           .addBox(
             CharBox(
               t,
               "line 2",
             ),
           )
-          .addFil
+          .addFil()
 
         val line1 = b1.buildTo(700)
         val line2 = b2.buildTo(700)

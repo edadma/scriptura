@@ -5,4 +5,4 @@ trait SkipBox extends Box:
   val descent: Double = 0
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
-    box(t, x, y, "crimson")
+    box(t, x, y, "lightgreen")

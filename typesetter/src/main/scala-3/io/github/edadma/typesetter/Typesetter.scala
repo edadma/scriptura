@@ -22,6 +22,7 @@ abstract class Typesetter:
   )
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
+  protected val scopes = new mutable.Stack[Map[String, Any]]
 
   def setFont(font: Any /*, size: Double*/ ): Unit
 
@@ -159,6 +160,14 @@ abstract class Typesetter:
   )
 
   currentFont = makeFont("gentium", 50, Set("regular"))
+
+  def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
+
+  def getGlue(name: String): Glue = get(name).asInstanceOf[Glue]
+
+  def getNumber(name: String): Double = get(name).asInstanceOf[Double]
+
+  def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
