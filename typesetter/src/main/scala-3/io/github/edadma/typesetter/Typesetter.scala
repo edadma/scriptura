@@ -24,6 +24,8 @@ abstract class Typesetter:
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected val scopes = new mutable.Stack[Map[String, Any]]
 
+  scopes push Map.empty
+
   def setFont(font: Any /*, size: Double*/ ): Unit
 
   def setColor(color: Color): Unit
@@ -42,9 +44,11 @@ abstract class Typesetter:
 
   def makeFont(font: Any, size: Double): Any
 
+  def charWidth(font: Any, c: Char): Double
+
   doc.setTypesetter(this)
 
-  def setFont(f: Font): Unit = setFont(f.fontFace /*, f.size*/ )
+  def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
 
   loadTypeface(
     "noto",
@@ -161,6 +165,31 @@ abstract class Typesetter:
 
   currentFont = makeFont("gentium", 50, Set("regular"))
 
+  println(charWidth(currentFont.renderFont, ' '))
+
+  set(
+    "baselineskip" -> Glue(currentFont.size * 1.2 * pt),
+    "lineskip" -> Glue(1),
+    "lineskiplimit" -> 0,
+    "spaceskip" -> Glue(currentFont.space),
+    "xspaceskip" -> Glue(currentFont.space * 1.5),
+    "hsize" -> 800,
+    "vsize" -> 500,
+    "parindent" -> in / 2,
+    "parfillskip" -> FilGlue,
+    "leftskip" -> ZeroGlue,
+    "rightskip" -> ZeroGlue,
+    "parskip" -> FilGlue,
+    "hangindent" -> 0,
+    "hangafter" -> 1,
+  )
+
+  def in: Double = currentDPI
+
+  def pt: Double = in / 72
+
+  def cm: Double = in / 2.54
+
   def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
 
   def getGlue(name: String): Glue = get(name).asInstanceOf[Glue]
@@ -168,6 +197,8 @@ abstract class Typesetter:
   def getNumber(name: String): Double = get(name).asInstanceOf[Double]
 
   def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
+
+  def set(pairs: (String, Any)*): Unit = scopes(0) ++= pairs
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
@@ -217,8 +248,9 @@ abstract class Typesetter:
               s"font for typeface '$typeface' with style '${styleSet.mkString(", ")}' has not been loaded",
             ),
           )
+        val derivedFont = makeFont(font, size)
 
-        Font(typeface, size, 0, styleSet, makeFont(font, size), baseline, ligatures)
+        Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
 
 end Typesetter
 

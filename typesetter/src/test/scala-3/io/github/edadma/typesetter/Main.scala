@@ -21,7 +21,7 @@ object Main extends SimpleSwingApplication:
 
         b1.addFil()
           .addBox(CharBox(t, "Hello"))
-          .addGlue(5, 1)
+          .addGlue(t.currentFont.space, 1)
           .addBox(
             CharBox(
               t,

@@ -6,7 +6,7 @@ class Font(
     //                 extents: FontExtents,
     val space: Double,
     val style: Set[String],
-    val fontFace: Any,
+    val renderFont: Any,
     val baseline: Option[Double],
     val ligatures: Set[String],
 )
