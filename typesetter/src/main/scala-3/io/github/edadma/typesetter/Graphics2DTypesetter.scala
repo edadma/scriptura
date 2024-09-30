@@ -19,7 +19,7 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
 
   private val frc = g.getFontRenderContext
 
-  def setFont(font: Any, size: Double): Unit = g.setFont(font.asInstanceOf[JFont].deriveFont(size.toFloat))
+  def setFont(font: Any /*, size: Double*/ ): Unit = g.setFont(font.asInstanceOf[JFont] /*.deriveFont(size.toFloat)*/ )
 
   def setColor(color: Color): Unit =
     g.setColor(new java.awt.Color(color.redInt, color.greenInt, color.blueInt, color.alphaInt))

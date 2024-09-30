@@ -23,7 +23,7 @@ abstract class Typesetter:
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
 
-  def setFont(font: Any, size: Double): Unit
+  def setFont(font: Any /*, size: Double*/ ): Unit
 
   def setColor(color: Color): Unit
 
@@ -43,7 +43,7 @@ abstract class Typesetter:
 
   doc.setTypesetter(this)
 
-  def setFont(f: Font): Unit = setFont(f.fontFace, f.size)
+  def setFont(f: Font): Unit = setFont(f.fontFace /*, f.size*/ )
 
   loadTypeface(
     "noto",
