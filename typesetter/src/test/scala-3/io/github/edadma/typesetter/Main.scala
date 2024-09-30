@@ -20,9 +20,9 @@ object Main extends SimpleSwingApplication:
         val b1 = new HBoxBuilder
 
         b1.addFil()
-          .addBox(CharBox(t, "Hello"))
+          .add(CharBox(t, "Hello"))
           .addGlue(t.currentFont.space, 1)
-          .addBox(
+          .add(
             CharBox(
               t,
               "Scriptura",
@@ -32,7 +32,7 @@ object Main extends SimpleSwingApplication:
         val b2 = new HBoxBuilder
 
         b2.addFil()
-          .addBox(
+          .add(
             CharBox(
               t,
               "line 2",
@@ -43,7 +43,7 @@ object Main extends SimpleSwingApplication:
         val line1 = b1.buildTo(700)
         val line2 = b2.buildTo(700)
         val vb = new VBoxBuilder
-        val vbox = vb.addBox(line1).addBox(line2).build
+        val vbox = vb.add(line1).add(line2).build
 
         vbox.draw(t, 10, 10 + vbox.ascent)
       }

@@ -22,12 +22,12 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
     var firstLine = true
 
     while boxes.nonEmpty do
-      val hbox = new HBox
+      val hbox = new HBoxBuilder
 
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.width + boxes.head.width <= pageMode.result.lineWidth then
+          if hbox.size(_.width) + boxes.head.width <= pageMode.result.lineWidth then
             hbox add boxes.remove(0)
             line()
           else

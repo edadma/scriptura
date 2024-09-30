@@ -6,16 +6,18 @@ import scala.language.postfixOps
 trait Buildable:
   protected val boxes = new ArrayBuffer[Box]
 
+  def size(measure: Box => Double): Double = boxes map measure sum
+
   // Add a box to the builder
-  def addBox(b: Box): this.type =
+  def add(b: Box): this.type =
     boxes += b
     this // Return the builder for chaining
 
   // Add a flexible GlueBox
   def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): this.type =
-    addBox(Glue(naturalWidth, stretch, shrink))
+    add(Glue(naturalWidth, stretch, shrink))
 
-  def addFil(): this.type = addBox(FilGlue)
+  def addFil(): this.type = add(FilGlue)
 
   protected def buildTo(size: Double, boxes: ArrayBuffer[Box], measure: Box => Double, skip: Double => Box): List[Box] =
     // Step 1: Calculate the natural size of all boxes
