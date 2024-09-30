@@ -5,18 +5,6 @@ import scala.compiletime.uninitialized
 import scala.language.postfixOps
 
 abstract class Typesetter:
-  type RenderFont
-
-  case class Font(
-      family: String,
-      size: Double,
-      //                 extents: FontExtents,
-      space: Double,
-      style: Set[String],
-      fontFace: RenderFont,
-      baseline: Option[Double],
-      ligatures: Set[String],
-  )
 
   val doc: Document
 
@@ -28,14 +16,14 @@ abstract class Typesetter:
   UnitConverter.t = this
 
   case class Typeface(
-      fonts: mutable.HashMap[Set[String], RenderFont],
+      fonts: mutable.HashMap[Set[String], Any], // todo: find a nicer target independent type other than Any
       baseline: Option[Double],
       ligatures: Set[String],
   )
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
 
-  def setFont(font: RenderFont, size: Double): Unit
+  def setFont(font: Any, size: Double): Unit
 
   def setColor(color: Color): Unit
 
@@ -47,7 +35,7 @@ abstract class Typesetter:
 
   def fillRect(x: Double, y: Double, width: Double, height: Double): Unit
 
-  def loadFont(path: String): RenderFont
+  def loadFont(path: String): Any
 
   def getTextExtents(text: String): TextExtents
 
