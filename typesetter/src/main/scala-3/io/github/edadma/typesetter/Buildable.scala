@@ -3,7 +3,7 @@ package io.github.edadma.typesetter
 import scala.collection.mutable.ArrayBuffer
 import scala.language.postfixOps
 
-trait ListBoxBuilder:
+trait Buildable:
   protected val boxes = new ArrayBuffer[Box]
 
   // Add a box to the builder

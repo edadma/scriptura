@@ -1,6 +1,6 @@
 package io.github.edadma.typesetter
 
-class HBoxBuilder extends ListBoxBuilder:
+class HBoxBuilder extends Buildable:
 
   // Produce an HBox of a specific width
   def buildTo(width: Double): HBox = HBox(buildTo(width, boxes, _.width, HSkipBox(_)))

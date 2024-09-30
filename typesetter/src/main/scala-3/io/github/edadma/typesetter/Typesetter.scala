@@ -23,6 +23,7 @@ abstract class Typesetter:
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected val scopes = new mutable.Stack[Map[String, Any]]
+  protected[typesetter] val modeStack = new mutable.Stack[Mode]
 
   scopes push Map.empty
 
@@ -249,6 +250,28 @@ abstract class Typesetter:
         val derivedFont = makeFont(font, size)
 
         Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
+
+  infix def add(box: Box): Typesetter =
+    modeStack.top add box
+    this
+
+  def done(): Unit =
+    paragraph()
+    modeStack.top.done()
+
+  def paragraph(): Unit =
+    modeStack.top match
+      case p: ParagraphMode => p.done()
+      case _                =>
+
+  def charBox(s: String): CharBox = new CharBox(this, s)
+
+  def start(): Unit =
+    paragraph()
+
+    modeStack.top match
+      case p: PageMode => p.start
+      case _           =>
 
 end Typesetter
 
