@@ -43,10 +43,7 @@ abstract class Typesetter:
 
   doc.setTypesetter(this)
 
-  def setFont(f: Font): Unit =
-    if currentFont ne f then
-      currentFont = f
-      setFont(f.fontFace, f.size)
+  def setFont(f: Font): Unit = setFont(f.fontFace, f.size)
 
   loadTypeface(
     "noto",
@@ -161,7 +158,7 @@ abstract class Typesetter:
     "Regular",
   )
 
-  setFont(makeFont("gentium", 50, Set("regular")))
+  currentFont = makeFont("gentium", 50, Set("regular"))
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
