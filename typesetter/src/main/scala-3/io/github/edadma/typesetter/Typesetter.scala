@@ -165,7 +165,7 @@ abstract class Typesetter:
 
     typefaces get typeface match
       case None => typefaces(typeface) = Typeface(mutable.HashMap(styleSet -> font), None, ligatures)
-      case Some(Typeface(fonts, _, ligatures)) =>
+      case Some(Typeface(fonts, _, _)) =>
         if fonts contains styleSet then
           sys.error(s"font for typeface '$typeface' with style '${styleSet.mkString(", ")}' has already been loaded")
         else fonts(styleSet) = font
