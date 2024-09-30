@@ -53,6 +53,8 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
       yAdvance = 0, // In horizontal typesetting, yAdvance is 0
     )
 
+  def makeFont(font: Any, size: Double): Any = font.asInstanceOf[JFont].deriveFont(size.toFloat)
+
 //    val glyphs = font.createGlyphVector(frc, text)
 //    val lb = glyphs.getLogicalBounds
 //    val vb = glyphs.getVisualBounds

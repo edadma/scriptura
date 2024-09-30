@@ -38,6 +38,8 @@ abstract class Typesetter:
 
   def getTextExtents(text: String): TextExtents
 
+  def makeFont(font: Any, size: Double): Any
+
   doc.setTypesetter(this)
 
   def setFont(f: Font): Unit =
@@ -158,7 +160,7 @@ abstract class Typesetter:
     "Regular",
   )
 
-  setFont(makeFont("gentium", 24, Set("regular")))
+  setFont(makeFont("gentium", 50, Set("regular")))
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
@@ -209,7 +211,7 @@ abstract class Typesetter:
             ),
           )
 
-        Font(typeface, size, 0, styleSet, font, baseline, ligatures)
+        Font(typeface, size, 0, styleSet, makeFont(font, size), baseline, ligatures)
 
 end Typesetter
 
