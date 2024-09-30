@@ -20,13 +20,12 @@ object Main extends SimpleSwingApplication:
         val b1 = new HBoxBuilder
 
         b1.addFil
-          .addBox(CharBox(t, "Hello", Color("black")))
+          .addBox(CharBox(t, "Hello"))
           .addGlue(5, 1)
           .addBox(
             CharBox(
               t,
               "Scriptura",
-              Color("black"),
             ),
           )
           .addFil
@@ -37,7 +36,6 @@ object Main extends SimpleSwingApplication:
             CharBox(
               t,
               "line 2",
-              Color("black"),
             ),
           )
           .addFil

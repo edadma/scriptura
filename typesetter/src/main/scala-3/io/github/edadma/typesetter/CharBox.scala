@@ -1,9 +1,10 @@
 package io.github.edadma.typesetter
 
-class CharBox(t: Typesetter, val text: String, val color: Color) extends Box:
+class CharBox(t: Typesetter, val text: String) extends Box:
 
   val TextExtents(_, yBearing, width, height, xAdvance, _) = t.getTextExtents(text)
   private val font = t.currentFont
+  private val color = t.currentColor
 
   val ascent: Double = -yBearing // Ascent is the negative yBearing
   val descent: Double = height - ascent // Descent is height minus ascent

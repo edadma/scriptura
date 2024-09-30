@@ -11,6 +11,7 @@ abstract class Typesetter:
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
   var currentFont: Font = uninitialized
+  var currentColor: Color = Color("grey")
 
   UnitConverter.t = this
 
