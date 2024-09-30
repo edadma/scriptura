@@ -8,7 +8,6 @@ abstract class Typesetter:
 
   val doc: Document
 
-  var currentFontSize: Double = uninitialized
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
   var currentFont: Font = uninitialized
@@ -159,6 +158,8 @@ abstract class Typesetter:
     "Regular",
   )
 
+  setFont()
+
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
 
@@ -195,6 +196,17 @@ abstract class Typesetter:
     typefaces get typeface match
       case None                                => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _, ligatures)) => typefaces(typeface) = Typeface(fonts, Some(baseline), ligatures)
+
+  private def lookupFont(typeface: String, size: Double, styleSet: Set[String]): Font =
+    typefaces get typeface match
+      case None => sys.error(s"font for typeface '$typeface' not found")
+      case Some(Typeface(fonts, baseline, ligatures)) =>
+        fonts.getOrElse(
+          styleSet map (_.toLowerCase) filterNot (_ == "regular"),
+          sys.error(
+            s"font for typeface '$typeface' with style '${styleSet.mkString(", ")}' has not been loaded",
+          ),
+        )
 
 end Typesetter
 

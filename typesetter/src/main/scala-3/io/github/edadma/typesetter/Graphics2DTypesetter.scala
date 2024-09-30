@@ -12,14 +12,10 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
   g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
 
-  private var font =
-    // JFont.createFont(JFont.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
-    loadFont("fonts/MonteCarlo-Regular.ttf").deriveFont(50f)
+  // JFont.createFont(JFont.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
+  // loadFont("fonts/MonteCarlo-Regular.ttf").deriveFont(50f)
   // Font.createFont(Font.TRUETYPE_FONT, new File("fonts/cm/cmunrm.ttf")).deriveFont(30f)
   //     loadFont("fonts/Roboto-Regular.ttf").deriveFont(24f)
-
-  g.setFont(font)
-  currentFontSize = 24
 
   private val frc = g.getFontRenderContext
 
