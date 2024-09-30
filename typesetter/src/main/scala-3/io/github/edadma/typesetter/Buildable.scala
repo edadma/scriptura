@@ -9,7 +9,7 @@ trait Buildable:
   def size(measure: Box => Double): Double = boxes map measure sum
 
   // Add a box to the builder
-  def add(b: Box): this.type =
+  infix def add(b: Box): this.type =
     boxes += b
     this // Return the builder for chaining
 

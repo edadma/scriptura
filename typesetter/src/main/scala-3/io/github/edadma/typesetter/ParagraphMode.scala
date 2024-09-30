@@ -62,7 +62,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
                   case idx =>
                     val beforeHyphen = b.newCharBox(b.text.substring(0, idx + 1))
 
-                    if hbox.width + beforeHyphen.width <= pageMode.result.lineWidth then
+                    if hbox.size(_.width) + beforeHyphen.width <= pageMode.result.lineWidth then
                       hbox add beforeHyphen
                       boxes.remove(0)
                       boxes.insert(0, b.newCharBox(b.text.substring(idx + 1)))
