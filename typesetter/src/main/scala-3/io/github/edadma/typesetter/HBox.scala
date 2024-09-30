@@ -3,9 +3,9 @@ package io.github.edadma.typesetter
 class HBox(val boxes: List[Box]) extends Box:
 
   val width: Double = boxes.map(_.width).sum
-  val height: Double = if boxes.isEmpty then 0 else boxes.map(_.height).max
   val ascent: Double = if boxes.isEmpty then 0 else boxes.map(_.ascent).max
-  val descent: Double = height - ascent // ascent + descent = height
+  val descent: Double = if boxes.isEmpty then 0 else boxes.map(_.descent).max
+  val height: Double = ascent + descent
   val xAdvance: Double = boxes.map(_.xAdvance).sum
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
