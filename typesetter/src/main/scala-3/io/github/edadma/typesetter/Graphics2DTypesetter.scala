@@ -5,7 +5,7 @@ import java.awt.font.TextLayout
 import java.io.File
 
 class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
-  type GenericFont = JFont
+  type RenderFont = JFont
 
 //  def setFont(font: java.awt.Font): Unit = g.setFont(font)
 
@@ -24,6 +24,8 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   currentFontSize = 24
 
   private val frc = g.getFontRenderContext
+
+  def setFont(font: RenderFont, size: Double): Unit = g.setFont(font.deriveFont(size.toFloat))
 
   def setColor(color: Color): Unit =
     g.setColor(new java.awt.Color(color.redInt, color.greenInt, color.blueInt, color.alphaInt))

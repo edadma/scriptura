@@ -5,7 +5,7 @@ import scala.compiletime.uninitialized
 import scala.language.postfixOps
 
 abstract class Typesetter:
-  type GenericFont
+  type RenderFont
 
   case class Font(
       family: String,
@@ -13,7 +13,7 @@ abstract class Typesetter:
       //                 extents: FontExtents,
       space: Double,
       style: Set[String],
-      fontFace: GenericFont,
+      fontFace: RenderFont,
       baseline: Option[Double],
       ligatures: Set[String],
   )
@@ -23,18 +23,19 @@ abstract class Typesetter:
   var currentFontSize: Double = uninitialized
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
+  var currentFont: Font = uninitialized
 
   UnitConverter.t = this
 
   case class Typeface(
-      fonts: mutable.HashMap[Set[String], GenericFont],
+      fonts: mutable.HashMap[Set[String], RenderFont],
       baseline: Option[Double],
       ligatures: Set[String],
   )
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
 
-  //  def setFont(font: Any): Unit
+  def setFont(font: RenderFont, size: Double): Unit
 
   def setColor(color: Color): Unit
 
@@ -46,11 +47,16 @@ abstract class Typesetter:
 
   def fillRect(x: Double, y: Double, width: Double, height: Double): Unit
 
-  def loadFont(path: String): GenericFont
+  def loadFont(path: String): RenderFont
 
   def getTextExtents(text: String): TextExtents
 
   doc.setTypesetter(this)
+
+  def setFont(f: Font): Unit =
+    if currentFont ne f then
+      currentFont = f
+      setFont(f.fontFace, f.size)
 
   loadTypeface(
     "noto",
