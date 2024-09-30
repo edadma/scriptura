@@ -165,8 +165,6 @@ abstract class Typesetter:
 
   currentFont = makeFont("gentium", 50, Set("regular"))
 
-  println(charWidth(currentFont.renderFont, ' '))
-
   set(
     "baselineskip" -> Glue(currentFont.size * 1.2 * pt),
     "lineskip" -> Glue(1),
