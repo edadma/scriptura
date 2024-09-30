@@ -23,7 +23,7 @@ object UnitConverter:
     case "in" => inchesToPoints(value) // Inches (1 inch = 72 points)
     case "cm" => cmToPoints(value) // Centimeters (1 cm = 28.3465 points)
     case "mm" => mmToPoints(value) // Millimeters (1 mm = 2.83465 points)
-    case "em" => value * t.currentFontSize // Em units (based on current font size)
+    case "em" => value * t.currentFont.size // Em units (based on current font size)
     case "ex" => value * t.currentFontXHeight // Ex units (based on current font x-height)
     case "px" => pixelsToPoints(value) // Pixels (dependent on screen DPI)
     case _    => throw new IllegalArgumentException(s"Unknown unit: $unit")

@@ -18,15 +18,16 @@ object Main extends SimpleSwingApplication:
 
         val t = new Graphics2DTypesetter(new TestDocument, g)
         val b1 = new HBoxBuilder
+        val f = t.currentFont
 
         b1.addFil
-          .addBox(CharBox(t, "Hello", null, Color("black")))
+          .addBox(CharBox(t, "Hello", f, Color("black")))
           .addGlue(5, 1)
           .addBox(
             CharBox(
               t,
               "Scriptura",
-              null,
+              f,
               Color("black"),
             ),
           )
@@ -38,7 +39,7 @@ object Main extends SimpleSwingApplication:
             CharBox(
               t,
               "line 2",
-              null,
+              f,
               Color("black"),
             ),
           )

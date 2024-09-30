@@ -158,7 +158,7 @@ abstract class Typesetter:
     "Regular",
   )
 
-  setFont()
+  setFont(makeFont("gentium", 24, Set("regular")))
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
@@ -197,16 +197,19 @@ abstract class Typesetter:
       case None                                => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _, ligatures)) => typefaces(typeface) = Typeface(fonts, Some(baseline), ligatures)
 
-  private def lookupFont(typeface: String, size: Double, styleSet: Set[String]): Font =
+  def makeFont(typeface: String, size: Double, styleSet: Set[String]): Font =
     typefaces get typeface match
       case None => sys.error(s"font for typeface '$typeface' not found")
       case Some(Typeface(fonts, baseline, ligatures)) =>
-        fonts.getOrElse(
-          styleSet map (_.toLowerCase) filterNot (_ == "regular"),
-          sys.error(
-            s"font for typeface '$typeface' with style '${styleSet.mkString(", ")}' has not been loaded",
-          ),
-        )
+        val font =
+          fonts.getOrElse(
+            styleSet map (_.toLowerCase) filterNot (_ == "regular"),
+            sys.error(
+              s"font for typeface '$typeface' with style '${styleSet.mkString(", ")}' has not been loaded",
+            ),
+          )
+
+        Font(typeface, size, 0, styleSet, font, baseline, ligatures)
 
 end Typesetter
 

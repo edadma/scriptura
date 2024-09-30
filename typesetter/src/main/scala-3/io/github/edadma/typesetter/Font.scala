@@ -1,7 +1,7 @@
 package io.github.edadma.typesetter
 
 class Font(
-    val family: String,
+    val typeface: String,
     val size: Double,
     //                 extents: FontExtents,
     val space: Double,
