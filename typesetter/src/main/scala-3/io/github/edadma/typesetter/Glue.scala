@@ -1,6 +1,7 @@
 package io.github.edadma.typesetter
 
-class Glue(val naturalSize: Double, val stretch: Double = 0, val shrink: Double = 0, val order: Int = 0) extends Box:
+class Glue(val naturalSize: Double, val stretch: Double = 0, val shrink: Double = 0, val order: Int = 0)
+    extends SpaceBox:
 
   val name: String =
     order match
@@ -9,7 +10,6 @@ class Glue(val naturalSize: Double, val stretch: Double = 0, val shrink: Double 
       case 2 => "Fill"
       case 3 => "Filll"
 
-  val ascent: Double = 0
   val descent: Double = 0
   val height: Double = naturalSize
   val width: Double = naturalSize // Initially, it's the natural width

@@ -1,6 +1,6 @@
 package io.github.edadma.typesetter
 
-class VBox(val boxes: List[Box]) extends Box:
+class VBox(val boxes: List[Box]) extends ContentBox:
 
   val width: Double = if boxes.isEmpty then 0 else boxes.map(_.width).max
   val height: Double = boxes.map(_.height).sum

@@ -95,7 +95,7 @@ trait Buildable:
 
     // Step 5: Replace remaining GlueBoxes with their natural sizes if any
     glueBoxesWithIndices.foreach { case (g, idx) =>
-      if (!boxes(idx).isInstanceOf[SkipBox])
+      if (!boxes(idx).isInstanceOf[SpaceBox])
         boxes(idx) = skip(measure(g))
     }
 

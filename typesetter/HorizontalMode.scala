@@ -1,4 +1,4 @@
-package io.github.edadma.compositor
+package io.github.edadma.typesetter
 
 abstract class HorizontalMode extends Mode:
   protected def addBox(box: Box): Unit

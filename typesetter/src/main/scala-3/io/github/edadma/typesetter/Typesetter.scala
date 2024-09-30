@@ -8,6 +8,7 @@ abstract class Typesetter:
 
   val doc: Document
 
+  var debug: Boolean = true
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
   var currentFont: Font = uninitialized
@@ -266,12 +267,12 @@ abstract class Typesetter:
 
   def charBox(s: String): CharBox = new CharBox(this, s)
 
-  def start(): Unit =
-    paragraph()
-
-    modeStack.top match
-      case p: PageMode => p.start
-      case _           =>
+//  def start(): Unit =
+//    paragraph()
+//
+//    modeStack.top match
+//      case p: PageMode => p.start
+//      case _           =>
 
 end Typesetter
 

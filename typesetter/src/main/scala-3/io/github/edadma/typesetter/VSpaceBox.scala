@@ -1,8 +1,7 @@
 package io.github.edadma.typesetter
 
-class VSkipBox(val height: Double) extends Box:
+class VSpaceBox(val height: Double) extends SpaceBox:
 
-  val ascent: Double = 0
   val descent: Double = height
   val width: Double = 0
   val xAdvance: Double = 0
@@ -11,4 +10,4 @@ class VSkipBox(val height: Double) extends Box:
     // No drawing needed for a rigid box (invisible)
     ()
 
-  override def toString: String = s"VSkipBox(height=$height)"
+  override def toString: String = s"VSpaceBox(height=$height)"

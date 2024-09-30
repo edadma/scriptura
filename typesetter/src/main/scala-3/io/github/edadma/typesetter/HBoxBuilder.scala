@@ -2,8 +2,6 @@ package io.github.edadma.typesetter
 
 class HBoxBuilder extends Buildable:
 
-  // Produce an HBox of a specific width
-  def buildTo(width: Double): HBox = HBox(buildTo(width, boxes, _.width, HSkipBox(_)))
+  def buildTo(width: Double): HBox = HBox(buildTo(width, boxes, _.width, HSpaceBox(_)))
 
-  // Produce an HBox with just the boxes added
   def build: HBox = HBox(boxes.toList)
