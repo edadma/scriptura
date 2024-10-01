@@ -29,6 +29,7 @@ object Main extends SimpleSwingApplication:
             ),
           )
           .addFil()
+
         val b2 = new HBoxBuilder
 
         b2.addFil()
@@ -40,10 +41,22 @@ object Main extends SimpleSwingApplication:
           )
           .addFil()
 
+        val b3 = new HBoxBuilder
+
+        b3.addFil()
+          .add(
+            CharBox(
+              t,
+              "866-536x354.jpg",
+            ),
+          )
+          .addFil()
+
         val line1 = b1.buildTo(700)
         val line2 = b2.buildTo(700)
+        val line3 = b3.buildTo(700)
         val vb = new VBoxBuilder
-        val vbox = vb.add(line1).add(line2).build
+        val vbox = vb.add(line1).add(line2).add(line3).build
 
         vbox.draw(t, 10, 10 + vbox.ascent)
       }
