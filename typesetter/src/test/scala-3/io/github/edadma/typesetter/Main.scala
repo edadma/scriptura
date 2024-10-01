@@ -56,7 +56,7 @@ object Main extends SimpleSwingApplication:
         val line2 = b2.buildTo(700)
         val line3 = b3.buildTo(700)
         val vb = new VBoxBuilder
-        val vbox = vb.add(line1).add(line2).add(line3).build
+        val vbox = vb.add(line1).add(line3).add(line2).build
 
         vbox.draw(t, 10, 10 + vbox.ascent)
       }

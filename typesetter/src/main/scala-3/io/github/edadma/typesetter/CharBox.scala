@@ -10,7 +10,7 @@ class CharBox(t: Typesetter, val text: String, font: Font, color: Color) extends
   val typ: Type = Type.Start
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
-    box(t, x, y)
+    box(t, x, y, "purple")
     if text.nonEmpty then
       t.setFont(font)
       t.setColor(color)

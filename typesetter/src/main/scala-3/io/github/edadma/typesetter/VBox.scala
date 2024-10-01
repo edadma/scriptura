@@ -13,10 +13,19 @@ class VBox(val boxes: List[Box]) extends ContentBox:
     box(t, x, y)
 
     var currentY = if boxes.isEmpty then y else y - ascent + boxes.head.ascent
+    var list = boxes
 
-    for box <- boxes do
+    while list.nonEmpty do
+      val box = list.head
+
       box.draw(t, x, currentY)
-      currentY += box.height
+      currentY += box.descent
+
+      val tail = list.tail
+
+      if tail.nonEmpty then currentY += tail.head.ascent
+
+      list = tail
 
   override def toString: String =
     s"VBox(width=$width, height=$height, boxes=$boxes)"
