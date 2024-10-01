@@ -257,13 +257,13 @@ abstract class Typesetter:
     this
 
   def done(): Unit =
-    paragraph()
+//    paragraph()
     modeStack.top.done()
 
-  def paragraph(): Unit =
-    modeStack.top match
-      case p: ParagraphMode => p.done()
-      case _                =>
+//  def paragraph(): Unit =
+//    modeStack.top match
+//      case p: ParagraphMode => p.done()
+//      case _                =>
 
   def charBox(s: String): CharBox = new CharBox(this, s)
 

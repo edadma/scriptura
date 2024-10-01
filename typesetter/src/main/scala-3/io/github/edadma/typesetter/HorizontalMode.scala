@@ -25,10 +25,10 @@ abstract class HorizontalMode extends Mode:
             if b.text.nonEmpty &&
               !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&
               ".!?:;".contains(b.text.last) =>
-          addBox(Glue(t.currentFont.space * 1.5))
+          addBox(t.getGlue("xspaceskip"))
           addBox(box)
         case _ =>
-          addBox(Glue(t.currentFont.space))
+          addBox(t.getGlue("spaceskip"))
           addBox(box)
     else addBox(box)
   end add

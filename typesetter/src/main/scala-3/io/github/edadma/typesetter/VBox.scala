@@ -7,6 +7,7 @@ class VBox(val boxes: List[Box]) extends ContentBox:
   val descent: Double = if boxes.isEmpty then 0 else boxes.last.descent
   val ascent: Double = height - descent
   val xAdvance: Double = width
+  val typ: Type = Type.Vertical
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
     box(t, x, y)
