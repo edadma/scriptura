@@ -45,7 +45,7 @@ object Main extends SimpleSwingApplication:
 
         b3.addFil()
           .add(
-            CharBox(
+            ImageBox(
               t,
               "866-536x354.jpg",
             ),

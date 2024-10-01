@@ -8,7 +8,7 @@ abstract class Typesetter:
 
   val doc: Document
 
-  var debug: Boolean = true
+  var debug: Boolean = false
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
   var currentFont: Font = uninitialized
