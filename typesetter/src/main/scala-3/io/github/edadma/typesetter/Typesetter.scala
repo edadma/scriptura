@@ -48,6 +48,10 @@ abstract class Typesetter:
 
   def charWidth(font: Any, c: Char): Double
 
+  def loadImage(path: String): (Any, Int, Int)
+
+  def drawImage(image: Any, x: Double, y: Double): Unit
+
   doc.setTypesetter(this)
 
   def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
@@ -180,8 +184,11 @@ abstract class Typesetter:
     "leftskip" -> ZeroGlue,
     "rightskip" -> ZeroGlue,
     "parskip" -> FilGlue,
-    "hangindent" -> 0,
-    "hangafter" -> 1,
+    "hangindent" -> 0.0,
+    "hangafter" -> 1.0,
+
+    //
+    "imageScaling" -> 1.0,
   )
 
   def in: Double = currentDPI

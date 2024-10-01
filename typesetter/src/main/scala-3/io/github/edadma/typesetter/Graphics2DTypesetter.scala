@@ -3,6 +3,8 @@ package io.github.edadma.typesetter
 import java.awt.{Font => JFont, Graphics2D, RenderingHints, Toolkit}
 import java.awt.font.TextLayout
 import java.io.File
+import javax.imageio.ImageIO
+import java.awt.image.BufferedImage
 
 class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
 //  def setFont(font: java.awt.Font): Unit = g.setFont(font)
@@ -58,6 +60,13 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
   def charWidth(font: Any, c: Char): Double =
     setFont(font)
     g.getFontMetrics.charWidth(c)
+
+  def loadImage(path: String): (Any, Int, Int) =
+    val image = ImageIO.read(new File(path))
+
+    (image, image.getWidth, image.getHeight)
+
+  def drawImage(image: Any, x: Double, y: Double): Unit = g.drawImage(image.asInstanceOf[BufferedImage], x, y, null)
 
 //    val glyphs = font.createGlyphVector(frc, text)
 //    val lb = glyphs.getLogicalBounds
