@@ -66,7 +66,8 @@ class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
 
     (image, image.getWidth, image.getHeight)
 
-  def drawImage(image: Any, x: Double, y: Double): Unit = g.drawImage(image.asInstanceOf[BufferedImage], x, y, null)
+  def drawImage(image: Any, x: Double, y: Double): Unit =
+    g.drawImage(image.asInstanceOf[BufferedImage], x.toInt, y.toInt, null)
 
 //    val glyphs = font.createGlyphVector(frc, text)
 //    val lb = glyphs.getLogicalBounds
