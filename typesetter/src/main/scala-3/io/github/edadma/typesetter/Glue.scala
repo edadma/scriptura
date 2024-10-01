@@ -14,10 +14,7 @@ class Glue(val naturalSize: Double, val stretch: Double = 0, val shrink: Double 
   val height: Double = naturalSize
   val width: Double = naturalSize // Initially, it's the natural width
   val xAdvance: Double = naturalSize // Same as width initially
-
-  def draw(t: Typesetter, x: Double, y: Double): Unit =
-    // No drawing needed for glue
-    ()
+  val typ: Type = Type.Start // todo: this is not correct
 
   override def toString: String = s"${name}Glue(naturalSize=$naturalSize, stretch=$stretch, shrink=$shrink)"
 end Glue

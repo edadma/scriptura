@@ -7,6 +7,7 @@ class HBox(val boxes: List[Box]) extends ContentBox:
   val descent: Double = if boxes.isEmpty then 0 else boxes.map(_.descent).max
   val height: Double = ascent + descent
   val xAdvance: Double = boxes.map(_.xAdvance).sum
+  val typ: Type = Type.Horizontal
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
     box(t, x, y)
