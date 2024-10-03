@@ -3,10 +3,16 @@ package io.github.edadma.typesetter
 import scala.collection.mutable.ArrayBuffer
 import scala.language.postfixOps
 
-trait Buildable:
+class Builder:
   protected val boxes = new ArrayBuffer[Box]
 
   def size(measure: Box => Double): Double = boxes map measure sum
+
+  def last: Box = boxes.last
+
+  def lastOption: Option[Box] = boxes.lastOption
+
+  def removeLast(): Box = boxes.remove(boxes.length - 1)
 
   // Add a box to the builder
   infix def add(b: Box): this.type =
@@ -21,15 +27,15 @@ trait Buildable:
 
   protected def buildTo(size: Double, boxes: ArrayBuffer[Box], measure: Box => Double, skip: Double => Box): List[Box] =
     // Step 1: Calculate the natural size of all boxes
-    val naturalSize = boxes.map(measure).sum
+    val naturalSize = boxes map measure sum
     val delta = size - naturalSize
 
-    // Step 2: Collect all GlueBoxes with their indices
+    // Step 2: Collect all Glue with their indices
     val glueBoxesWithIndices = boxes.zipWithIndex.collect { case (g: Glue, idx) =>
       (g, idx)
     }
 
-    // If there are no GlueBoxes, return the boxes as-is (or handle accordingly)
+    // If there are no Glue, return the boxes as-is (or handle accordingly)
     if (glueBoxesWithIndices.isEmpty) {
       if (delta != 0) {
         println("Warning: No glue available to adjust the size.")
@@ -95,7 +101,7 @@ trait Buildable:
       currentOrder -= 1
     }
 
-    // Step 5: Replace remaining GlueBoxes with their natural sizes if any
+    // Step 5: Replace remaining Glue with their natural sizes if any
     glueBoxesWithIndices.foreach { case (g, idx) =>
       if (!boxes(idx).isInstanceOf[SpaceBox])
         boxes(idx) = skip(measure(g))
