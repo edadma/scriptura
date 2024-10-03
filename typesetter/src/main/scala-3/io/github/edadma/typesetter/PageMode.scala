@@ -14,7 +14,7 @@ class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
 
   protected[typesetter] var page: VBoxBuilder = new VBoxBuilder
 
-  def add(box: Box): Unit =
+  infix def add(box: Box): Unit =
     if box.typ == Type.Start then start add box
     else addLine(box)
 
@@ -31,14 +31,14 @@ class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
     // todo: only internally generated interline spacing should be removed
     if page.nonEmpty || !box.isInstanceOf[VSpaceBox] then page add box
 
-  def result: PageBox = page
+  def result: Box = page.buildTo(pageHeight)
 
   def start: ParagraphMode =
     val paragraphMode = new ParagraphMode(t, this)
 
     t.modeStack push paragraphMode
 
-    if t.indentParagraph && !firstParagraph then paragraphMode add new HSpaceBox(0, t.parindent, 0)
+    if t.indentParagraph && !firstParagraph then paragraphMode add t.getNumber("parindent")
     else firstParagraph = false
 
     paragraphMode

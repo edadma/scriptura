@@ -14,6 +14,10 @@ class Builder:
 
   def removeLast(): Box = boxes.remove(boxes.length - 1)
 
+  def nonEmpty: Boolean = boxes.nonEmpty
+
+  def isEmpty: Boolean = boxes.isEmpty
+
   // Add a box to the builder
   infix def add(b: Box): this.type =
     boxes += b
