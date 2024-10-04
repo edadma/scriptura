@@ -25,6 +25,7 @@ abstract class Typesetter:
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected val scopes = new mutable.Stack[Map[String, Any]]
   protected[typesetter] val modeStack = new mutable.Stack[Mode]
+  var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   scopes push Map.empty
 

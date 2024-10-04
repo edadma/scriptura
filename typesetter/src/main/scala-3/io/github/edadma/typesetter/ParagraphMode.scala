@@ -83,12 +83,12 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
         val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0
         val skip = baseline - last.descent - hbox.ascent
 
-        if skip > 0 then pageMode addLine new VSpaceBox(0, skip, if firstLine then 0.05 else 0)
+        if skip > 0 then pageMode addLine new Glue(skip, if firstLine then 0.05 else 0)
         if firstLine then firstLine = false
 
-      pageMode addLine hbox
+      pageMode addLine hbox.buildTo(t.getNumber("hsize"))
     end while
 
-    comp.indentParagraph = true
+    t.indentParagraph = true
     pop
   end done
