@@ -27,7 +27,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.size(_.width) + boxes.head.width <= pageMode.result.lineWidth then
+          if hbox.size(_.width) + boxes.head.width <= t.getNumber("hsize") then
             hbox add boxes.remove(0)
             line()
           else
@@ -47,7 +47,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
                             val (before, after) = hyphenation.next
                             val beforeHyphen = b.newCharBox(before)
 
-                            if hbox.width + beforeHyphen.width <= pageMode.result.lineWidth then
+                            if hbox.width + beforeHyphen.width <= t.getNumber("hsize") then
                               lastBefore = beforeHyphen
                               lastAfter = after
                               longest()
@@ -62,7 +62,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
                   case idx =>
                     val beforeHyphen = b.newCharBox(b.text.substring(0, idx + 1))
 
-                    if hbox.size(_.width) + beforeHyphen.width <= pageMode.result.lineWidth then
+                    if hbox.size(_.width) + beforeHyphen.width <= t.getNumber("hsize") then
                       hbox add beforeHyphen
                       boxes.remove(0)
                       boxes.insert(0, b.newCharBox(b.text.substring(idx + 1)))
@@ -77,8 +77,8 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
 
       // hbox.setToWidth(pageMode.result.lineWidth)
 
-      if pageMode.result.nonEmpty && !pageMode.result.last.isSpace then
-        val last = pageMode.result.last
+      if pageMode.page.nonEmpty && !pageMode.page.last.isSpace then
+        val last = pageMode.page.last
         val baselines = List(last.baselineHeight, hbox.baselineHeight) filterNot (_.isEmpty) map (_.get)
         val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0
         val skip = baseline - last.descent - hbox.ascent

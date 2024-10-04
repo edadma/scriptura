@@ -38,7 +38,7 @@ class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
 
     t.modeStack push paragraphMode
 
-    if t.indentParagraph && !firstParagraph then paragraphMode add t.getNumber("parindent")
+    if t.indentParagraph && !firstParagraph then paragraphMode add HSpaceBox(t.getNumber("parindent"))
     else firstParagraph = false
 
     paragraphMode
