@@ -13,8 +13,7 @@ abstract class Typesetter:
   var currentDPI: Double = uninitialized
   var currentFont: Font = uninitialized
   var currentColor: Color = Color("grey")
-
-  UnitConverter.t = this
+  val converter = new UnitConverter(this)
 
   case class Typeface(
       fonts: mutable.HashMap[Set[String], Any], // todo: find a nicer target independent type other than Any
@@ -28,6 +27,8 @@ abstract class Typesetter:
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   scopes push Map.empty
+  modeStack push new SimpleDocumentMode(this)
+  modeStack push new PageMode(this, modeStack.top)
 
   def setFont(font: Any /*, size: Double*/ ): Unit
 
