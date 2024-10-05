@@ -1,9 +1,7 @@
 package io.github.edadma.typesetter
 
-class HBoxBuilder extends Builder:
+class HBoxBuilder(protected val t: Typesetter, val toSize: Double | Null = null) extends Builder:
 
-  def buildTo(width: Double): HBox = HBox(buildTo(width, boxes, _.width, HSpaceBox(_)))
-
-  def build: HBox = HBox(boxes.toList)
-
-  def width: Double = size(_.width)
+  protected val measure: Box => Double = _.width
+  protected val skip: Double => Box = HSpaceBox(_)
+  protected val wrap: Seq[Box] => Box = HBox(_)

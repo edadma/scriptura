@@ -19,11 +19,12 @@ object Main extends SimpleSwingApplication:
         val t =
           new Graphics2DTypesetter(g):
             set("hsize", 700)
+            setDocument(new TestDocument)
 
-//        val b1 = new HBoxBuilder
+//        val b1 = new HBoxBuilder(t, 700)
 
-        t.setDocument(new TestDocument)
-        t.addFil()
+        t.hbox
+          .addFil()
           .add(CharBox(t, "Hello"))
           .addGlue(t.currentFont.space, 1)
           .add(
@@ -34,7 +35,7 @@ object Main extends SimpleSwingApplication:
           )
           .addFil()
 
-//        val b2 = new HBoxBuilder
+        val b2 = new HBoxBuilder(t, 700)
 
         t.addFil()
           .add(
@@ -56,11 +57,11 @@ object Main extends SimpleSwingApplication:
           )
           .addFil()
 
-//        val line1 = b1.buildTo(700)
-//        val line2 = b2.buildTo(700)
-//        val line3 = b3.buildTo(700)
+        val line1 = b1.result
+        val line2 = b2.result
+        val line3 = b3.result
 //        val vb = new VBoxBuilder
-//        val vbox = vb.add(line1).add(line3).add(line2).build
+        t.add(line1).add(line3).add(line2).build
 
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)

@@ -1,7 +1,7 @@
 package io.github.edadma.typesetter
 
 abstract class HorizontalMode extends Mode:
-  protected def addBox(box: Box): Unit
+  protected def addBox(box: Box): Mode
 
   protected def nonEmpty: Boolean
 
@@ -11,7 +11,7 @@ abstract class HorizontalMode extends Mode:
 
   protected def update(index: Int, elem: Box): Unit
 
-  infix def add(box: Box): Unit =
+  infix def add(box: Box): Mode =
     if nonEmpty then
       (last, box) match
         case (_: SpaceBox, _)                 => addBox(box)
@@ -21,6 +21,7 @@ abstract class HorizontalMode extends Mode:
               .endsWith(")") && !b.text.startsWith("(") && (!l.text
               .exists(_.isLetterOrDigit) || !b.text.exists(_.isLetterOrDigit)) =>
           update(length - 1, l.newCharBox(l.text ++ b.text))
+          this
         case (b: CharBox, _)
             if b.text.nonEmpty &&
               !(b.text.last == '.' && Abbreviation(b.text.dropRight(1))) &&

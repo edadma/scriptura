@@ -6,7 +6,9 @@ import scala.collection.mutable.ArrayBuffer
 class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends HorizontalMode:
   val boxes = new ArrayBuffer[Box]
 
-  protected def addBox(box: Box): Unit = boxes += box
+  protected def addBox(box: Box): Mode =
+    boxes += box
+    this
 
   protected def nonEmpty: Boolean = boxes.nonEmpty
 
@@ -22,12 +24,12 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
     var firstLine = true
 
     while boxes.nonEmpty do
-      val hbox = new HBoxBuilder
+      val hbox = new HBoxBuilder(t, t.getNumber("hsize"))
 
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.size(_.width) + boxes.head.width <= t.getNumber("hsize") then
+          if hbox.size + boxes.head.width <= t.getNumber("hsize") then
             hbox add boxes.remove(0)
             line()
           else
@@ -47,7 +49,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
                             val (before, after) = hyphenation.next
                             val beforeHyphen = b.newCharBox(before)
 
-                            if hbox.width + beforeHyphen.width <= t.getNumber("hsize") then
+                            if hbox.size + beforeHyphen.width <= t.getNumber("hsize") then
                               lastBefore = beforeHyphen
                               lastAfter = after
                               longest()
@@ -62,7 +64,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
                   case idx =>
                     val beforeHyphen = b.newCharBox(b.text.substring(0, idx + 1))
 
-                    if hbox.size(_.width) + beforeHyphen.width <= t.getNumber("hsize") then
+                    if hbox.size + beforeHyphen.width <= t.getNumber("hsize") then
                       hbox add beforeHyphen
                       boxes.remove(0)
                       boxes.insert(0, b.newCharBox(b.text.substring(idx + 1)))
@@ -75,7 +77,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
       if boxes.isEmpty then hbox add new HSpaceBox(2)
 
-      val newLine = hbox.buildTo(t.getNumber("hsize"))
+      val newLine = hbox.result
 
       if pageMode.page.nonEmpty && !pageMode.page.last.isSpace then
         val last = pageMode.page.last

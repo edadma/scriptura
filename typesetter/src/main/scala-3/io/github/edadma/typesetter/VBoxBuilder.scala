@@ -1,9 +1,7 @@
 package io.github.edadma.typesetter
 
-class VBoxBuilder extends Builder:
+class VBoxBuilder(protected val t: Typesetter, protected val toSize: Double | Null = null) extends Builder:
 
-  def buildTo(height: Double): VBox = VBox(buildTo(height, boxes, _.height, VSpaceBox(_)))
-
-  def build: VBox = VBox(boxes.toList)
-
-  def height: Double = size(_.height)
+  protected val measure: Box => Double = _.height
+  protected val skip: Double => Box = VSpaceBox(_)
+  protected val wrap: Seq[Box] => Box = VBox(_)

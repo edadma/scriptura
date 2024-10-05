@@ -1,6 +1,6 @@
 package io.github.edadma.typesetter
 
-class HBox(val boxes: List[Box]) extends ContentBox:
+class HBox(val boxes: Seq[Box]) extends ContentBox:
 
   val width: Double = boxes.map(_.width).sum
   val ascent: Double = if boxes.isEmpty then 0 else boxes.map(_.ascent).max

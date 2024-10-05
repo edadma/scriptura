@@ -3,7 +3,7 @@ package io.github.edadma.typesetter
 abstract class Mode:
   protected val t: Typesetter
 
-  infix def add(box: Box): Unit
+  infix def add(box: Box): Mode
 
   def result: Box
 

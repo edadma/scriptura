@@ -3,10 +3,14 @@ package io.github.edadma.typesetter
 import scala.collection.mutable.ArrayBuffer
 import scala.language.postfixOps
 
-class Builder:
+abstract class Builder extends Mode:
   protected val boxes = new ArrayBuffer[Box]
+  protected val measure: Box => Double
+  protected val skip: Double => Box
+  protected val toSize: Double | Null
+  protected val wrap: Seq[Box] => Box
 
-  def size(measure: Box => Double): Double = boxes map measure sum
+  def size: Double = boxes map measure sum
 
   def last: Box = boxes.last
 
@@ -18,12 +22,18 @@ class Builder:
 
   def isEmpty: Boolean = boxes.isEmpty
 
-  // Add a box to the builder
   infix def add(b: Box): this.type =
     boxes += b
-    this // Return the builder for chaining
+    this
 
-  protected def buildTo(size: Double, boxes: ArrayBuffer[Box], measure: Box => Double, skip: Double => Box): List[Box] =
+  def result: Box =
+    toSize match
+      case null      => wrap(build)
+      case s: Double => wrap(buildTo(s))
+
+  protected def build: Seq[Box] = boxes.toSeq
+
+  protected def buildTo(size: Double): Seq[Box] =
     // Step 1: Calculate the natural size of all boxes
     val naturalSize = boxes map measure sum
     val delta = size - naturalSize
