@@ -1,10 +1,6 @@
 package io.github.edadma.typesetter
 
-import io.github.edadma.typesetter.TestDocument
-
-import java.awt.RenderingHints
 import scala.swing.*
-import scala.swing.event.*
 
 object Main extends SimpleSwingApplication:
   def top: Frame = new MainFrame:
