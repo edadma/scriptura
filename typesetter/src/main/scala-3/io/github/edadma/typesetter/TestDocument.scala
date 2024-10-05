@@ -1,4 +1,4 @@
 package io.github.edadma.typesetter
 
-class TestDocument(protected val t: Typesetter) extends Document:
+class TestDocument extends Document:
   def init(): Unit = ()

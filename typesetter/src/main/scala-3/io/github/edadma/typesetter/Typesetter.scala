@@ -6,7 +6,7 @@ import scala.language.postfixOps
 
 abstract class Typesetter:
 
-  var document: Document = TestDocument(this)
+  var document: Document = uninitialized
   var debug: Boolean = false
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
@@ -21,44 +21,12 @@ abstract class Typesetter:
   )
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
-  protected val scopes = new mutable.Stack[Map[String, Any]]
+  protected[typesetter] val scopes = new mutable.Stack[Map[String, Any]]
   protected[typesetter] val modeStack = new mutable.Stack[Mode]
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   scopes push Map.empty
   modeStack push new TestDocumentMode(this)
-  modeStack push new PageMode(this, modeStack.top)
-  document.init()
-
-  def setFont(font: Any /*, size: Double*/ ): Unit
-
-  def setColor(color: Color): Unit
-
-  def drawString(text: String, x: Double, y: Double): Unit
-
-  def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit
-
-  def drawRect(x: Double, y: Double, width: Double, height: Double): Unit
-
-  def fillRect(x: Double, y: Double, width: Double, height: Double): Unit
-
-  def loadFont(path: String): Any
-
-  def getTextExtents(text: String): TextExtents
-
-  def makeFont(font: Any, size: Double): Any
-
-  def charWidth(font: Any, c: Char): Double
-
-  def loadImage(path: String): (Any, Int, Int)
-
-  def drawImage(image: Any, x: Double, y: Double): Unit
-
-  document.init()
-
-  def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
-
-  def setDocument(d: Document): Unit = document = d
 
   loadTypeface(
     "noto",
@@ -174,26 +142,40 @@ abstract class Typesetter:
   )
 
   currentFont = makeFont("gentium", 50, Set("regular"))
+  set(defaultParameters)
+  modeStack push new PageMode(this, modeStack.top)
+  setDocument(new TestDocument)
+  document.init()
 
-  set(
-    "baselineskip" -> Glue(currentFont.size * 1.2 * pt),
-    "lineskip" -> Glue(1),
-    "lineskiplimit" -> 0.0,
-    "spaceskip" -> Glue(currentFont.space),
-    "xspaceskip" -> Glue(currentFont.space * 1.5),
-    "hsize" -> 800.0,
-    "vsize" -> 500.0,
-    "parindent" -> in / 2,
-    "parfillskip" -> FilGlue,
-    "leftskip" -> ZeroGlue,
-    "rightskip" -> ZeroGlue,
-    "parskip" -> FilGlue,
-    "hangindent" -> 0.0,
-    "hangafter" -> 1.0,
+  def setFont(font: Any /*, size: Double*/ ): Unit
 
-    //
-    "imageScaling" -> 1.0,
-  )
+  def setColor(color: Color): Unit
+
+  def drawString(text: String, x: Double, y: Double): Unit
+
+  def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit
+
+  def drawRect(x: Double, y: Double, width: Double, height: Double): Unit
+
+  def fillRect(x: Double, y: Double, width: Double, height: Double): Unit
+
+  def loadFont(path: String): Any
+
+  def getTextExtents(text: String): TextExtents
+
+  def makeFont(font: Any, size: Double): Any
+
+  def charWidth(font: Any, c: Char): Double
+
+  def loadImage(path: String): (Any, Int, Int)
+
+  def drawImage(image: Any, x: Double, y: Double): Unit
+
+  def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
+
+  def setDocument(d: Document): Unit =
+    document = d
+    d.t = this
 
   def in: Double = currentDPI
 
@@ -209,7 +191,7 @@ abstract class Typesetter:
 
   def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
 
-  def set(pairs: (String, Any)*): Unit = scopes(0) ++= pairs
+  def set(pairs: Seq[(String, Any)]): Unit = scopes(0) ++= pairs
 
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
@@ -284,6 +266,27 @@ abstract class Typesetter:
 //    modeStack.top match
 //      case p: PageMode => p.start
 //      case _           =>
+
+  def defaultParameters =
+    List(
+      "baselineskip" -> Glue(currentFont.size * 1.2 * pt),
+      "lineskip" -> Glue(1),
+      "lineskiplimit" -> 0.0,
+      "spaceskip" -> Glue(currentFont.space),
+      "xspaceskip" -> Glue(currentFont.space * 1.5),
+      "hsize" -> 800.0,
+      "vsize" -> 500.0,
+      "parindent" -> in / 2,
+      "parfillskip" -> FilGlue,
+      "leftskip" -> ZeroGlue,
+      "rightskip" -> ZeroGlue,
+      "parskip" -> FilGlue,
+      "hangindent" -> 0.0,
+      "hangafter" -> 1.0,
+
+      //
+      "imageScaling" -> 1.0,
+    )
 
 end Typesetter
 

@@ -10,6 +10,7 @@ import pprint.pprintln
 class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
   protected[typesetter] var firstParagraph: Boolean = true
 
+  println(t.scopes.top)
   private val pageHeight = t.getNumber("vsize")
 
   protected[typesetter] var page: VBoxBuilder = new VBoxBuilder
