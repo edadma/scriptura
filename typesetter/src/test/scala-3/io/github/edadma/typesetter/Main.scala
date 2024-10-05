@@ -16,11 +16,14 @@ object Main extends SimpleSwingApplication:
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
-        val t = new Graphics2DTypesetter(g)
-        val b1 = new HBoxBuilder
+        val t =
+          new Graphics2DTypesetter(g):
+            set("hsize", 700)
+
+//        val b1 = new HBoxBuilder
 
         t.setDocument(new TestDocument)
-        b1.addFil()
+        t.addFil()
           .add(CharBox(t, "Hello"))
           .addGlue(t.currentFont.space, 1)
           .add(
@@ -31,9 +34,9 @@ object Main extends SimpleSwingApplication:
           )
           .addFil()
 
-        val b2 = new HBoxBuilder
+//        val b2 = new HBoxBuilder
 
-        b2.addFil()
+        t.addFil()
           .add(
             CharBox(
               t,
@@ -42,9 +45,9 @@ object Main extends SimpleSwingApplication:
           )
           .addFil()
 
-        val b3 = new HBoxBuilder
+//        val b3 = new HBoxBuilder
 
-        b3.addFil()
+        t.addFil()
           .add(
             ImageBox(
               t,
@@ -53,13 +56,13 @@ object Main extends SimpleSwingApplication:
           )
           .addFil()
 
-        val line1 = b1.buildTo(700)
-        val line2 = b2.buildTo(700)
-        val line3 = b3.buildTo(700)
-        val vb = new VBoxBuilder
-        val vbox = vb.add(line1).add(line3).add(line2).build
+//        val line1 = b1.buildTo(700)
+//        val line2 = b2.buildTo(700)
+//        val line3 = b3.buildTo(700)
+//        val vb = new VBoxBuilder
+//        val vbox = vb.add(line1).add(line3).add(line2).build
 
-        vbox.draw(t, 10, 10 + vbox.ascent)
+        t.draw(t, 10, 10 + vbox.ascent)
       }
     }
 

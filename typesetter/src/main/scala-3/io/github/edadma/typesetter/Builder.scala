@@ -23,12 +23,6 @@ class Builder:
     boxes += b
     this // Return the builder for chaining
 
-  // Add a flexible GlueBox
-  def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): this.type =
-    add(Glue(naturalWidth, stretch, shrink))
-
-  def addFil(): this.type = add(FilGlue)
-
   protected def buildTo(size: Double, boxes: ArrayBuffer[Box], measure: Box => Double, skip: Double => Box): List[Box] =
     // Step 1: Calculate the natural size of all boxes
     val naturalSize = boxes map measure sum

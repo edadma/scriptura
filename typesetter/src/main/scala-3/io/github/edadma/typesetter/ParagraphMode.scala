@@ -79,7 +79,9 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
 
       if pageMode.page.nonEmpty && !pageMode.page.last.isSpace then
         val last = pageMode.page.last
-        val skip = t.getGlue("baselineskip") - last.descent - newLine.ascent
+        val baselineskip = t.getGlue("baselineskip") - last.descent - newLine.ascent
+        val skip =
+          if baselineskip.naturalSize <= t.getNumber("lineskiplimit") then t.getGlue("lineskip") else baselineskip
 
         pageMode addLine skip
         firstLine = false

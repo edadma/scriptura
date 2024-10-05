@@ -189,7 +189,7 @@ abstract class Typesetter:
 
   def getNumber(name: String): Double = get(name).asInstanceOf[Double]
 
-  def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
+  def set(name: String, value: Double | Glue): Unit = scopes(0) += (name -> value)
 
   def set(pairs: Seq[(String, Any)]): Unit = scopes(0) ++= pairs
 
@@ -249,6 +249,11 @@ abstract class Typesetter:
     modeStack.top add box
     this
 
+  infix def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): Typesetter =
+    add(Glue(naturalWidth, stretch, shrink))
+
+  infix def addFil(): Typesetter = add(FilGlue)
+
   def done(): Unit =
 //    paragraph()
     modeStack.top.done()
@@ -267,7 +272,7 @@ abstract class Typesetter:
 //      case p: PageMode => p.start
 //      case _           =>
 
-  def defaultParameters =
+  private def defaultParameters =
     List(
       "baselineskip" -> Glue(currentFont.size * 1.2 * pt),
       "lineskip" -> Glue(1),
