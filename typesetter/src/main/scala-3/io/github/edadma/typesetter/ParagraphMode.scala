@@ -75,18 +75,16 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
       if boxes.isEmpty then hbox add new HSpaceBox(2)
 
-      // hbox.setToWidth(pageMode.result.lineWidth)
+      val newLine = hbox.buildTo(t.getNumber("hsize"))
 
       if pageMode.page.nonEmpty && !pageMode.page.last.isSpace then
         val last = pageMode.page.last
-        val baselines = List(last.baselineHeight, hbox.baselineHeight) filterNot (_.isEmpty) map (_.get)
-        val baseline = if baselines.nonEmpty then baselines.sum / baselines.length else 0
-        val skip = baseline - last.descent - hbox.ascent
+        val skip = t.getGlue("baselineskip") - last.descent - newLine.ascent
 
-        if skip > 0 then pageMode addLine new Glue(skip, if firstLine then 0.05 else 0)
-        if firstLine then firstLine = false
+        pageMode addLine skip
+        firstLine = false
 
-      pageMode addLine hbox.buildTo(t.getNumber("hsize"))
+      pageMode addLine newLine
     end while
 
     t.indentParagraph = true

@@ -16,6 +16,10 @@ class Glue(val naturalSize: Double, val stretch: Double = 0, val shrink: Double 
   val xAdvance: Double = naturalSize // Same as width initially
   val typ: Type = Type.Start // todo: this is not correct
 
+  def -(amount: Double): Glue = Glue(naturalSize - amount, stretch, shrink, order)
+  def +(amount: Double): Glue = Glue(naturalSize + amount, stretch, shrink, order)
+  def *(amount: Double): Glue = Glue(naturalSize * amount, stretch, shrink, order)
+
   override def toString: String = s"${name}Glue(naturalSize=$naturalSize, stretch=$stretch, shrink=$shrink)"
 end Glue
 
