@@ -254,6 +254,10 @@ abstract class Typesetter:
 
   infix def addFil(): Typesetter = add(FilGlue)
 
+  def hbox(toSize: Double | Null = null): Typesetter =
+    modeStack push new HBoxBuilder(this, toSize)
+    this
+
   def done(): Unit =
     modeStack.top.done()
 

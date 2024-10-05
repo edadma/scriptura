@@ -21,9 +21,7 @@ object Main extends SimpleSwingApplication:
             set("hsize", 700)
             setDocument(new TestDocument)
 
-//        val b1 = new HBoxBuilder(t, 700)
-
-        t.hbox
+        t.hbox(700)
           .addFil()
           .add(CharBox(t, "Hello"))
           .addGlue(t.currentFont.space, 1)
@@ -34,21 +32,10 @@ object Main extends SimpleSwingApplication:
             ),
           )
           .addFil()
+          .done()
 
-        val b2 = new HBoxBuilder(t, 700)
-
-        t.addFil()
-          .add(
-            CharBox(
-              t,
-              "line 2",
-            ),
-          )
+        t.hbox(700)
           .addFil()
-
-//        val b3 = new HBoxBuilder
-
-        t.addFil()
           .add(
             ImageBox(
               t,
@@ -56,12 +43,18 @@ object Main extends SimpleSwingApplication:
             ),
           )
           .addFil()
+          .done()
 
-        val line1 = b1.result
-        val line2 = b2.result
-        val line3 = b3.result
-//        val vb = new VBoxBuilder
-        t.add(line1).add(line3).add(line2).build
+        t.hbox(700)
+          .addFil()
+          .add(
+            CharBox(
+              t,
+              "line 2",
+            ),
+          )
+          .addFil()
+          .done()
 
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
