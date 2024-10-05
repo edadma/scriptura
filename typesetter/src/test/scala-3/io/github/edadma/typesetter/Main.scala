@@ -62,7 +62,8 @@ object Main extends SimpleSwingApplication:
 //        val vb = new VBoxBuilder
 //        val vbox = vb.add(line1).add(line3).add(line2).build
 
-        t.draw(t, 10, 10 + vbox.ascent)
+        t.end()
+        t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
       }
     }
 

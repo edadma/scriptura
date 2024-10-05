@@ -255,13 +255,16 @@ abstract class Typesetter:
   infix def addFil(): Typesetter = add(FilGlue)
 
   def done(): Unit =
-//    paragraph()
+    paragraph()
     modeStack.top.done()
 
-//  def paragraph(): Unit =
-//    modeStack.top match
-//      case p: ParagraphMode => p.done()
-//      case _                =>
+  def paragraph(): Unit =
+    modeStack.top match
+      case p: ParagraphMode => p.done()
+      case _                =>
+
+  def end(): Unit =
+    while modeStack.nonEmpty do done()
 
   def charBox(s: String): CharBox = new CharBox(this, s)
 
