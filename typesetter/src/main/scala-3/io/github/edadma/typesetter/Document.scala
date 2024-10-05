@@ -1,8 +1,9 @@
 package io.github.edadma.typesetter
 
-import scala.compiletime.uninitialized
-
 abstract class Document:
-  protected var t: Typesetter = uninitialized
+  protected val t: Typesetter
+  var pages = new ArrayBufer[Box]
 
-  def setTypesetter(typesetter: Typesetter): Unit = t = typesetter
+  infix def add(box: Box): Unit = pages += box
+
+  def init(): Unit

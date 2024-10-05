@@ -6,7 +6,7 @@ import java.io.File
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
-class Graphics2DTypesetter(val doc: Document, g: Graphics2D) extends Typesetter:
+class Graphics2DTypesetter(g: Graphics2D) extends Typesetter:
 //  def setFont(font: java.awt.Font): Unit = g.setFont(font)
 
   currentDPI = Toolkit.getDefaultToolkit.getScreenResolution

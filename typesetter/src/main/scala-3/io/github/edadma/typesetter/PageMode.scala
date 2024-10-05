@@ -24,7 +24,7 @@ class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
         case _: VSpaceBox => page.removeLast()
         case _            =>
       }
-      document.add(page.buildTo(pageHeight))
+      document add page.buildTo(pageHeight)
       page = new VBoxBuilder
     end if
 

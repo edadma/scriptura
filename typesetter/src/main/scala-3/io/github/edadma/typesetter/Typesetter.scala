@@ -6,14 +6,13 @@ import scala.language.postfixOps
 
 abstract class Typesetter:
 
-  val doc: Document
-
+  var document: Document = TestDocument(this)
   var debug: Boolean = false
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
   var currentFont: Font = uninitialized
   var currentColor: Color = Color("grey")
-  val converter = new UnitConverter(this)
+  val converter = UnitConverter(this)
 
   case class Typeface(
       fonts: mutable.HashMap[Set[String], Any], // todo: find a nicer target independent type other than Any
@@ -27,8 +26,9 @@ abstract class Typesetter:
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   scopes push Map.empty
-  modeStack push new SimpleDocumentMode(this)
+  modeStack push new TestDocumentMode(this)
   modeStack push new PageMode(this, modeStack.top)
+  document.init()
 
   def setFont(font: Any /*, size: Double*/ ): Unit
 
@@ -54,9 +54,11 @@ abstract class Typesetter:
 
   def drawImage(image: Any, x: Double, y: Double): Unit
 
-  doc.setTypesetter(this)
+  document.init()
 
   def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
+
+  def setDocument(d: Document): Unit = document = d
 
   loadTypeface(
     "noto",

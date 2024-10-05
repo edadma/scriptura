@@ -16,9 +16,10 @@ object Main extends SimpleSwingApplication:
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
-        val t = new Graphics2DTypesetter(new TestDocument, g)
+        val t = new Graphics2DTypesetter(g)
         val b1 = new HBoxBuilder
 
+        t.setDocument(new TestDocument)
         b1.addFil()
           .add(CharBox(t, "Hello"))
           .addGlue(t.currentFont.space, 1)
