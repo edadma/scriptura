@@ -255,7 +255,6 @@ abstract class Typesetter:
   infix def addFil(): Typesetter = add(FilGlue)
 
   def done(): Unit =
-    paragraph()
     modeStack.top.done()
 
   def paragraph(): Unit =
