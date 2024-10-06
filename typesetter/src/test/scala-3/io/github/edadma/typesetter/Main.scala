@@ -14,9 +14,9 @@ object Main extends SimpleSwingApplication:
 
         val t =
           new Graphics2DTypesetter(new TestDocument, g):
-            set("hsize", 700)
+            set("hsize", 600)
 
-        t.hbox(700)
+        t.hbox(t.getNumber("hsize"))
           .addFil()
           .add(CharBox(t, "Hello"))
           .addGlue(t.currentFont.space, 1)
@@ -29,7 +29,7 @@ object Main extends SimpleSwingApplication:
           .addFil()
           .done()
 
-        t.hbox(700)
+        t.hbox(t.getNumber("hsize"))
           .addFil()
           .add(
             ImageBox(
@@ -40,7 +40,7 @@ object Main extends SimpleSwingApplication:
           .addFil()
           .done()
 
-        t.hbox(700)
+        t.hbox(t.getNumber("hsize"))
           .addFil()
           .add(
             CharBox(
@@ -53,6 +53,7 @@ object Main extends SimpleSwingApplication:
 
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
+        println("---------------")
       }
     }
 

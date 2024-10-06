@@ -30,7 +30,11 @@ abstract class ListBoxBuilder extends Builder:
     // If there are no Glue, return the boxes as-is (or handle accordingly)
     if (glueBoxesWithIndices.isEmpty) {
       if (delta != 0) {
-        println("Warning: No glue available to adjust the size.")
+        println(s"Warning: No glue available to adjust the size ($getClass) (${boxes.flatMap({ b =>
+            b match
+              case c: CharBox => Seq(c.text)
+              case _          => Nil
+          })}).")
       }
       return boxes.toList
     }
@@ -103,7 +107,7 @@ abstract class ListBoxBuilder extends Builder:
     val finalSize = boxes map measure sum
 
     if (math.abs(finalSize - size) > 1e-3)
-      println(s"Warning: Final size ($finalSize) does not match target size ($size).")
+      println(s"Warning: Final size ($finalSize) of '${getClass.getName}' does not match target size ($size).")
 
     // Return the adjusted boxes as a List
     boxes.toList
