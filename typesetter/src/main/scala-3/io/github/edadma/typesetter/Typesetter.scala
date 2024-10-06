@@ -243,7 +243,7 @@ abstract class Typesetter:
 
         Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
 
-  infix def add(text: String): Unit =
+  infix def add(text: String): Typesetter =
     start()
     add(charBox(text))
 
@@ -270,16 +270,14 @@ abstract class Typesetter:
     modeStack push new HBoxBuilder(this, toSize)
     this
 
-  def done(): Unit =
-    modeStack.top.done()
+  def done(): Unit = modeStack.top.done()
 
   def paragraph(): Unit =
     modeStack.top match
       case p: ParagraphMode => p.done()
       case _                =>
 
-  def end(): Unit =
-    while modeStack.nonEmpty do done()
+  def end(): Unit = while modeStack.nonEmpty do done()
 
   def start(): Unit =
     paragraph()

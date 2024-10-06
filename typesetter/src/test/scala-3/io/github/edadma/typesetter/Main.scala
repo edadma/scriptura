@@ -18,14 +18,8 @@ object Main extends SimpleSwingApplication:
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
-          .add(CharBox(t, "Hello"))
-          .addGlue(t.currentFont.space, 1)
-          .add(
-            CharBox(
-              t,
-              "Scriptura",
-            ),
-          )
+          .add("Hello")
+          .add("Scriptura")
           .addFil()
           .done()
 
@@ -42,12 +36,7 @@ object Main extends SimpleSwingApplication:
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
-          .add(
-            CharBox(
-              t,
-              "line 2",
-            ),
-          )
+          .add("line 2")
           .addFil()
           .done()
 

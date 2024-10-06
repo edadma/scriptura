@@ -4,6 +4,7 @@ trait HorizontalMode extends Builder:
   override infix def add(box: Box): Unit =
     if nonEmpty then
       (last, box) match
+        case (_, _: (HBox | Glue))            => super.add(box)
         case (_: SpaceBox, _)                 => super.add(box)
         case (_, b: CharBox) if b.text == "," => super.add(box)
         case (l: CharBox, b: CharBox)
