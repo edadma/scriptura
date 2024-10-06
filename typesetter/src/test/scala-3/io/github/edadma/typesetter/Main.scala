@@ -17,32 +17,44 @@ object Main extends SimpleSwingApplication:
             set("hsize", 600)
             debug = true
 
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("Hello")
+//          .add(" ")
+//          .add("Scriptura!")
+//          .add(" ")
+//          .add("Cool")
+//          .addFil()
+//          .done()
+
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add(
+//            ImageBox(
+//              t,
+//              "866-536x354.jpg",
+//            ),
+//          )
+//          .addFil()
+//          .done()
+
         t.hbox(t.getNumber("hsize"))
           .addFil()
-          .add("Hello")
-          .add(" ")
-          .add("Scriptura!")
-          .add(" ")
-          .add("Cool")
+          .add("one")
           .addFil()
           .done()
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
-          .add(
-            ImageBox(
-              t,
-              "866-536x354.jpg",
-            ),
-          )
+          .add("two")
           .addFil()
           .done()
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add("text")
-          .addFil()
-          .done()
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("three")
+//          .addFil()
+//          .done()
 
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
