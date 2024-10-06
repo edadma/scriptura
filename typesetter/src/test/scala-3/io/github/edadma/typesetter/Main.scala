@@ -15,7 +15,7 @@ object Main extends SimpleSwingApplication:
         val t =
           new Graphics2DTypesetter(new TestDocument, g):
             set("hsize", 600)
-            debug = true
+//            debug = true
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
@@ -38,26 +38,25 @@ object Main extends SimpleSwingApplication:
           .addFil()
           .done()
 
-//        t.hbox(t.getNumber("hsize"))
-//          .addFil()
-//          .add("one")
-//          .addFil()
-//          .done()
-//
-//        t.hbox(t.getNumber("hsize"))
-//          .addFil()
-//          .add("two")
-//          .addFil()
-//          .done()
+        t.hbox(t.getNumber("hsize"))
+          .addFil()
+          .add("[one")
+          .addFil()
+          .done()
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
-          .add("three")
+          .add("[two")
+          .addFil()
+          .done()
+
+        t.hbox(t.getNumber("hsize"))
+          .addFil()
+          .add("[three")
           .addFil()
           .done()
 
         t.end()
-//        println(t.document.pages.head)
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
       }
     }

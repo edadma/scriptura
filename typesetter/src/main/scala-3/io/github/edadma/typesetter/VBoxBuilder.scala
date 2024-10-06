@@ -12,7 +12,8 @@ class VBoxBuilder(val t: Typesetter, protected val toSize: Double | Null = null)
     if nonEmpty && !last.isSpace then
       val baselineskip = t.getGlue("baselineskip") - last.descent - box.ascent
       val skip =
-        if baselineskip.naturalSize <= t.getNumber("lineskiplimit") then t.getGlue("lineskip") else baselineskip
+        if baselineskip.naturalSize <= t.getNumber("lineskiplimit") then t.getGlue("lineskip")
+        else baselineskip
 
       super.add(skip)
     end if
