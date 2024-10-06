@@ -245,6 +245,20 @@ abstract class Typesetter:
 
         Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
 
+  infix def add(text: String): Unit =
+    // start()
+    add(charBox(text))
+
+//  def textBox(text: String): CharBox =
+//    val rep =
+//      if representations then Ligatures.replace(text, Ligatures.REPRESENTATIONS, currentFont.ligatures) else text
+//
+//    charBox(if ligatures then Ligatures(rep, currentFont.ligatures) else rep)
+//    charBox(text)
+
+  // todo: charBox should do what textBox did in "compositor" (dealing with ligatures of all kinds)
+  def charBox(s: String): CharBox = new CharBox(this, s)
+
   infix def add(box: Box): Typesetter =
     modeStack.top add box
     this
@@ -269,13 +283,11 @@ abstract class Typesetter:
   def end(): Unit =
     while modeStack.nonEmpty do done()
 
-  def charBox(s: String): CharBox = new CharBox(this, s)
-
 //  def start(): Unit =
 //    paragraph()
 //
 //    modeStack.top match
-//      case p: PageMode => p.start
+//      case p: PageMode => p.start // todo: PageMode here should be VerticalMode
 //      case _           =>
 
   private def defaultParameters =
