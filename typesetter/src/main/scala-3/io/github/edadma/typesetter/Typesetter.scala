@@ -283,8 +283,14 @@ abstract class Typesetter:
     paragraph()
 
     modeStack.top match
-      case p: VBoxBuilder => p.paragraph
-      case _              =>
+      case v: VBoxBuilder =>
+        val paragraphMode = new ParagraphMode(this, v)
+
+        modeStack push paragraphMode
+
+        if indentParagraph /*&& !firstParagraph*/ then paragraphMode add HSpaceBox(getNumber("parindent"))
+//        else firstParagraph = false
+      case _ =>
 
   private def defaultParameters =
     List(

@@ -7,7 +7,6 @@ class ShiftBox(val box: Box, val shift: Double) extends ContentBox:
   val height: Double = box.height // The overall height is still the same
   val width: Double = box.width // The width is unchanged
   val xAdvance: Double = box.xAdvance // xAdvance remains the same
-  val typ: Type = box.typ
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
     // Apply the vertical shift by adding the `amount` to the y-coordinate

@@ -14,7 +14,6 @@ class Glue(val naturalSize: Double, val stretch: Double = 0, val shrink: Double 
   val height: Double = naturalSize
   val width: Double = naturalSize // Initially, it's the natural width
   val xAdvance: Double = naturalSize // Same as width initially
-  val typ: Type = Type.Start // todo: this is not correct
 
   def -(amount: Double): Glue = Glue(naturalSize - amount, stretch, shrink, order)
   def +(amount: Double): Glue = Glue(naturalSize + amount, stretch, shrink, order)

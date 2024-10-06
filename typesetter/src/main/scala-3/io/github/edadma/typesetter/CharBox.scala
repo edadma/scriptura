@@ -7,7 +7,6 @@ class CharBox(t: Typesetter, val text: String, font: Font, color: Color) extends
 
   val ascent: Double = -yBearing // Ascent is the negative yBearing
   val descent: Double = height - ascent // Descent is height minus ascent
-  val typ: Type = Type.Start
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
     box(t, x, y, "purple")
