@@ -11,6 +11,7 @@ class VBoxBuilder(val t: Typesetter, protected val toSize: Double | Null = null)
   override infix def add(box: Box): Unit =
     if box.typ == Type.Start then paragraph add box
     else
+      println(box)
       if nonEmpty && !last.isSpace then
         val baselineskip = t.getGlue("baselineskip") - last.descent - box.ascent
         val skip =

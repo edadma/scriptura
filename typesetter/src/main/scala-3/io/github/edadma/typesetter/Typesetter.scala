@@ -146,7 +146,8 @@ abstract class Typesetter:
 
   currentFont = makeFont("gentium", 50, Set("regular"))
   set(defaultParameters)
-  modeStack push new PageMode(this, modeStack.top)
+//  modeStack push new PageMode(this, modeStack.top)
+  modeStack push new VBoxBuilder(this)
 
   def setFont(font: Any /*, size: Double*/ ): Unit
 
