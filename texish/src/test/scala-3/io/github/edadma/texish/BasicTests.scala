@@ -9,14 +9,57 @@ class BasicTests extends AnyFreeSpec with Matchers with Testing:
     test("asdf") shouldBe "asdf"
   }
 
-  "simple text 1" in {
+  "space text 1" in {
     test("asdf zxcv") shouldBe
       """
       |["asdf", " ", "zxcv"]
       """.trim.stripMargin
   }
 
-  "simple text 2" in {
+  "space text 2" in {
+    test("asdf  zxcv") shouldBe
+      """
+      |["asdf", " ", "zxcv"]
+      """.trim.stripMargin
+  }
+
+  "space text 3" in {
+    test(" asdf zxcv") shouldBe
+      """
+      |[" ", "asdf", " ", "zxcv"]
+      """.trim.stripMargin
+  }
+
+  "space text 4" in {
+    test("  asdf zxcv") shouldBe
+      """
+      |[" ", "asdf", " ", "zxcv"]
+      """.trim.stripMargin
+  }
+
+  "space text 5" in {
+    test("asdf zxcv ") shouldBe
+      """
+      |["asdf", " ", "zxcv", " "]
+      """.trim.stripMargin
+  }
+
+  "space text 6" in {
+    test("asdf zxcv  ") shouldBe
+      """
+      |["asdf", " ", "zxcv", " "]
+      """.trim.stripMargin
+  }
+
+  "space text 7" in {
+    test(" ") shouldBe " "
+  }
+
+  "space text 8" in {
+    test("  ") shouldBe " "
+  }
+
+  "newline text 1" in {
     test(
       """asdf
         |zxcv""".stripMargin,
@@ -26,7 +69,7 @@ class BasicTests extends AnyFreeSpec with Matchers with Testing:
       """.trim.stripMargin
   }
 
-  "simple text 3" in {
+  "newline text 2" in {
     test(
       """asdf
         |

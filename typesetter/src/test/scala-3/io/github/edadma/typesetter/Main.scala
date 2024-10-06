@@ -19,6 +19,7 @@ object Main extends SimpleSwingApplication:
         t.hbox(t.getNumber("hsize"))
           .addFil()
           .add("Hello")
+          .add(" ")
           .add("Scriptura")
           .addFil()
           .done()
