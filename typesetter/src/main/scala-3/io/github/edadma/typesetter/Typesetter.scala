@@ -143,7 +143,8 @@ abstract class Typesetter:
 
   currentFont = makeFont("gentium", 50, Set("regular"))
   set(defaultParameters)
-  modeStack push new PageMode(this, modeStack.top)
+  modeStack push new VBoxBuilder(this, getNumber("vsize"))
+  //  modeStack push new PageMode(this, modeStack.top)
   setDocument(new TestDocument)
   document.init()
 

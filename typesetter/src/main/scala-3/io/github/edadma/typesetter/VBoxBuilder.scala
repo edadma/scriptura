@@ -8,7 +8,7 @@ class VBoxBuilder(protected val t: Typesetter, protected val toSize: Double | Nu
 
   protected[typesetter] var firstParagraph: Boolean = true
 
-  infix def add(box: Box): Unit =
+  override infix def add(box: Box): Unit =
     if box.typ == Type.Start then paragraph add box
     else
       if nonEmpty && !last.isSpace then
