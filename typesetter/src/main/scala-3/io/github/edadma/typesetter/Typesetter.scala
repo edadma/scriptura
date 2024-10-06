@@ -244,7 +244,7 @@ abstract class Typesetter:
         Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
 
   infix def add(text: String): Typesetter =
-    start()
+    if modeStack.top.isInstanceOf[VBoxBuilder] then start()
     add(charBox(text))
 
 //  def textBox(text: String): CharBox =
