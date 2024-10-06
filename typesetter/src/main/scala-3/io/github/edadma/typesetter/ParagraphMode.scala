@@ -1,7 +1,6 @@
 package io.github.edadma.typesetter
 
 import scala.annotation.tailrec
-import scala.collection.mutable.ArrayBuffer
 
 class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends HorizontalMode:
   def result: Box = ???
