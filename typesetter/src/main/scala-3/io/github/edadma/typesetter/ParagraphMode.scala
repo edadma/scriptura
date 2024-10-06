@@ -2,12 +2,10 @@ package io.github.edadma.typesetter
 
 import scala.annotation.tailrec
 
-class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends HorizontalMode:
+class ParagraphMode(protected val t: Typesetter, pageMode: Builder) extends HorizontalMode:
   def result: Box = ???
 
   override def done(): Unit =
-    var firstLine = true
-
     while boxes.nonEmpty do
       val hbox = new HBoxBuilder(t, t.getNumber("hsize"))
 
@@ -64,16 +62,7 @@ class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends Hor
 
       val newLine = hbox.result
 
-      if pageMode.page.nonEmpty && !pageMode.page.last.isSpace then
-        val last = pageMode.page.last
-        val baselineskip = t.getGlue("baselineskip") - last.descent - newLine.ascent
-        val skip =
-          if baselineskip.naturalSize <= t.getNumber("lineskiplimit") then t.getGlue("lineskip") else baselineskip
-
-        pageMode addLine skip
-        firstLine = false
-
-      pageMode addLine newLine
+      pageMode add newLine
     end while
 
     t.indentParagraph = true

@@ -24,8 +24,6 @@ class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
     // todo: only internally generated interline spacing should be removed
     if page.nonEmpty || !box.isInstanceOf[VSpaceBox] then page add box
 
-  def result: Box = page.result
-
   def paragraph: ParagraphMode =
     val paragraphMode = new ParagraphMode(t, this)
 
