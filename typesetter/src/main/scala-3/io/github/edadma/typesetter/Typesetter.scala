@@ -10,7 +10,6 @@ abstract class Typesetter:
 
   var debug: Boolean = false
   var currentFontXHeight: Double = uninitialized
-  var currentDPI: Double = uninitialized
   var currentFont: Font = uninitialized
   var currentColor: Color = Color("grey")
   val converter = UnitConverter(this)
@@ -146,8 +145,9 @@ abstract class Typesetter:
 
   currentFont = makeFont("gentium", 50, Set("regular"))
   set(defaultParameters)
-//  modeStack push new PageMode(this, modeStack.top)
   modeStack push new VBoxBuilder(this)
+
+  def getDPI: Double
 
   def setFont(font: Any /*, size: Double*/ ): Unit
 
@@ -175,7 +175,7 @@ abstract class Typesetter:
 
   def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
 
-  def in: Double = currentDPI
+  def in: Double = getDPI
 
   def pt: Double = in / 72
 
@@ -284,7 +284,7 @@ abstract class Typesetter:
 
     modeStack.top match
       case v: VBoxBuilder =>
-        val paragraphMode = new ParagraphMode(this, v)
+        val paragraphMode = new ParagraphMode(this)
 
         modeStack push paragraphMode
 
@@ -295,7 +295,7 @@ abstract class Typesetter:
   private def defaultParameters =
     List(
       "baselineskip" -> Glue(currentFont.size * 1.2 * pt),
-      "lineskip" -> Glue(1),
+      "lineskip" -> Glue(1 * pt),
       "lineskiplimit" -> 0.0,
       "spaceskip" -> Glue(currentFont.space, 1),
       "xspaceskip" -> Glue(currentFont.space * 1.5, 1),

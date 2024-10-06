@@ -2,7 +2,7 @@ package io.github.edadma.typesetter
 
 import scala.annotation.tailrec
 
-class ParagraphMode(val t: Typesetter, pageMode: Builder) extends HorizontalMode:
+class ParagraphMode(val t: Typesetter) extends HorizontalMode:
   def result: Box = ???
 
   override def done(): Unit =
@@ -62,7 +62,7 @@ class ParagraphMode(val t: Typesetter, pageMode: Builder) extends HorizontalMode
 
       val newLine = hbox.result
 
-      pageMode add newLine
+      t.modeStack(1) add newLine
     end while
 
     t.indentParagraph = true

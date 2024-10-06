@@ -9,8 +9,6 @@ import java.awt.image.BufferedImage
 class Graphics2DTypesetter(val document: Document, g: Graphics2D) extends Typesetter:
 //  def setFont(font: java.awt.Font): Unit = g.setFont(font)
 
-  currentDPI = Toolkit.getDefaultToolkit.getScreenResolution
-
   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
   g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
 
@@ -20,6 +18,8 @@ class Graphics2DTypesetter(val document: Document, g: Graphics2D) extends Typese
   //     loadFont("fonts/Roboto-Regular.ttf").deriveFont(24f)
 
   private val frc = g.getFontRenderContext
+
+  def getDPI: Double = Toolkit.getDefaultToolkit.getScreenResolution
 
   def setFont(font: Any /*, size: Double*/ ): Unit = g.setFont(font.asInstanceOf[JFont] /*.deriveFont(size.toFloat)*/ )
 

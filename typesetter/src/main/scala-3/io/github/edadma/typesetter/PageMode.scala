@@ -1,6 +1,6 @@
 package io.github.edadma.typesetter
 
-class PageMode(t: Typesetter, document: Mode) extends VBoxBuilder(t):
+class PageMode(t: Typesetter) extends VBoxBuilder(t):
   private lazy val pageHeight = t.getNumber("vsize")
 
   override infix def add(box: Box): Unit =
@@ -9,7 +9,7 @@ class PageMode(t: Typesetter, document: Mode) extends VBoxBuilder(t):
         case _: VSpaceBox => removeLast()
         case _            =>
       }
-      document add result
+      t.modeStack(1) add result
       clear()
     end if
 

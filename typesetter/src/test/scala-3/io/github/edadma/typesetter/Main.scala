@@ -57,6 +57,7 @@ object Main extends SimpleSwingApplication:
           .done()
 
         t.end()
+//        println(t.document.pages.head)
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
       }
     }

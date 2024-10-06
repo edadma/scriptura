@@ -3,9 +3,9 @@ package io.github.edadma.typesetter
 import scala.compiletime.uninitialized
 
 class UnitConverter(t: Typesetter):
-  def pointsToPixels(points: Double): Double = (points / 72.0) * t.currentDPI
+  def pointsToPixels(points: Double): Double = (points / 72.0) * t.getDPI
 
-  def pixelsToPoints(pixels: Double): Double = (pixels / t.currentDPI) * 72.0
+  def pixelsToPoints(pixels: Double): Double = (pixels / t.getDPI) * 72.0
 
   def cmToPoints(cm: Double): Double = (cm / 2.54) * 72.0
 
