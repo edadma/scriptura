@@ -15,12 +15,15 @@ object Main extends SimpleSwingApplication:
         val t =
           new Graphics2DTypesetter(new TestDocument, g):
             set("hsize", 600)
+            debug = true
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
           .add("Hello")
           .add(" ")
-          .add("Scriptura")
+          .add("Scriptura!")
+          .add(" ")
+          .add("Cool")
           .addFil()
           .done()
 
@@ -37,7 +40,7 @@ object Main extends SimpleSwingApplication:
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
-          .add("line 2")
+          .add("text")
           .addFil()
           .done()
 

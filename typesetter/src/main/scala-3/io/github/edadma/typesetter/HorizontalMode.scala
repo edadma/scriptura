@@ -4,6 +4,13 @@ trait HorizontalMode extends Builder:
   override infix def add(box: Box): Unit =
     if nonEmpty then
       (last, box) match
+        case (l: CharBox, b: CharBox)
+            if b.text == " " &&
+              !(l.text.last == '.' && Abbreviation(l.text.dropRight(1))) &&
+              ".!?:;".contains(l.text.last) =>
+          println(123)
+          super.add(t.getGlue("xspaceskip"))
+          super.add(box)
         case (_, b: CharBox) if b.text == " " => super.add(t.getGlue("spaceskip"))
         case _                                => super.add(box)
 
