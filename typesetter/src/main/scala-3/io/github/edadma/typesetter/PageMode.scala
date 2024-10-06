@@ -14,11 +14,9 @@ class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
 
   protected[typesetter] var page: VBoxBuilder = new VBoxBuilder(t, pageHeight)
 
-  infix def add(box: Box): Mode =
+  infix def add(box: Box): Unit =
     if box.typ == Type.Start then start add box
     else addLine(box)
-
-    this
 
   infix def addLine(box: Box): Unit =
     if page.size + box.height > pageHeight then

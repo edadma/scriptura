@@ -1,9 +1,9 @@
 package io.github.edadma.typesetter
 
-abstract class Mode:
+trait Mode:
   protected val t: Typesetter
 
-  infix def add(box: Box): Mode
+  infix def add(box: Box): Unit
 
   def result: Box
 

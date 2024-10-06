@@ -4,20 +4,6 @@ import scala.annotation.tailrec
 import scala.collection.mutable.ArrayBuffer
 
 class ParagraphMode(protected val t: Typesetter, pageMode: PageMode) extends HorizontalMode:
-  val boxes = new ArrayBuffer[Box]
-
-  protected def addBox(box: Box): Mode =
-    boxes += box
-    this
-
-  protected def nonEmpty: Boolean = boxes.nonEmpty
-
-  protected def last: Box = boxes.last
-
-  protected def length: Int = boxes.length
-
-  protected def update(index: Int, elem: Box): Unit = boxes.update(index, elem)
-
   def result: Box = ???
 
   override def done(): Unit =

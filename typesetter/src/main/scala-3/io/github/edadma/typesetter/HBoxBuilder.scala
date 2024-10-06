@@ -1,6 +1,8 @@
 package io.github.edadma.typesetter
 
-class HBoxBuilder(protected val t: Typesetter, val toSize: Double | Null = null) extends Builder:
+class HBoxBuilder(protected val t: Typesetter, val toSize: Double | Null = null)
+    extends ListBoxBuilder
+    with HorizontalMode:
 
   protected val measure: Box => Double = _.width
   protected val skip: Double => Box = HSpaceBox(_)
