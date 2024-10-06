@@ -30,11 +30,12 @@ abstract class ListBoxBuilder extends Builder:
     // If there are no Glue, return the boxes as-is (or handle accordingly)
     if (glueBoxesWithIndices.isEmpty) {
       if (delta != 0) {
-        println(s"Warning: No glue available to adjust the size ($getClass) (${boxes.flatMap({ b =>
-            b match
-              case c: CharBox => Seq(c.text)
-              case _          => Nil
-          })}).")
+        println(s"Warning: No glue available to adjust the size ($getClass) (${boxes
+            .map({
+              case c: CharBox => c.text
+              case _          => " "
+            })
+            .mkString}).")
       }
       return boxes.toList
     }
