@@ -1,12 +1,5 @@
 package io.github.edadma.typesetter
 
-import pprint.pprintln
-
-//class PageMode(protected val t: Typesetter) extends Mode:
-//  infix def add(box: Box): Unit = {}
-//
-//  def result: Box = ZeroGlue
-
 class PageMode(protected val t: Typesetter, document: Mode) extends Mode:
   protected[typesetter] var firstParagraph: Boolean = true
 
