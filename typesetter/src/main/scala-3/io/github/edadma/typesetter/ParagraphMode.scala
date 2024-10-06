@@ -2,7 +2,7 @@ package io.github.edadma.typesetter
 
 import scala.annotation.tailrec
 
-class ParagraphMode(protected val t: Typesetter, pageMode: Builder) extends HorizontalMode:
+class ParagraphMode(val t: Typesetter, pageMode: Builder) extends HorizontalMode:
   def result: Box = ???
 
   override def done(): Unit =

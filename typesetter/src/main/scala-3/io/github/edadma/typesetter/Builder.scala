@@ -5,6 +5,10 @@ import scala.collection.mutable.ArrayBuffer
 trait Builder extends Mode:
   protected val boxes = new ArrayBuffer[Box]
 
+  def init(): Unit = ()
+
+  def clear(): Unit = boxes.clear()
+
   def last: Box = boxes.last
 
   def lastOption: Option[Box] = boxes.lastOption

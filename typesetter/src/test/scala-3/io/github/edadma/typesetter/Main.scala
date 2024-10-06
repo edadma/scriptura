@@ -13,9 +13,8 @@ object Main extends SimpleSwingApplication:
         super.paintComponent(g)
 
         val t =
-          new Graphics2DTypesetter(g):
+          new Graphics2DTypesetter(new TestDocument, g):
             set("hsize", 700)
-            setDocument(new TestDocument)
 
         t.hbox(700)
           .addFil()

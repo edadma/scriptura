@@ -6,7 +6,8 @@ import scala.language.postfixOps
 
 abstract class Typesetter:
 
-  var document: Document = uninitialized
+  val document: Document
+
   var debug: Boolean = false
   var currentFontXHeight: Double = uninitialized
   var currentDPI: Double = uninitialized
@@ -26,7 +27,9 @@ abstract class Typesetter:
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   scopes push Map.empty
-  modeStack push new TestDocumentMode(this)
+  modeStack push document
+  document.ts = this
+  document.init()
 
   loadTypeface(
     "noto",
@@ -143,10 +146,7 @@ abstract class Typesetter:
 
   currentFont = makeFont("gentium", 50, Set("regular"))
   set(defaultParameters)
-  modeStack push new VBoxBuilder(this, getNumber("vsize"))
-  //  modeStack push new PageMode(this, modeStack.top)
-  setDocument(new TestDocument)
-  document.init()
+  modeStack push new PageMode(this, modeStack.top)
 
   def setFont(font: Any /*, size: Double*/ ): Unit
 
@@ -173,10 +173,6 @@ abstract class Typesetter:
   def drawImage(image: Any, x: Double, y: Double): Unit
 
   def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
-
-  def setDocument(d: Document): Unit =
-    document = d
-    d.t = this
 
   def in: Double = currentDPI
 

@@ -1,7 +1,9 @@
 package io.github.edadma.typesetter
 
 trait Mode:
-  protected val t: Typesetter
+  def t: Typesetter
+
+  def init(): Unit
 
   infix def add(box: Box): Unit
 
