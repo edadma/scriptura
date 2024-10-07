@@ -38,21 +38,21 @@ object Main extends SimpleSwingApplication:
           .addFil()
           .done()
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add("[one")
-          .addFil()
-          .done()
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("one")
+//          .addFil()
+//          .done()
+//
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("two")
+//          .addFil()
+//          .done()
 
         t.hbox(t.getNumber("hsize"))
           .addFil()
-          .add("[two")
-          .addFil()
-          .done()
-
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add("[three")
+          .add("three")
           .addFil()
           .done()
 
