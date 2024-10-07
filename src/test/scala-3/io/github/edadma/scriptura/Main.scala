@@ -1,9 +1,8 @@
 package io.github.edadma.scriptura
 
 import scala.swing.*
-
-import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument, ImageBox}
-import io.github.edadma.texish
+import io.github.edadma.typesetter.{Graphics2DTypesetter, ImageBox, TestDocument}
+import io.github.edadma.texish.{Parser, Renderer}
 
 object Main extends SimpleSwingApplication:
   def top: Frame = new MainFrame:
@@ -20,45 +19,70 @@ object Main extends SimpleSwingApplication:
             set("hsize", 600)
         //            debug = true
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add("Hello")
-          .add(" ")
-          .add("Scriptura!")
-          .add(" ")
-          .add("Cool")
-          .addFil()
-          .done()
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("Hello")
+//          .add(" ")
+//          .add("Scriptura!")
+//          .add(" ")
+//          .add("Cool")
+//          .addFil()
+//          .done()
+//
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add(
+//            ImageBox(
+//              t,
+//              "866-536x354.jpg",
+//            ),
+//          )
+//          .addFil()
+//          .done()
+//
+//        //        t.hbox(t.getNumber("hsize"))
+//        //          .addFil()
+//        //          .add("one")
+//        //          .addFil()
+//        //          .done()
+//        //
+//        //        t.hbox(t.getNumber("hsize"))
+//        //          .addFil()
+//        //          .add("two")
+//        //          .addFil()
+//        //          .done()
+//
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("three")
+//          .addFil()
+//          .done()
+//
+//        t.end()
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add(
-            ImageBox(
-              t,
-              "866-536x354.jpg",
-            ),
-          )
-          .addFil()
-          .done()
+        val p = new Parser(Nil, Nil)
+        val r = new Renderer(p, Map.empty, null) {
+          override def output(v: Any): Unit = t add v.toString
 
-        //        t.hbox(t.getNumber("hsize"))
-        //          .addFil()
-        //          .add("one")
-        //          .addFil()
-        //          .done()
-        //
-        //        t.hbox(t.getNumber("hsize"))
-        //          .addFil()
-        //          .add("two")
-        //          .addFil()
-        //          .done()
+          override def set(name: String, value: Any): Unit =
+            value match
+              case n: BigDecimal => t.set(name, n.toDouble)
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add("three")
-          .addFil()
-          .done()
+          override def get(name: String): Any = t.get(name)
 
+          override def enterScope(): Unit = t.enter()
+
+          override def exitScope(): Unit = t.exit()
+        }
+
+        val src =
+          """
+            |Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
+          """.trim.stripMargin
+        val ast = p.parse(src)
+
+//        pprintln(ast)
+        r.render(ast)
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
       }

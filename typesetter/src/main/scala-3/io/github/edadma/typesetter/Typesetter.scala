@@ -191,6 +191,10 @@ abstract class Typesetter:
 
   def set(pairs: Seq[(String, Any)]): Unit = scopes(0) ++= pairs
 
+  def enter(): Unit = scopes push scopes.top
+
+  def exit(): Unit = scopes.pop
+
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
 
