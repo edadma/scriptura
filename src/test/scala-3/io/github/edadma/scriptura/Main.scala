@@ -19,13 +19,13 @@ object Main extends SimpleSwingApplication:
           new Graphics2DTypesetter(new TestDocument, g):
             set("hsize", 600)
             // debug = true
-        val p = new Parser(Nil, Nil)
+        val p = new Parser(Nil, Nil, blanks = true)
         val r = new Renderer(p, Map.empty, null) {
           var newlineCount: Int = 0
 
           override def output(v: Any): Unit =
-            pprintln(v)
             v match
+              case s: Seq[Any]               => s.foreach(output)
               case "\n" if newlineCount == 0 => newlineCount += 1
               case "\n" =>
                 t.paragraph()
@@ -49,11 +49,12 @@ object Main extends SimpleSwingApplication:
           """
           |Lorem ipsum dolor sit am
           |
+          |
           |Lorem ipsum dolor sit amet
           |""".trim.stripMargin
         val ast = p.parse(src)
 
-//        pprintln(ast)
+        pprintln(ast)
         r.render(ast)
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
