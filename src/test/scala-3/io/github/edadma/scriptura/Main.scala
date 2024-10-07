@@ -3,6 +3,7 @@ package io.github.edadma.scriptura
 import scala.swing.*
 import io.github.edadma.typesetter.{Graphics2DTypesetter, ImageBox, TestDocument}
 import io.github.edadma.texish.{Parser, Renderer}
+import pprint.pprintln
 
 object Main extends SimpleSwingApplication:
   def top: Frame = new MainFrame:
@@ -17,54 +18,13 @@ object Main extends SimpleSwingApplication:
         val t =
           new Graphics2DTypesetter(new TestDocument, g):
             set("hsize", 600)
-        //            debug = true
-
-//        t.hbox(t.getNumber("hsize"))
-//          .addFil()
-//          .add("Hello")
-//          .add(" ")
-//          .add("Scriptura!")
-//          .add(" ")
-//          .add("Cool")
-//          .addFil()
-//          .done()
-//
-//        t.hbox(t.getNumber("hsize"))
-//          .addFil()
-//          .add(
-//            ImageBox(
-//              t,
-//              "866-536x354.jpg",
-//            ),
-//          )
-//          .addFil()
-//          .done()
-//
-//        //        t.hbox(t.getNumber("hsize"))
-//        //          .addFil()
-//        //          .add("one")
-//        //          .addFil()
-//        //          .done()
-//        //
-//        //        t.hbox(t.getNumber("hsize"))
-//        //          .addFil()
-//        //          .add("two")
-//        //          .addFil()
-//        //          .done()
-//
-//        t.hbox(t.getNumber("hsize"))
-//          .addFil()
-//          .add("three")
-//          .addFil()
-//          .done()
-//
-//        t.end()
-
+            // debug = true
         val p = new Parser(Nil, Nil)
         val r = new Renderer(p, Map.empty, null) {
           var newlineCount: Int = 0
 
           override def output(v: Any): Unit =
+            pprintln(v)
             v match
               case "\n" if newlineCount == 0 => newlineCount += 1
               case "\n" =>
