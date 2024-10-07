@@ -62,7 +62,17 @@ object Main extends SimpleSwingApplication:
 
         val p = new Parser(Nil, Nil)
         val r = new Renderer(p, Map.empty, null) {
-          override def output(v: Any): Unit = t add v.toString
+          var newlineCount: Int = 0
+
+          override def output(v: Any): Unit =
+            v match
+              case "\n" if newlineCount == 0 => newlineCount += 1
+              case "\n" =>
+                t.paragraph()
+                newlineCount = 0
+              case v =>
+                t.add(v.toString)
+                newlineCount = 0
 
           override def set(name: String, value: Any): Unit =
             value match
@@ -77,8 +87,10 @@ object Main extends SimpleSwingApplication:
 
         val src =
           """
-            |Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.
-          """.trim.stripMargin
+          |Lorem ipsum dolor sit am
+          |
+          |Lorem ipsum dolor sit amet
+          |""".trim.stripMargin
         val ast = p.parse(src)
 
 //        pprintln(ast)
