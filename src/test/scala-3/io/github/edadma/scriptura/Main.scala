@@ -25,17 +25,16 @@ object Main extends SimpleSwingApplication:
 
           override def output(v: Any): Unit =
             v match
-              case s: Seq[Any] => s.foreach(output)
-              case '\n' if newlineCount == 0 =>
-                newlineCount += 1
-                t add " "
-              case ' ' if newlineCount > 0 =>
-              case '\n' if newlineCount == 1 =>
+              case s: Seq[Any]               => s.foreach(output)
+              case "\n" if newlineCount == 0 => newlineCount += 1
+              case " " if newlineCount > 0   =>
+              case "\n" if newlineCount == 1 =>
                 newlineCount += 1
                 t.paragraph()
-              case '\n' =>
-              case v =>
-                t.add(v.toString)
+              case "\n" =>
+              case s: String =>
+                if newlineCount > 0 then t add " "
+                t add s
                 newlineCount = 0
 
           override def set(name: String, value: Any): Unit =

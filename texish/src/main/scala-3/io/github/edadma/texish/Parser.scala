@@ -97,8 +97,8 @@ class Parser(
           case None =>
             parseActive(r) match {
               case None =>
-                if blanks && matches(r, ' ', '\t') then (skip(r, p => p.ch != ' ' && p.ch != '\t'), LiteralAST(' '))
-                else if blanks && r.ch == '\n' then (r.next, LiteralAST('\n'))
+                if blanks && matches(r, ' ', '\t') then (skip(r, p => p.ch != ' ' && p.ch != '\t'), LiteralAST(" "))
+                else if blanks && r.ch == '\n' then (r.next, LiteralAST("\n"))
                 else parseStatic(r)
               case Some(a) => a
             }
