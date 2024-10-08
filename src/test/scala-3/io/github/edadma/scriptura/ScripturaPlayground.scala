@@ -4,6 +4,8 @@ import scala.swing.*
 import scala.swing.event.*
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
+import java.awt.Toolkit
+
 import io.github.edadma.typesetter.{Graphics2DTypesetter, ImageBox, TestDocument}
 import io.github.edadma.texish.{Parser, Renderer}
 
@@ -22,6 +24,7 @@ class MultiPagePanel extends BoxPanel(Orientation.Vertical):
     repaint()
 
 object ScripturaPlayground extends SimpleSwingApplication:
+  val screenSize = Toolkit.getDefaultToolkit.getScreenSize
 
   def top: Frame = new MainFrame:
     title = "Scriptura Playground"
@@ -50,10 +53,10 @@ object ScripturaPlayground extends SimpleSwingApplication:
     }
 
     // Main split pane
-    val splitPane = new SplitPane(Orientation.Horizontal, leftPanel, outputScrollPane) {
+    val splitPane = new SplitPane(Orientation.Vertical, leftPanel, outputScrollPane) {
       oneTouchExpandable = true
       continuousLayout = true
-      dividerLocation = 300
+      dividerLocation = screenSize.width / 2
     }
 
     // Event handling for the Run button
@@ -66,7 +69,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
 
     // Set up the main frame
     contents = splitPane
-    size = new Dimension(800, 600)
+    size = new Dimension(screenSize.width, screenSize.height)
 
     override def closeOperation(): Unit = dispose()
 
