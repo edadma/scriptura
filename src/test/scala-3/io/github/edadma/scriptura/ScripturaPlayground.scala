@@ -28,7 +28,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
     val leftPanel = new BoxPanel(Orientation.Vertical) {
       contents += new ScrollPane(inputArea)
       contents += new ScrollPane(errorOutput)
-      contents += runButton
+      contents += new FlowPanel(FlowPanel.Alignment.Center)(runButton)
       border = Swing.EmptyBorder(10, 10, 10, 10)
     }
 
