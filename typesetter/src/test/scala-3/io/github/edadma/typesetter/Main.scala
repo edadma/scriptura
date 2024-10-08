@@ -17,26 +17,26 @@ object Main extends SimpleSwingApplication:
             set("hsize", 600)
 //            debug = true
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add("Hello")
-          .add(" ")
-          .add("Scriptura!")
-          .add(" ")
-          .add("Cool")
-          .addFil()
-          .done()
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("Hello")
+//          .add(" ")
+//          .add("Scriptura!")
+//          .add(" ")
+//          .add("Cool")
+//          .addFil()
+//          .done()
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add(
-            ImageBox(
-              t,
-              "866-536x354.jpg",
-            ),
-          )
-          .addFil()
-          .done()
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add(
+//            ImageBox(
+//              t,
+//              "866-536x354.jpg",
+//            ),
+//          )
+//          .addFil()
+//          .done()
 
 //        t.hbox(t.getNumber("hsize"))
 //          .addFil()
@@ -50,12 +50,62 @@ object Main extends SimpleSwingApplication:
 //          .addFil()
 //          .done()
 
-        t.hbox(t.getNumber("hsize"))
-          .addFil()
-          .add("three")
-          .addFil()
-          .done()
+//        t.hbox(t.getNumber("hsize"))
+//          .addFil()
+//          .add("three")
+//          .addFil()
+//          .done()
 
+        Seq(
+          "asdf1",
+          " ",
+          "asdf2",
+          " ",
+          "asdf3",
+          " ",
+          "asdf4",
+          " ",
+          "asdf5",
+          " ",
+          "asdf6",
+          " ",
+          "asdf7",
+          " ",
+          "asdf8",
+          " ",
+          "asdf9",
+          " ",
+          "asdf10",
+          " ",
+          "asdf11",
+          " ",
+          "asdf12",
+          " ",
+          "asdf13",
+          " ",
+          "asdf14",
+          " ",
+          "asdf15",
+          " ",
+          "asdf16",
+          " ",
+          "asdf17",
+          " ",
+          "asdf18",
+          " ",
+          "asdf19",
+          " ",
+          "asdf20",
+          " ",
+          "asdf21",
+          " ",
+          "asdf22",
+          " ",
+          "asdf23",
+          " ",
+          "asdf24",
+          " ",
+        ).foreach(t.add)
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
       }

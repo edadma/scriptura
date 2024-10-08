@@ -11,7 +11,7 @@ abstract class Typesetter:
   var debug: Boolean = false
   var currentFontXHeight: Double = uninitialized
   var currentFont: Font = uninitialized
-  var currentColor: Color = Color("grey")
+  var currentColor: Color = Color("black")
   val converter = UnitConverter(this)
 
   case class Typeface(
@@ -248,7 +248,7 @@ abstract class Typesetter:
         Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
 
   infix def add(text: String): Typesetter =
-    if modeStack.top.isInstanceOf[VBoxBuilder] then start()
+    if modeStack.top.isInstanceOf[VerticalMode] then start()
     add(charBox(text))
 
 //  def textBox(text: String): CharBox =

@@ -2,6 +2,8 @@ package io.github.edadma.typesetter
 
 import scala.annotation.tailrec
 
+import pprint.pprintln
+
 class ParagraphMode(val t: Typesetter) extends HorizontalMode:
   def result: Box = ???
 
@@ -58,7 +60,7 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
 
       if hbox.last.isSpace then hbox.removeLast()
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
-      if boxes.isEmpty then hbox add new HSpaceBox(2)
+      if boxes.isEmpty then hbox add t.getGlue("parfillskip")
 
       val newLine = hbox.result
 
