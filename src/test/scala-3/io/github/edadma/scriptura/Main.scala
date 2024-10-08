@@ -33,7 +33,7 @@ object Main extends SimpleSwingApplication:
                 t.paragraph()
               case "\n" =>
               case s: String =>
-                if newlineCount > 0 then t add " "
+                if newlineCount == 1 then t add " "
                 t add s
                 newlineCount = 0
 
