@@ -2,15 +2,32 @@ package io.github.edadma.scriptura
 
 import scala.swing.*
 import scala.swing.event.*
+import java.awt.image.BufferedImage
+import javax.swing.ImageIcon
 import io.github.edadma.typesetter.{Graphics2DTypesetter, ImageBox, TestDocument}
 import io.github.edadma.texish.{Parser, Renderer}
 
 import pprint.pprintln
 
+class MultiPagePanel extends BoxPanel(Orientation.Vertical):
+  def setImages(images: List[BufferedImage]): Unit =
+    contents.clear()
+
+    for (img <- images)
+      contents +=
+        new Label {
+          icon = new ImageIcon(img)
+        }
+
+    revalidate()
+    repaint()
+
 object ScripturaPlayground extends SimpleSwingApplication:
 
   def top: Frame = new MainFrame:
     title = "Scriptura Playground"
+
+    val src: String = ""
 
     // Left panel components
     val inputArea = new TextArea {
@@ -24,6 +41,9 @@ object ScripturaPlayground extends SimpleSwingApplication:
     }
     val runButton = new Button("Run")
 
+    val multiPagePanel = new MultiPagePanel
+    val outputScrollPane = new ScrollPane(multiPagePanel)
+
     // Adding components to the left panel
     val leftPanel = new BoxPanel(Orientation.Vertical) {
       contents += new ScrollPane(inputArea)
@@ -32,14 +52,8 @@ object ScripturaPlayground extends SimpleSwingApplication:
       border = Swing.EmptyBorder(10, 10, 10, 10)
     }
 
-    // Right panel for the typesetter output (placeholder for now)
-    val outputArea = new Panel {
-      background = java.awt.Color.white
-      preferredSize = new Dimension(400, 600)
-    }
-
     // Main split pane
-    val splitPane = new SplitPane(Orientation.Horizontal, leftPanel, outputArea) {
+    val splitPane = new SplitPane(Orientation.Horizontal, leftPanel, outputScrollPane) {
       oneTouchExpandable = true
       continuousLayout = true
       dividerLocation = 300
