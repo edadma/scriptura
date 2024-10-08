@@ -25,11 +25,15 @@ object Main extends SimpleSwingApplication:
 
           override def output(v: Any): Unit =
             v match
-              case s: Seq[Any]               => s.foreach(output)
-              case "\n" if newlineCount == 0 => newlineCount += 1
-              case "\n" =>
+              case s: Seq[Any] => s.foreach(output)
+              case '\n' if newlineCount == 0 =>
+                newlineCount += 1
+                t add " "
+              case ' ' if newlineCount > 0 =>
+              case '\n' if newlineCount == 1 =>
+                newlineCount += 1
                 t.paragraph()
-                newlineCount = 0
+              case '\n' =>
               case v =>
                 t.add(v.toString)
                 newlineCount = 0
@@ -47,12 +51,11 @@ object Main extends SimpleSwingApplication:
 
         val src =
           """
-          |TEX has two parameters called \leftskip and \rightskip that specify glue
-          |to be inserted at the left and right of every line in a paragraph; this glue is
-          |taken into account when badnesses and demerits are computed. Plain TEX normally
-          |keeps \leftskip and \rightskip zero, but it has a ‘\narrower’ macro that increases
-          |both of their values by the current \parindent. You may want to use \narrower when
-          |quoting lengthy passages from a book.
+          |asdf qwer sdfg asdf qwer sdfg asdf.
+          |qwer sdfg asdf qwer sdfg asdf qwer sdfg asdf qwer sdfg
+          | 
+          |wert kljh eryt wert kljh eryt
+          |wert kljh eryt wert kljh eryt wert kljh eryt wert kljh eryt 
           """.trim.stripMargin
         val ast = p.parse(src)
 
