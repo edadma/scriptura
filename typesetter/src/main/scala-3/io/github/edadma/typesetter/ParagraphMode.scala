@@ -58,7 +58,7 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
 
       line()
 
-      if hbox.last.isSpace then hbox.removeLast()
+      if hbox.nonEmpty && hbox.last.isSpace then hbox.removeLast()
       if boxes.nonEmpty && boxes.head.isSpace then boxes.remove(0)
       if boxes.isEmpty then hbox add t.getGlue("parfillskip")
 

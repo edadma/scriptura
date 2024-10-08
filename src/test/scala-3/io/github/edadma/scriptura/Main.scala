@@ -47,11 +47,13 @@ object Main extends SimpleSwingApplication:
 
         val src =
           """
-          |Lorem ipsum dolor sit am
-          |
-          |
-          |Lorem ipsum dolor sit amet
-          |""".trim.stripMargin
+          |TEX has two parameters called \leftskip and \rightskip that specify glue
+          |to be inserted at the left and right of every line in a paragraph; this glue is
+          |taken into account when badnesses and demerits are computed. Plain TEX normally
+          |keeps \leftskip and \rightskip zero, but it has a ‘\narrower’ macro that increases
+          |both of their values by the current \parindent. You may want to use \narrower when
+          |quoting lengthy passages from a book.
+          """.trim.stripMargin
         val ast = p.parse(src)
 
         pprintln(ast)
