@@ -15,9 +15,8 @@ class MultiPagePanel extends BoxPanel(Orientation.Vertical):
 
     for (img <- images)
       contents +=
-        new Label {
+        new Label:
           icon = new ImageIcon(img)
-        }
 
     revalidate()
     repaint()
