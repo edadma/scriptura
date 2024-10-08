@@ -26,8 +26,6 @@ object ScripturaPlayground extends SimpleSwingApplication:
   def top: Frame = new MainFrame:
     title = "Scriptura Playground"
 
-    val src: String = ""
-
     // Left panel components
     val inputArea = new TextArea {
       rows = 20
