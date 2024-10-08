@@ -1,17 +1,65 @@
 package io.github.edadma.scriptura
 
 import scala.swing.*
+import scala.swing.event.*
 import io.github.edadma.typesetter.{Graphics2DTypesetter, ImageBox, TestDocument}
 import io.github.edadma.texish.{Parser, Renderer}
+
 import pprint.pprintln
 
-object Main extends SimpleSwingApplication:
+object ScripturaPlayground extends SimpleSwingApplication:
+
   def top: Frame = new MainFrame:
-    title = "Simple Swing Example"
+    title = "Scriptura Playground"
 
-    contents = new Panel {
-      preferredSize = new Dimension(800, 500)
+    // Left panel components
+    val inputArea = new TextArea {
+      rows = 20
+      lineWrap = true
+      wordWrap = true
+    }
+    val errorOutput = new TextArea {
+      rows = 5
+      editable = false
+    }
+    val runButton = new Button("Run")
 
+    // Adding components to the left panel
+    val leftPanel = new BoxPanel(Orientation.Vertical) {
+      contents += new ScrollPane(inputArea)
+      contents += new ScrollPane(errorOutput)
+      contents += runButton
+      border = Swing.EmptyBorder(10, 10, 10, 10)
+    }
+
+    // Right panel for the typesetter output (placeholder for now)
+    val outputArea = new Panel {
+      background = java.awt.Color.white
+      preferredSize = new Dimension(400, 600)
+    }
+
+    // Main split pane
+    val splitPane = new SplitPane(Orientation.Horizontal, leftPanel, outputArea) {
+      oneTouchExpandable = true
+      continuousLayout = true
+      dividerLocation = 300
+    }
+
+    // Event handling for the Run button
+    listenTo(runButton)
+    reactions += { case ButtonClicked(`runButton`) =>
+      val inputText = inputArea.text
+    // Add your typesetting logic here, using the inputText
+    // Example: errorOutput.text = "Error: Could not typeset" // for error messages
+    }
+
+    // Set up the main frame
+    contents = splitPane
+    size = new Dimension(800, 600)
+
+    override def closeOperation(): Unit = dispose()
+
+/*
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
@@ -52,9 +100,9 @@ object Main extends SimpleSwingApplication:
           """
           |asdf qwer sdfg asdf qwer sdfg asdf.
           |qwer sdfg asdf qwer sdfg asdf qwer sdfg asdf qwer sdfg
-          | 
+          |
           |wert kljh eryt wert kljh eryt
-          |wert kljh eryt wert kljh eryt wert kljh eryt wert kljh eryt 
+          |wert kljh eryt wert kljh eryt wert kljh eryt wert kljh eryt
           """.trim.stripMargin
         val ast = p.parse(src)
 
@@ -63,6 +111,4 @@ object Main extends SimpleSwingApplication:
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
       }
-    }
-
-    override def closeOperation(): Unit = dispose()
+ */
