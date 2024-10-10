@@ -2,6 +2,8 @@ package io.github.edadma.typesetter
 
 import scala.language.postfixOps
 
+import pprint.pprintln
+
 abstract class ListBoxBuilder extends Builder:
   protected val measure: Box => Double
   protected val skip: Double => Box
@@ -100,7 +102,7 @@ abstract class ListBoxBuilder extends Builder:
 
     // Step 5: Replace remaining Glue with their natural sizes if any
     glueBoxesWithIndices.foreach { case (g, idx) =>
-      if (!boxes(idx).isInstanceOf[SpaceBox])
+      if (boxes(idx).isInstanceOf[Glue])
         boxes(idx) = skip(measure(g))
     }
 
