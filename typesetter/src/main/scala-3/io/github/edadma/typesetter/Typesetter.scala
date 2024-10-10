@@ -273,6 +273,8 @@ abstract class Typesetter:
 
   infix def addFil(): Typesetter = add(FilGlue)
 
+  def noBreakSpace: Typesetter = add(getGlue("spaceskip").noBreak)
+
   def hbox(toSize: Double | Null = null): Typesetter =
     modeStack push new HBoxBuilder(this, toSize)
     this
