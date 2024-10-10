@@ -25,6 +25,7 @@ abstract class Typesetter:
   protected[typesetter] val modeStack = new mutable.Stack[Mode]
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
+  init()
   scopes push Map.empty
   modeStack push document
   document.ts = this
@@ -146,6 +147,8 @@ abstract class Typesetter:
   currentFont = makeFont("noto", 16, Set("regular"))
   set(defaultParameters)
   modeStack push new VBoxBuilder(this)
+
+  def init(): Unit
 
   def getDPI: Double
 

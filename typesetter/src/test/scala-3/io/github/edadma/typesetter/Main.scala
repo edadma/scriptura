@@ -13,9 +13,9 @@ object Main extends SimpleSwingApplication:
         super.paintComponent(g)
 
         val t =
-          new Graphics2DTypesetter(new TestDocument, g):
+          new Graphics2DTypesetter(new TestDocument):
             set("hsize", 600)
-//            debug = true
+            debug = true
 
 //        t.hbox(t.getNumber("hsize"))
 //          .addFil()
@@ -108,6 +108,7 @@ object Main extends SimpleSwingApplication:
         ).foreach(t.add)
         t.end()
         t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
+        g.drawImage(t.page, null, 0, 0)
       }
     }
 

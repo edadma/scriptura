@@ -6,18 +6,21 @@ import java.io.File
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
 
-class Graphics2DTypesetter(val document: Document, g: Graphics2D) extends Typesetter:
-//  def setFont(font: java.awt.Font): Unit = g.setFont(font)
+import scala.compiletime.uninitialized
+
+class Graphics2DTypesetter(val document: Document) extends Typesetter:
+
+  var page: BufferedImage = uninitialized
+  var g: Graphics2D = uninitialized
 
   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
   g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
 
-  // JFont.createFont(JFont.TRUETYPE_FONT, new File("fonts/Roboto-Regular.ttf")).deriveFont(24f)
-  // loadFont("fonts/MonteCarlo-Regular.ttf").deriveFont(50f)
-  // Font.createFont(Font.TRUETYPE_FONT, new File("fonts/cm/cmunrm.ttf")).deriveFont(30f)
-  //     loadFont("fonts/Roboto-Regular.ttf").deriveFont(24f)
-
   private val frc = g.getFontRenderContext
+
+  def init(): Unit =
+    page = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB)
+    g = page.createGraphics()
 
   def getDPI: Double = Toolkit.getDefaultToolkit.getScreenResolution
 
