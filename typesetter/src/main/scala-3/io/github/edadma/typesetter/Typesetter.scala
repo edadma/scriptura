@@ -176,7 +176,7 @@ abstract class Typesetter:
 
   currentFont = makeFont("noto", 16, Set("regular"))
   set(defaultParameters)
-  modeStack push new VBoxBuilder(this)
+  modeStack push new PageMode(this)
 
   def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
 

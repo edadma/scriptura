@@ -112,6 +112,8 @@ object Main extends SimpleSwingApplication:
         t add "asdf"
         t.paragraph()
         t add "qwer"
+        t.paragraph()
+        t.add(FillGlue)
         t.end()
 
         val img = t.render(t.document.pages.head).asInstanceOf[BufferedImage]

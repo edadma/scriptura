@@ -24,4 +24,6 @@ end Glue
 
 val FilGlue = Glue(0, 1, 0, 1)
 
+val FillGlue = Glue(0, 1, 0, 2)
+
 val ZeroGlue = Glue(0, 0, 0, 0)
