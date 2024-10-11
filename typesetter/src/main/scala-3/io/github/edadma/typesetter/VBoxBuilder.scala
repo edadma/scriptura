@@ -8,10 +8,8 @@ class VBoxBuilder(val t: Typesetter, protected val toSize: Double | Null = null)
   protected val skip: Double => Box = VSpaceBox(_)
   protected val wrap: Seq[Box] => Box = VBox(_)
 
-//  protected[typesetter] var firstParagraph: Boolean = true
-
   override infix def add(box: Box): Unit =
-    if nonEmpty && !last.isSpace then
+    if nonEmpty && !last.isSpace && !box.isSpace then
       val baselineskip = t.getGlue("baselineskip") - last.descent - box.ascent
       val skip =
         if baselineskip.naturalSize <= t.getNumber("lineskiplimit") then t.getGlue("lineskip")

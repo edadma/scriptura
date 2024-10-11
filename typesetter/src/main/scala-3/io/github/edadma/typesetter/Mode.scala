@@ -9,8 +9,6 @@ trait Mode:
 
   def result: Box
 
-  def nonEmpty: Boolean
-
   def done(): Unit =
     pop
     t.add(result)

@@ -9,6 +9,8 @@ trait Builder extends Mode:
 
   def clear(): Unit = boxes.clear()
 
+  def beforeLast: Box = boxes(boxes.length - 2)
+
   def last: Box = boxes.last
 
   def lastOption: Option[Box] = boxes.lastOption
@@ -18,6 +20,8 @@ trait Builder extends Mode:
   def length: Int = boxes.length
 
   def update(index: Int, elem: Box): Unit = boxes.update(index, elem)
+
+  def insert(idx: Int, box: Box): Unit = boxes.insert(idx, box)
 
   def nonEmpty: Boolean = boxes.nonEmpty
 

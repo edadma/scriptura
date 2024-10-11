@@ -8,7 +8,7 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
   def result: Box = ???
 
   override def done(): Unit =
-//    var first = true
+    var first = true
 
     while boxes.nonEmpty do
       val hbox = new HBoxBuilder(t, t.getNumber("hsize"))
@@ -66,11 +66,13 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
 
       val newLine = hbox.result
 
-//      if first then
-//        if t.modeStack(1).nonEmpty then t.modeStack(1) add t.getGlue("parskip")
-//        first = false
-
       t.modeStack(1) add newLine
+
+      if first then
+        val vlist = t.modeStack(1).asInstanceOf[VBoxBuilder]
+
+        if vlist.length > 1 then vlist.insert(vlist.length - 2, t.getGlue("parskip"))
+        first = false
     end while
 
     t.indentParagraph = true
