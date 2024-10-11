@@ -14,10 +14,13 @@ class VBox(val boxes: Seq[Box]) extends ContentBox:
     var currentY = if boxes.isEmpty then y else y - ascent + boxes.head.ascent
     var list = boxes
 
+    println("----------")
     while list.nonEmpty do
       val box = list.head
 
       box.draw(t, x, currentY)
+      println(box)
+      println(box.descent)
       currentY += box.descent
 
       val tail = list.tail

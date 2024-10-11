@@ -13,7 +13,6 @@ class PageMode(t: Typesetter) extends VBoxBuilder(t):
       clear()
     end if
 
-    // todo: only internally generated interline spacing should be removed
-    if nonEmpty || !box.isInstanceOf[VSpaceBox] then super.add(box)
+    super.add(box)
 
   override def result: Box = wrap(buildTo(pageHeight))
