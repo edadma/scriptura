@@ -1,8 +1,9 @@
 package io.github.edadma.typesetter
 
 import scala.swing.*
-
 import pprint.pprintln
+
+import java.awt.image.BufferedImage
 
 object Main extends SimpleSwingApplication:
   def top: Frame = new MainFrame:
@@ -16,7 +17,7 @@ object Main extends SimpleSwingApplication:
 
         val t =
           new Graphics2DTypesetter(new TestDocument):
-            set("hsize", 600)
+            set("hsize", 400)
             debug = true
 
 //        t.hbox(t.getNumber("hsize"))
@@ -112,9 +113,10 @@ object Main extends SimpleSwingApplication:
         t.paragraph()
         t add "qwer"
         t.end()
-        t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
+
+        val img = t.render(t.document.pages.head).asInstanceOf[BufferedImage]
 //        pprintln(t.document.pages.head)
-        g.drawImage(t.page, null, 0, 0)
+        g.drawImage(img, null, 0, 0)
       }
     }
 

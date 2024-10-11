@@ -22,9 +22,15 @@ class Graphics2DTypesetter(val document: Document) extends Typesetter:
     page = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB)
     g = page.createGraphics()
 
+  def render(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any =
+    page = new BufferedImage(getNumber("hsize").toInt, getNumber("vsize").toInt, BufferedImage.TYPE_INT_ARGB)
+    g = page.createGraphics()
+    box.draw(this, xoffset, yoffset + box.ascent)
+    page
+
   def getDPI: Double = Toolkit.getDefaultToolkit.getScreenResolution
 
-  def setFont(font: Any /*, size: Double*/ ): Unit = g.setFont(font.asInstanceOf[JFont] /*.deriveFont(size.toFloat)*/ )
+  def setFont(font: Any): Unit = g.setFont(font.asInstanceOf[JFont])
 
   def setColor(color: Color): Unit =
     g.setColor(new java.awt.Color(color.redInt, color.greenInt, color.blueInt, color.alphaInt))

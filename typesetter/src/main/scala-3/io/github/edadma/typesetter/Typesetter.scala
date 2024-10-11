@@ -25,6 +25,36 @@ abstract class Typesetter:
   protected[typesetter] val modeStack = new mutable.Stack[Mode]
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
+  def init(): Unit
+
+  def render(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any
+
+  def getDPI: Double
+
+  def setFont(font: Any /*, size: Double*/ ): Unit
+
+  def setColor(color: Color): Unit
+
+  def drawString(text: String, x: Double, y: Double): Unit
+
+  def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit
+
+  def drawRect(x: Double, y: Double, width: Double, height: Double): Unit
+
+  def fillRect(x: Double, y: Double, width: Double, height: Double): Unit
+
+  def loadFont(path: String): Any
+
+  def getTextExtents(text: String): TextExtents
+
+  def makeFont(font: Any, size: Double): Any
+
+  def charWidth(font: Any, c: Char): Double
+
+  def loadImage(path: String): (Any, Int, Int)
+
+  def drawImage(image: Any, x: Double, y: Double): Unit
+
   init()
   scopes push Map.empty
   modeStack push document
@@ -147,34 +177,6 @@ abstract class Typesetter:
   currentFont = makeFont("noto", 16, Set("regular"))
   set(defaultParameters)
   modeStack push new VBoxBuilder(this)
-
-  def init(): Unit
-
-  def getDPI: Double
-
-  def setFont(font: Any /*, size: Double*/ ): Unit
-
-  def setColor(color: Color): Unit
-
-  def drawString(text: String, x: Double, y: Double): Unit
-
-  def drawLine(x1: Double, y1: Double, x2: Double, y2: Double): Unit
-
-  def drawRect(x: Double, y: Double, width: Double, height: Double): Unit
-
-  def fillRect(x: Double, y: Double, width: Double, height: Double): Unit
-
-  def loadFont(path: String): Any
-
-  def getTextExtents(text: String): TextExtents
-
-  def makeFont(font: Any, size: Double): Any
-
-  def charWidth(font: Any, c: Char): Double
-
-  def loadImage(path: String): (Any, Int, Int)
-
-  def drawImage(image: Any, x: Double, y: Double): Unit
 
   def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
 
