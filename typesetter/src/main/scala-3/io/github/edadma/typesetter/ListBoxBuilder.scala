@@ -17,7 +17,11 @@ abstract class ListBoxBuilder extends Builder:
       case null      => wrap(build)
       case s: Double => wrap(buildTo(s))
 
-  protected def build: Seq[Box] = boxes.toSeq
+  protected def build: Seq[Box] =
+    boxes map {
+      case g: Glue => skip(g.naturalSize)
+      case b       => b
+    } toSeq
 
   protected def buildTo(size: Double): Seq[Box] =
     // Step 1: Calculate the natural size of all boxes

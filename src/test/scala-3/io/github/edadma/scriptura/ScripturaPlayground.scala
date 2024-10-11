@@ -62,9 +62,45 @@ object ScripturaPlayground extends SimpleSwingApplication:
     // Event handling for the Run button
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
-      val inputText = inputArea.text
-    // Add your typesetting logic here, using the inputText
-    // Example: errorOutput.text = "Error: Could not typeset" // for error messages
+      val t =
+        new Graphics2DTypesetter(new TestDocument):
+          set("hsize", 600)
+          debug = true
+      val p = new Parser(Nil, Nil, blanks = true)
+      val r = new Renderer(p, Map.empty, null) {
+        var newlineCount: Int = 0
+
+        override def output(v: Any): Unit =
+          v match
+            case s: Seq[Any]               => s.foreach(output)
+            case "\n" if newlineCount == 0 => newlineCount += 1
+            case " " if newlineCount > 0   =>
+            case "\n" if newlineCount == 1 =>
+              newlineCount += 1
+              t.paragraph()
+            case "\n" =>
+            case s: String =>
+              if newlineCount == 1 then t add " "
+              t add s
+              newlineCount = 0
+
+        override def set(name: String, value: Any): Unit =
+          value match
+            case n: BigDecimal => t.set(name, n.toDouble)
+
+        override def get(name: String): Any = t.get(name)
+
+        override def enterScope(): Unit = t.enter()
+
+        override def exitScope(): Unit = t.exit()
+      }
+
+      val ast = p.parse(inputArea.text)
+
+      r.render(ast)
+      t.end()
+      t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
+      multiPagePanel.setImages(List(t.page))
     }
 
     // Set up the main frame
