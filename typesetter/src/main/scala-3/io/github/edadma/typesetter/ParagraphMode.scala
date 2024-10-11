@@ -8,6 +8,8 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
   def result: Box = ???
 
   override def done(): Unit =
+    if t.modeStack(1).nonEmpty then t.modeStack(1) add t.getGlue("parskip")
+
     while boxes.nonEmpty do
       val hbox = new HBoxBuilder(t, t.getNumber("hsize"))
 
