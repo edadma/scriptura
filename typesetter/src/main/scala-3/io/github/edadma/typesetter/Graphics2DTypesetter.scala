@@ -19,7 +19,7 @@ class Graphics2DTypesetter(val document: Document) extends Typesetter:
   private val frc = g.getFontRenderContext
 
   def init(): Unit =
-    page = new BufferedImage(1200, 800, BufferedImage.TYPE_INT_ARGB)
+    page = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB)
     g = page.createGraphics()
 
   def render(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any =
