@@ -29,7 +29,7 @@ abstract class Typesetter:
 
   def init(): Unit
 
-  def render(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any
+  def render(box: Box, xinset: Int = 0, yinset: Int = 0): Any
 
   def getDPI: Double
 

@@ -62,10 +62,11 @@ object ScripturaPlayground extends SimpleSwingApplication:
     // Event handling for the Run button
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
+      val doc = new TestDocument
       val t =
-        new Graphics2DTypesetter(new TestDocument):
+        new Graphics2DTypesetter(doc):
           set("hsize", 600)
-          debug = true
+//          debug = true
       val p = new Parser(Nil, Nil, blanks = true)
       val r = new Renderer(p, Map.empty, null) {
         var newlineCount: Int = 0
@@ -99,8 +100,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
 
       r.render(ast)
       t.end()
-      t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
-      multiPagePanel.setImages(List(t.page))
+      multiPagePanel.setImages(doc.pages.toList.asInstanceOf[List[BufferedImage]])
     }
 
     // Set up the main frame
