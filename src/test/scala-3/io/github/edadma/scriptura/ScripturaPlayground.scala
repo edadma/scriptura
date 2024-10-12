@@ -74,7 +74,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
             set("hsize", 600)
         //          debug = true
         val p = new ScripturaParser
-        val r = new ScripturaRenderer(t, Map.empty, null)
+        val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)
 
         r.render(ast)
