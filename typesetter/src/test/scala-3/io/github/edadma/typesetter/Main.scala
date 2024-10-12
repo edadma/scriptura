@@ -15,10 +15,11 @@ object Main extends SimpleSwingApplication:
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
+        val doc = new TestDocument
         val t =
-          new Graphics2DTypesetter(new TestDocument):
+          new Graphics2DTypesetter(doc):
             set("hsize", 400)
-            debug = true
+//            debug = true
 
 //        t.hbox(t.getNumber("hsize"))
 //          .addFil()
@@ -59,66 +60,13 @@ object Main extends SimpleSwingApplication:
 //          .addFil()
 //          .done()
 
-//        Seq(
-//          "asdf1",
-//          " ",
-//          "asdf2",
-////          " ",
-////          "asdf3",
-////          " ",
-////          "asdf4",
-////          " ",
-////          "asdf5",
-////          " ",
-////          "asdf6",
-////          " ",
-////          "asdf7",
-////          " ",
-////          "asdf8",
-////          " ",
-////          "asdf9",
-////          " ",
-////          "asdf10",
-////          " ",
-////          "asdf11",
-////          " ",
-////          "asdf12",
-////          " ",
-////          "asdf13",
-////          " ",
-////          "asdf14",
-////          " ",
-////          "asdf15",
-////          " ",
-////          "asdf16",
-////          " ",
-////          "asdf17",
-////          " ",
-////          "asdf18",
-////          " ",
-////          "asdf19",
-////          " ",
-////          "asdf20",
-////          " ",
-////          "asdf21",
-////          " ",
-////          "asdf22",
-////          " ",
-////          "asdf23",
-////          " ",
-////          "asdf24",
-////          " ",
-//        ).foreach(t.add)
-        t add "asdf"
+        t add "[qsdf"
         t.paragraph()
-        t add "qwer"
+        t add "[qhTwer"
         t.paragraph()
         t.add(FillGlue)
         t.end()
-
-        val img = t.render(t.document.pages.head).asInstanceOf[BufferedImage]
-//        pprintln(t.document.pages.head)
-        g.drawImage(img, null, 0, 0)
+        g.drawImage(doc.pages.head.asInstanceOf[BufferedImage], null, 0, 0)
       }
     }
 

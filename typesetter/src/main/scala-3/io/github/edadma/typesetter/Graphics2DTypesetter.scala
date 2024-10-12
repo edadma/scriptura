@@ -25,6 +25,8 @@ class Graphics2DTypesetter(val document: Document) extends Typesetter:
   def render(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any =
     page = new BufferedImage(getNumber("hsize").toInt, getNumber("vsize").toInt, BufferedImage.TYPE_INT_ARGB)
     g = page.createGraphics()
+    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
+    g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
     box.draw(this, xoffset, yoffset + box.ascent)
     page
 

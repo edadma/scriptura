@@ -1,6 +1,7 @@
 package io.github.edadma.typesetter
 
 import scala.collection.mutable
+import scala.collection.mutable.ArrayBuffer
 import scala.compiletime.uninitialized
 import scala.language.postfixOps
 
@@ -13,6 +14,7 @@ abstract class Typesetter:
   var currentFont: Font = uninitialized
   var currentColor: Color = Color("black")
   val converter = UnitConverter(this)
+  val pages = new ArrayBuffer[Any]
 
   case class Typeface(
       fonts: mutable.HashMap[Set[String], Any], // todo: find a nicer target independent type other than Any
@@ -31,7 +33,7 @@ abstract class Typesetter:
 
   def getDPI: Double
 
-  def setFont(font: Any /*, size: Double*/ ): Unit
+  def setFont(font: Any): Unit
 
   def setColor(color: Color): Unit
 
