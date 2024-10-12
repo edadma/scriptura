@@ -15,6 +15,8 @@ trait Builder extends Mode:
 
   def lastOption: Option[Box] = boxes.lastOption
 
+  def dropRight(n: Int): Unit = boxes dropRight n
+
   def removeLast(): Box = boxes.remove(boxes.length - 1)
 
   def length: Int = boxes.length

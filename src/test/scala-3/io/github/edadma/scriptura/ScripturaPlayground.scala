@@ -10,16 +10,20 @@ import io.github.edadma.texish.{Parser, Renderer}
 import pprint.pprintln
 
 class MultiPagePanel extends BoxPanel(Orientation.Vertical):
-  border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
-
   def setImages(images: List[BufferedImage]): Unit =
     contents.clear()
 
     for (img <- images)
-      contents +=
-        new Label:
-          icon = new ImageIcon(img)
-          border = BorderFactory.createLineBorder(Color.BLACK, 2) // Adds a 5-pixel black border around each page
+      val label = new Label:
+        icon = new ImageIcon(img)
+        border = BorderFactory.createLineBorder(Color.BLACK, 2) // Adds a border around each page
+
+      val wrapper = new BoxPanel(Orientation.Vertical) {
+        contents += label
+        border = BorderFactory.createEmptyBorder(10, 10, 0, 10) // Adds margin around each page
+      }
+
+      contents += wrapper
 
     revalidate()
     repaint()
@@ -47,10 +51,11 @@ object ScripturaPlayground extends SimpleSwingApplication:
 
     // Adding components to the left panel
     val leftPanel = new BoxPanel(Orientation.Vertical) {
+      border = Swing.EmptyBorder(10, 10, 10, 10)
+
       contents += new ScrollPane(inputArea)
       contents += new ScrollPane(errorOutput)
       contents += new FlowPanel(FlowPanel.Alignment.Center)(runButton)
-      border = Swing.EmptyBorder(10, 10, 10, 10)
     }
 
     // Main split pane
@@ -109,3 +114,53 @@ object ScripturaPlayground extends SimpleSwingApplication:
     size = new Dimension(screenSize.width, screenSize.height)
 
     override def closeOperation(): Unit = dispose()
+
+/*
+asdf
+
+zxcv
+
+sdfg
+
+wert
+
+rtuy
+
+asdf
+
+zxcv
+
+sdfg
+
+wert
+
+rtuy
+
+asdf
+
+zxcv
+
+sdfg
+
+wert
+
+rtuy
+
+rtuy
+
+rtuy
+
+rtuy
+
+rtuy
+
+rtuy
+
+xcvb
+
+sdfg
+
+dfgh
+
+wert
+ */

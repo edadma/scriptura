@@ -2,15 +2,15 @@ package io.github.edadma.typesetter
 
 class PageMode(t: Typesetter) extends VBoxBuilder(t):
   override infix def add(box: Box): Unit =
-    if size + box.height > t.getNumber("vsize") then
-      lastOption foreach { // todo: only internally generated interline spacing should be removed
-        case _: VSpaceBox => removeLast()
-        case _            =>
-      }
-      t.modeStack(1) add result
-      clear()
-    end if
+    val len = length
 
     super.add(box)
+
+    if size > t.getNumber("vsize") then
+      dropRight(length - len)
+      t.document add result
+      clear()
+      super.add(box)
+    end if
 
   override def result: Box = wrap(buildTo(t.getNumber("vsize")))

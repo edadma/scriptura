@@ -9,8 +9,6 @@ abstract class Document extends Mode:
 
   def init(): Unit
 
-  def add(box: Box): Unit
-
   override def done(): Unit = pop
 
   def result: Box = ???
