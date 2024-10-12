@@ -4,11 +4,10 @@ import scala.language.postfixOps
 
 import pprint.pprintln
 
-abstract class Renderer(
-    val parser: Parser,
-    val config: Map[String, Any],
-    val context: Any,
-) {
+abstract class Renderer:
+  val config: Map[String, Any]
+  val context: Any
+
   def output(v: Any): Unit
 
   def set(name: String, value: Any): Unit
@@ -33,7 +32,6 @@ abstract class Renderer(
   def teval(ast: AST): Boolean = truthy(eval(ast))
 
   infix def eval(ast: AST): Any =
-    pprintln(ast)
     ast match {
       case SetAST(v, expr) =>
         set(v, eval(expr))
@@ -195,5 +193,3 @@ abstract class Renderer(
   private class ContinueException extends RuntimeException
 
   private case class ForGenerator(v: String, s: Seq[Any])
-
-}

@@ -5,7 +5,7 @@ import scala.swing.event.*
 import java.awt.image.BufferedImage
 import javax.swing.{BorderFactory, ImageIcon}
 import java.awt.{Color, Toolkit}
-import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument}
+import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument, HorizontalMode}
 import io.github.edadma.texish.{Parser, Renderer}
 import pprint.pprintln
 
@@ -16,7 +16,7 @@ class MultiPagePanel extends BoxPanel(Orientation.Vertical):
     for (img <- images)
       val label = new Label:
         icon = new ImageIcon(img)
-        border = BorderFactory.createLineBorder(Color.BLACK, 2) // Adds a border around each page
+        border = BorderFactory.createLineBorder(Color.BLACK, 1) // Adds a border around each page
 
       val wrapper = new BoxPanel(Orientation.Vertical) {
         contents += label
@@ -68,45 +68,24 @@ object ScripturaPlayground extends SimpleSwingApplication:
     // Event handling for the Run button
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
-      val doc = new TestDocument
-      val t =
-        new Graphics2DTypesetter(doc):
-          set("hsize", 600)
-//          debug = true
-      val p = new Parser(Nil, Nil, blanks = true)
-      val r = new Renderer(p, Map.empty, null) {
-        var newlineCount: Int = 0
+      try {
+        val doc = new TestDocument
+        val t =
+          new Graphics2DTypesetter(doc):
+            set("hsize", 600)
+        //          debug = true
+        val p = new Parser(Nil, Nil, blanks = true)
+        val r = new ScripturaRenderer(t, Map.empty, null)
+        val ast = p.parse(inputArea.text)
 
-        override def output(v: Any): Unit =
-          v match
-            case s: Seq[Any]               => s foreach output
-            case "\n" if newlineCount == 0 => newlineCount += 1
-            case " " if newlineCount > 0   =>
-            case "\n" if newlineCount == 1 =>
-              newlineCount += 1
-              t.paragraph()
-            case "\n" =>
-            case s: String =>
-              if newlineCount == 1 then t add " "
-              t add s
-              newlineCount = 0
-
-        override def set(name: String, value: Any): Unit =
-          value match
-            case n: BigDecimal => t.set(name, n.toDouble)
-
-        override def get(name: String): Any = t.get(name)
-
-        override def enterScope(): Unit = t.enter()
-
-        override def exitScope(): Unit = t.exit()
-      }
-
-      val ast = p.parse(inputArea.text)
-
-      r.render(ast)
-      t.end()
-      multiPagePanel.setImages(doc.pages.toList.asInstanceOf[List[BufferedImage]])
+        r.render(ast)
+        t.end()
+        multiPagePanel.setImages(doc.pages.toList.asInstanceOf[List[BufferedImage]])
+        errorOutput.text = ""
+      } catch
+        case error: Throwable =>
+          errorOutput.text = error.toString
+          multiPagePanel.setImages(Nil)
     }
 
     // Set up the main frame

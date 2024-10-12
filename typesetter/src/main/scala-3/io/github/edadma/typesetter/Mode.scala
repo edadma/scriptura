@@ -15,4 +15,4 @@ trait Mode:
 
   def pop: Mode = t.modeStack.pop
 
-  def top: Mode = t.modeStack.top
+  def top: Mode = t.mode

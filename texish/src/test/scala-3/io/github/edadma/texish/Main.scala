@@ -6,12 +6,6 @@ import scala.collection.mutable
 import pprint.pprintln
 
 @main def run(): Unit =
-  val config =
-    Map(
-      "today" -> "MMMM d, y",
-      "include" -> ".",
-      "rounding" -> "HALF_EVEN",
-    )
   val actives =
     List(
       new Active("<") {
@@ -38,7 +32,15 @@ import pprint.pprintln
   val parser = new Parser(commands, actives, blanks = true)
   val scopes = mutable.Stack[Map[String, Any]](Map.empty)
   val renderer =
-    new Renderer(parser, config, null):
+    new Renderer:
+      val config: Map[String, Any] =
+        Map(
+          "today" -> "MMMM d, y",
+          "include" -> ".",
+          "rounding" -> "HALF_EVEN",
+        )
+      val context: Any = null
+
       def output(v: Any): Unit = println(display(v))
 
       def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)

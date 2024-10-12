@@ -178,6 +178,8 @@ abstract class Typesetter:
   set(defaultParameters)
   modeStack push new PageMode(this)
 
+  def mode: Mode = modeStack.top
+
   def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
 
   def in: Double = getDPI
@@ -253,7 +255,7 @@ abstract class Typesetter:
         Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
 
   infix def add(text: String): Typesetter =
-    if modeStack.top.isInstanceOf[VerticalMode] then start()
+    if mode.isInstanceOf[VerticalMode] then start()
     add(charBox(text))
 
 //  def textBox(text: String): CharBox =
@@ -267,7 +269,7 @@ abstract class Typesetter:
   def charBox(s: String): CharBox = new CharBox(this, s)
 
   infix def add(box: Box): Typesetter =
-    modeStack.top add box
+    mode add box
     this
 
   infix def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): Typesetter =
@@ -281,10 +283,10 @@ abstract class Typesetter:
     modeStack push new HBoxBuilder(this, toSize)
     this
 
-  def done(): Unit = modeStack.top.done()
+  def done(): Unit = mode.done()
 
   def paragraph(): Unit =
-    modeStack.top match
+    mode match
       case p: ParagraphMode => p.done()
       case _                =>
 
@@ -293,7 +295,7 @@ abstract class Typesetter:
   def start(): Unit =
     paragraph()
 
-    modeStack.top match
+    mode match
       case v: VBoxBuilder =>
         val paragraphMode = new ParagraphMode(this)
 
