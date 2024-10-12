@@ -15,7 +15,7 @@ import scala.util.matching.Regex
 
 abstract class Command(val name: String, val arity: Int, val eval: Boolean = true)
     extends ((CharReader, Renderer, List[Any], Map[String, Any], Any) => Any) {
-  override def toString = s"""io.github.edadma.texish.Command.standard("$name")"""
+  override def toString = s"""Command: "$name""""
 }
 
 object Command {
