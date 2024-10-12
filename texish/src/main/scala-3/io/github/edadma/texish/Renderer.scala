@@ -23,7 +23,10 @@ abstract class Renderer(
 
   val undefined: UNDEFINED.type = UNDEFINED
 
-  def render(ast: AST): Unit = output(eval(ast))
+  def render(ast: AST): Unit =
+    eval(ast) match
+      case () =>
+      case v  => output(v)
 
   def deval(ast: AST): String = display(eval(ast))
 
@@ -93,8 +96,10 @@ abstract class Renderer(
           case Some((_, yes)) => eval(yes)
         }
       case GroupAST(statements) =>
-        if (statements.length == 1) eval(statements.head)
-        else statements map eval filterNot (_ == ())
+        val res = statements map eval filterNot (_ == ())
+
+        if (res.length == 1) res.head
+        else res
       case LiteralAST(v) => v
       case CommandAST(pos, c, args, optional) =>
         c(pos, this, if (c.eval) args map eval else args, optional map { case (k, v) => k -> eval(v) }, context)
