@@ -3,7 +3,7 @@ package io.github.edadma.scriptura
 import io.github.edadma.texish.{Parser, Renderer}
 import io.github.edadma.typesetter.{Typesetter, HorizontalMode}
 
-class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any], val context: Any) extends Renderer {
+class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any], val context: Any) extends Renderer:
   var newlineCount: Int = 0
 
   override def output(v: Any): Unit =
@@ -29,4 +29,3 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
   override def enterScope(): Unit = typesetter.enter()
 
   override def exitScope(): Unit = typesetter.exit()
-}
