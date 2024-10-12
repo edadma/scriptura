@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage
 import javax.swing.{BorderFactory, ImageIcon}
 import java.awt.{Color, Toolkit}
 import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument, HorizontalMode}
-import io.github.edadma.texish.{Parser, Renderer}
 import pprint.pprintln
 
 class MultiPagePanel extends BoxPanel(Orientation.Vertical):
@@ -74,7 +73,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
           new Graphics2DTypesetter(doc):
             set("hsize", 600)
         //          debug = true
-        val p = new Parser(Nil, Nil, blanks = true)
+        val p = new ScripturaParser
         val r = new ScripturaRenderer(t, Map.empty, null)
         val ast = p.parse(inputArea.text)
 
