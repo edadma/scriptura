@@ -365,8 +365,8 @@ class Parser(
           case Some(r2) => parseGroup(r2)
           case None =>
             parseLiteralArgument(r1) match {
-              case (r2, "_") => (r2, VariableAST("_"))
-              case (r2, s)   => (r2, LiteralAST(s))
+              case (r2, "_") => (skipSpace(r2), VariableAST("_"))
+              case (r2, s)   => (skipSpace(r2), LiteralAST(s))
             }
         }
       case Some((r2, name)) => parseCommand(r1, name, r2, false)
