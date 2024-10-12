@@ -79,7 +79,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
 
         override def output(v: Any): Unit =
           v match
-            case s: Seq[Any]               => s.foreach(output)
+            case s: Seq[Any]               => s foreach output
             case "\n" if newlineCount == 0 => newlineCount += 1
             case " " if newlineCount > 0   =>
             case "\n" if newlineCount == 1 =>

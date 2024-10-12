@@ -23,23 +23,14 @@ abstract class Renderer(
 
   val undefined: UNDEFINED.type = UNDEFINED
 
-  def render(ast: AST): Unit =
-    def out(v: Any): Unit =
-      v match
-        case () =>
-        case a  => output(a)
-
-    eval(ast) match
-      case v: Vector[?] =>
-        pprintln(v)
-        v foreach out
-      case v => out(v)
+  def render(ast: AST): Unit = output(eval(ast))
 
   def deval(ast: AST): String = display(eval(ast))
 
   def teval(ast: AST): Boolean = truthy(eval(ast))
 
   infix def eval(ast: AST): Any =
+    pprintln(ast)
     ast match {
       case SetAST(v, expr) =>
         set(v, eval(expr))
@@ -103,7 +94,7 @@ abstract class Renderer(
         }
       case GroupAST(statements) =>
         if (statements.length == 1) eval(statements.head)
-        else statements map eval
+        else statements map eval filterNot (_ == ())
       case LiteralAST(v) => v
       case CommandAST(pos, c, args, optional) =>
         c(pos, this, if (c.eval) args map eval else args, optional map { case (k, v) => k -> eval(v) }, context)

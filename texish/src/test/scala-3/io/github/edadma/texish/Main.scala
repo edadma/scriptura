@@ -54,5 +54,5 @@ import pprint.pprintln
     """.trim.stripMargin
   val ast = parser.parse(src)
 
-  pprintln(ast)
+//  pprintln(ast)
   renderer.render(ast)
