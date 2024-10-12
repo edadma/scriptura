@@ -12,7 +12,7 @@ trait Testing:
         "rounding" -> "HALF_EVEN",
       )
     val parser = new Parser(Nil, Nil, blanks = true)
-    val scopes = new mutable.Stack[Map[String, Any]]
+    val scopes = mutable.Stack[Map[String, Any]](Map.empty)
     val bytes = new ByteArrayOutputStream
     val renderer =
       new Renderer(parser, config, null):

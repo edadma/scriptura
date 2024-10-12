@@ -24,9 +24,16 @@ abstract class Renderer(
   val undefined: UNDEFINED.type = UNDEFINED
 
   def render(ast: AST): Unit =
+    def out(v: Any): Unit =
+      v match
+        case () =>
+        case a  => output(a)
+
     eval(ast) match
-      case GroupAST(b) => b foreach output
-      case v           => output(v)
+      case v: Vector[?] =>
+        pprintln(v)
+        v foreach out
+      case v => out(v)
 
   def deval(ast: AST): String = display(eval(ast))
 
@@ -36,7 +43,6 @@ abstract class Renderer(
     ast match {
       case SetAST(v, expr) =>
         set(v, eval(expr))
-        nil
       case InAST(cpos, v, epos, expr) =>
         eval(expr) match {
           case s: Seq[_] =>

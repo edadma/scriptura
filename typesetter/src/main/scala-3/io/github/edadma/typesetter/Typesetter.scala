@@ -23,8 +23,8 @@ abstract class Typesetter:
   )
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
-  protected[typesetter] val scopes = new mutable.Stack[Map[String, Any]]
-  protected[typesetter] val modeStack = new mutable.Stack[Mode]
+  protected[typesetter] val scopes = mutable.Stack[Map[String, Any]](Map.empty)
+  protected[typesetter] val modeStack = mutable.Stack[Mode](document)
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   def init(): Unit
@@ -58,8 +58,6 @@ abstract class Typesetter:
   def drawImage(image: Any, x: Double, y: Double): Unit
 
   init()
-  scopes push Map.empty
-  modeStack push document
   document.ts = this
   document.init()
 

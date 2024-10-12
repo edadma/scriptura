@@ -36,7 +36,7 @@ import pprint.pprintln
             case _               => problem(pos, "expected arguments <string>"),
     )
   val parser = new Parser(commands, actives, blanks = true)
-  val scopes = new mutable.Stack[Map[String, Any]]
+  val scopes = mutable.Stack[Map[String, Any]](Map.empty)
   val renderer =
     new Renderer(parser, config, null):
       def output(v: Any): Unit = println(display(v))
@@ -50,10 +50,7 @@ import pprint.pprintln
       def exitScope(): Unit = scopes.pop
   val src =
     """
-    |asdf
-    |
-    |
-    |zxcv
+    |\set v 123 \v
     """.trim.stripMargin
   val ast = parser.parse(src)
 
