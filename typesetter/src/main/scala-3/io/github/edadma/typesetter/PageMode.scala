@@ -7,7 +7,7 @@ class PageMode(t: Typesetter) extends VBoxBuilder(t):
     super.add(box)
 
     if size > t.getNumber("vsize") then
-      dropRight(length - len)
+      trimEnd(length - len)
       t.document add result
       clear()
       super.add(box)
