@@ -3,15 +3,15 @@ package io.github.edadma.scriptura
 import scala.swing.*
 import scala.swing.event.*
 import java.awt.image.BufferedImage
-import javax.swing.ImageIcon
-import java.awt.Toolkit
-
-import io.github.edadma.typesetter.{Graphics2DTypesetter, ImageBox, TestDocument}
+import javax.swing.{BorderFactory, ImageIcon}
+import java.awt.{Color, Toolkit}
+import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument}
 import io.github.edadma.texish.{Parser, Renderer}
-
 import pprint.pprintln
 
 class MultiPagePanel extends BoxPanel(Orientation.Vertical):
+  border = BorderFactory.createEmptyBorder(10, 10, 10, 10)
+
   def setImages(images: List[BufferedImage]): Unit =
     contents.clear()
 
@@ -19,6 +19,7 @@ class MultiPagePanel extends BoxPanel(Orientation.Vertical):
       contents +=
         new Label:
           icon = new ImageIcon(img)
+          border = BorderFactory.createLineBorder(Color.BLACK, 2) // Adds a 5-pixel black border around each page
 
     revalidate()
     repaint()
@@ -108,57 +109,3 @@ object ScripturaPlayground extends SimpleSwingApplication:
     size = new Dimension(screenSize.width, screenSize.height)
 
     override def closeOperation(): Unit = dispose()
-
-/*
-      override def paintComponent(g: Graphics2D): Unit = {
-        super.paintComponent(g)
-
-        val t =
-          new Graphics2DTypesetter(new TestDocument, g):
-            set("hsize", 600)
-            // debug = true
-        val p = new Parser(Nil, Nil, blanks = true)
-        val r = new Renderer(p, Map.empty, null) {
-          var newlineCount: Int = 0
-
-          override def output(v: Any): Unit =
-            v match
-              case s: Seq[Any]               => s.foreach(output)
-              case "\n" if newlineCount == 0 => newlineCount += 1
-              case " " if newlineCount > 0   =>
-              case "\n" if newlineCount == 1 =>
-                newlineCount += 1
-                t.paragraph()
-              case "\n" =>
-              case s: String =>
-                if newlineCount == 1 then t add " "
-                t add s
-                newlineCount = 0
-
-          override def set(name: String, value: Any): Unit =
-            value match
-              case n: BigDecimal => t.set(name, n.toDouble)
-
-          override def get(name: String): Any = t.get(name)
-
-          override def enterScope(): Unit = t.enter()
-
-          override def exitScope(): Unit = t.exit()
-        }
-
-        val src =
-          """
-          |asdf qwer sdfg asdf qwer sdfg asdf.
-          |qwer sdfg asdf qwer sdfg asdf qwer sdfg asdf qwer sdfg
-          |
-          |wert kljh eryt wert kljh eryt
-          |wert kljh eryt wert kljh eryt wert kljh eryt wert kljh eryt
-          """.trim.stripMargin
-        val ast = p.parse(src)
-
-        pprintln(ast)
-        r.render(ast)
-        t.end()
-        t.document.pages.head.draw(t, 10, 10 + t.document.pages.head.ascent)
-      }
- */

@@ -29,6 +29,8 @@ class Graphics2DTypesetter(val document: Document) extends Typesetter:
       BufferedImage.TYPE_INT_ARGB,
     )
     g = page.createGraphics()
+    g.setColor(java.awt.Color.WHITE)
+    g.fillRect(0, 0, page.getWidth, page.getHeight)
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
     box.draw(this, xinset, yinset + box.ascent)
