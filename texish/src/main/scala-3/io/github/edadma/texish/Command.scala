@@ -803,6 +803,19 @@ object Command {
             case Nil                           => ???
           }
       },
+      new Command("set", 2) {
+        def apply(
+            pos: CharReader,
+            renderer: Renderer,
+            args: List[Any],
+            optional: Map[String, Any],
+            context: Any,
+        ): Any =
+          args match {
+            case List(k: String, v: Any) => renderer.set(k, v)
+            case List(k, _)              => problem(pos, s"expected variable name: $k")
+          }
+      },
       new Command("slice", 3) {
         def apply(
             pos: CharReader,

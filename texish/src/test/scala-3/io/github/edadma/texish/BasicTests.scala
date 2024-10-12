@@ -63,10 +63,7 @@ class BasicTests extends AnyFreeSpec with Matchers with Testing:
     test(
       """asdf
         |zxcv""".stripMargin,
-    ) shouldBe
-      """
-      |["asdf", "\n", "zxcv"]
-      """.trim.stripMargin
+    ) shouldBe "[\"asdf\", \"\n\", \"zxcv\"]"
   }
 
   "newline text 2" in {
@@ -74,8 +71,5 @@ class BasicTests extends AnyFreeSpec with Matchers with Testing:
       """asdf
         |
         |zxcv""".stripMargin,
-    ) shouldBe
-      """
-      |["asdf", "\n", "\n", "zxcv"]
-      """.trim.stripMargin
+    ) shouldBe "[\"asdf\", \"\n\", \"\n\", \"zxcv\"]"
   }
