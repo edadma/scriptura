@@ -10,11 +10,11 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
     v match
       case s: Seq[Any]                                                               => s foreach output
       case "\n" if newlineCount == 0 && typesetter.mode.isInstanceOf[HorizontalMode] => newlineCount += 1
-      case "\n" if newlineCount == 1                                                 =>
-      case "\n"                                                                      =>
-      case " " if newlineCount > 0 =>
+      case "\n" if newlineCount == 1 =>
         newlineCount += 1
         typesetter.paragraph()
+      case "\n"                    =>
+      case " " if newlineCount > 0 =>
       case s: String =>
         if newlineCount == 1 then typesetter add " "
         typesetter add s
