@@ -13,6 +13,7 @@ abstract class ListBoxBuilder extends Builder:
   def size: Double = boxes map measure sum
 
   def result: Box =
+    println("exit ListBoxBuilder" + boxes)
     toSize match
       case null      => wrap(build)
       case s: Double => wrap(buildTo(s))

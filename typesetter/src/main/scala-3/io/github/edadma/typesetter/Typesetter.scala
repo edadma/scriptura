@@ -279,11 +279,18 @@ abstract class Typesetter:
 
   def noBreakSpace: Typesetter = add(getGlue("spaceskip").noBreak)
 
+  def result: Box = mode.result
+
+  def pop(): Unit = modeStack.pop
+
   def hbox(toSize: Double | Null = null): Typesetter =
+    println("hbox()")
     modeStack push new HBoxBuilder(this, toSize)
     this
 
-  def done(): Unit = mode.done()
+  def done(): Unit =
+    println("done()")
+    mode.done()
 
   def paragraph(): Unit =
     mode match

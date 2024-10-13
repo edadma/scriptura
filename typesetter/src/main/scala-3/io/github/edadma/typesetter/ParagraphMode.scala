@@ -5,9 +5,11 @@ import scala.annotation.tailrec
 import pprint.pprintln
 
 class ParagraphMode(val t: Typesetter) extends HorizontalMode:
+  println("enter paragraph mode")
   def result: Box = ???
 
   override def done(): Unit =
+    println("exiting paragraph mode")
     var first = true
 
     while boxes.nonEmpty do
@@ -75,6 +77,7 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
         first = false
     end while
 
+    println("exit paragraph mode")
     t.indentParagraph = true
     pop
   end done

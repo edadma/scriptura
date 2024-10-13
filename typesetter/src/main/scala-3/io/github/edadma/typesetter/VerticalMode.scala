@@ -8,7 +8,7 @@ abstract class VerticalMode extends ListBoxBuilder:
   protected val skip: Double => Box = VSpaceBox(_)
 
   override infix def add(box: Box): Unit =
-    pprintln(box)
+    println("vertical mode add " + box)
     if nonEmpty && !last.isSpace && !box.isSpace then
       val baselineskip = t.getGlue("baselineskip") - last.descent - box.ascent
       val skip =

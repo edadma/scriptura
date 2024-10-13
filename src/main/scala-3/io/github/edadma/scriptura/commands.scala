@@ -18,7 +18,10 @@ val commands =
           case List(a: AST) =>
             context.asInstanceOf[Typesetter].hbox()
             renderer.render(a)
-            context.asInstanceOf[Typesetter].done()
+
+            val r = context.asInstanceOf[Typesetter].result
+
+            context.asInstanceOf[Typesetter].pop()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>"),
   )
