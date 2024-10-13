@@ -94,7 +94,11 @@ abstract class Renderer:
           case Some((_, yes)) => eval(yes)
         }
       case GroupAST(statements) =>
+        enterScope()
+
         val res = statements map eval filterNot (_ == ())
+
+        exitScope()
 
         if (res.length == 1) res.head
         else res
