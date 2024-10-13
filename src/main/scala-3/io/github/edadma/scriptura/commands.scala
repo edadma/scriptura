@@ -16,7 +16,10 @@ val commands =
       ): Any =
         args match
           case List(a: AST) =>
-            context.asInstanceOf[Typesetter].hbox()
+            if optional contains "to" then
+              context.asInstanceOf[Typesetter].hbox(optional("to").asInstanceOf[BigDecimal].toDouble)
+            else context.asInstanceOf[Typesetter].hbox()
+
             renderer.render(a)
 
             val r = context.asInstanceOf[Typesetter].result
@@ -94,3 +97,4 @@ val commands =
       ): Any =
         FilGlue,
   )
+//\vfil \hbox {\hfil asdf \hfil} \vfil
