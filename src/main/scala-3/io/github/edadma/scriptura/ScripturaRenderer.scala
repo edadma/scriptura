@@ -1,7 +1,7 @@
 package io.github.edadma.scriptura
 
 import io.github.edadma.texish.{Parser, Renderer}
-import io.github.edadma.typesetter.{Typesetter, HorizontalMode}
+import io.github.edadma.typesetter.{Typesetter, HorizontalMode, VerticalMode}
 
 class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]) extends Renderer:
   val context: Any = typesetter
@@ -14,8 +14,8 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
       case "\n" if newlineCount == 1 =>
         newlineCount += 1
         typesetter.paragraph()
-      case "\n"                    =>
-      case " " if newlineCount > 0 =>
+      case "\n"                                                                  =>
+      case " " if newlineCount > 0 || typesetter.mode.isInstanceOf[VerticalMode] =>
       case s: String =>
         if newlineCount == 1 then typesetter add " "
         typesetter add s
