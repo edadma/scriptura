@@ -3,9 +3,12 @@ package io.github.edadma.scriptura
 import scala.swing.*
 import scala.swing.event.*
 import java.awt.image.BufferedImage
-import javax.swing.{BorderFactory, ImageIcon}
+import javax.swing.{BorderFactory, ImageIcon, KeyStroke}
 import java.awt.{Color, Toolkit}
 import java.io.{PrintWriter, StringWriter}
+import javax.swing.undo.{UndoManager, AbstractUndoableEdit}
+import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
+
 import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument, HorizontalMode}
 
 import pprint.pprintln
@@ -41,6 +44,35 @@ object ScripturaPlayground extends SimpleSwingApplication:
       lineWrap = true
       wordWrap = true
     }
+
+    val undoManager = new UndoManager()
+
+    inputArea.peer.getDocument.addUndoableEditListener { event =>
+      undoManager.addEdit(event.getEdit)
+    }
+
+    val undoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK)
+    inputArea.peer.getInputMap.put(undoKey, "Undo")
+    inputArea.peer.getActionMap.put(
+      "Undo",
+      new javax.swing.AbstractAction {
+        override def actionPerformed(e: ActionEvent): Unit = {
+          if (undoManager.canUndo) undoManager.undo()
+        }
+      },
+    )
+
+    val redoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.SHIFT_DOWN_MASK | InputEvent.CTRL_DOWN_MASK)
+    inputArea.peer.getInputMap.put(redoKey, "Redo")
+    inputArea.peer.getActionMap.put(
+      "Redo",
+      new javax.swing.AbstractAction {
+        override def actionPerformed(e: ActionEvent): Unit = {
+          if (undoManager.canRedo) undoManager.redo()
+        }
+      },
+    )
+
     val errorOutput = new TextArea {
       rows = 5
       editable = false
