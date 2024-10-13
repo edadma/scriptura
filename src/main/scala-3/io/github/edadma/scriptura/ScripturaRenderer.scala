@@ -24,7 +24,8 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
         typesetter.start()
         typesetter add s
         newlineCount = 0
-      case b: Box => typesetter add b
+      case b: Box          => typesetter add b
+      case f: (() => Unit) => f()
 
   override def set(name: String, value: Any): Unit =
     value match

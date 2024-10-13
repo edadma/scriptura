@@ -25,4 +25,20 @@ val commands =
             r
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>"),
+    new Command("bold", 1, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            () =>
+              context.asInstanceOf[Typesetter].bold()
+              renderer.render(a)
+              context.asInstanceOf[Typesetter].nobold()
+          case List(a) => problem(pos, s"expected arguments <text>: $a")
+          case _       => problem(pos, "expected arguments <text>"),
   )

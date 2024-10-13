@@ -202,6 +202,26 @@ abstract class Typesetter:
 
   def exit(): Unit = scopes.pop
 
+  def italic(): Unit = addStyle("italic")
+
+  def noitalic(): Unit = removeStyle("italic")
+
+  def bold(): Unit = addStyle("bold")
+
+  def nobold(): Unit = removeStyle("bold")
+
+  def smallcaps(): Unit = addStyle("smallcaps")
+
+  def nosmallcaps(): Unit = removeStyle("smallcaps")
+
+  def setStyle(style: Set[String]): Font = selectFont(currentFont.typeface, currentFont.size, style)
+
+  def setStyle(style: String*): Font = setStyle(style.toSet)
+
+  def addStyle(style: String*): Font = setStyle(currentFont.style ++ style)
+
+  def removeStyle(style: String*): Font = setStyle(currentFont.style -- style)
+
   def loadFont(typeface: String, path: String, ligatures: Set[String], styleSet: Set[String]): Unit =
     val font = loadFont(path)
 
@@ -238,6 +258,12 @@ abstract class Typesetter:
     typefaces get typeface match
       case None                                => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _, ligatures)) => typefaces(typeface) = Typeface(fonts, Some(baseline), ligatures)
+
+  def selectFont(family: String, size: Double, style: String*): Font = selectFont(family, size, style.toSet)
+
+  def selectFont(family: String, size: Double, styleSet: Set[String]): Font =
+    currentFont = makeFont(family, size, styleSet)
+    currentFont
 
   def makeFont(typeface: String, size: Double, styleSet: Set[String]): Font =
     typefaces get typeface match
