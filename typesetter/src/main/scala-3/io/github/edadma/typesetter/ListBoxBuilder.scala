@@ -13,7 +13,6 @@ abstract class ListBoxBuilder extends Builder:
   def size: Double = boxes map measure sum
 
   def result: Box =
-    println("exit ListBoxBuilder" + boxes)
     toSize match
       case null      => wrap(build)
       case s: Double => wrap(buildTo(s))
@@ -37,13 +36,9 @@ abstract class ListBoxBuilder extends Builder:
     // If there are no Glue, return the boxes as-is (or handle accordingly)
     if (glueBoxesWithIndices.isEmpty) {
       if (delta != 0) {
-        println(s"Warning: No glue available to adjust the size ($getClass) (${boxes
-            .map({
-              case c: CharBox => c.text
-              case _          => " "
-            })
-            .mkString}).")
+        println(s"Warning: No glue available to adjust the size [${boxes mkString ", "}]")
       }
+
       return boxes.toList
     }
 

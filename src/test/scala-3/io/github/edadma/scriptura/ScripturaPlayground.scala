@@ -101,7 +101,6 @@ object ScripturaPlayground extends SimpleSwingApplication:
     // Event handling for the Run button
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
-      println("---------")
       try {
         val doc = new TestDocument(5)
         val t =
@@ -112,7 +111,6 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)
 
-        pprintln(ast)
         r.render(ast)
         t.end()
         multiPagePanel.setImages(doc.pages.toList.asInstanceOf[List[BufferedImage]])

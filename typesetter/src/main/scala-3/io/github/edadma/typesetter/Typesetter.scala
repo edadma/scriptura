@@ -308,16 +308,13 @@ abstract class Typesetter:
   def pop(): Unit = modeStack.pop
 
   def hbox(toSize: Double | Null = null): Typesetter =
-    println("hbox()")
     modeStack push new HBoxBuilder(this, toSize)
     this
 
   def done(): Unit =
-    println("done()")
     mode.done()
 
   def paragraph(): Unit =
-    println("paragraph")
     mode match
       case p: ParagraphMode => p.done()
       case _                =>

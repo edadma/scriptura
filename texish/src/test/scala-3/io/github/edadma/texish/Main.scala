@@ -47,9 +47,7 @@ import pprint.pprintln
 
       def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
 
-      def enterScope(): Unit =
-        println("enter")
-        scopes push scopes.top
+      def enterScope(): Unit = scopes push scopes.top
 
       def exitScope(): Unit = scopes.pop
   val src =
@@ -58,5 +56,5 @@ import pprint.pprintln
     """.trim.stripMargin
   val ast = parser.parse(src)
 
-  pprintln(ast)
+  //pprintln(ast)
   renderer.render(ast)

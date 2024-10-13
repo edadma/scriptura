@@ -10,7 +10,6 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
   var newlineCount: Int = 0
 
   override def output(v: Any): Unit =
-    pprintln(v)
     v match
       case s: Seq[Any]                                                               => s foreach output
       case "\n" if newlineCount == 0 && typesetter.mode.isInstanceOf[HorizontalMode] => newlineCount += 1
