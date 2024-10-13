@@ -5,7 +5,7 @@ import scala.swing.event.*
 import java.awt.image.BufferedImage
 import javax.swing.{BorderFactory, ImageIcon, KeyStroke}
 import java.awt.{Color, Toolkit}
-import java.io.{PrintWriter, StringWriter}
+import java.io.{PrintWriter, StringWriter, ByteArrayOutputStream, PrintStream}
 import javax.swing.undo.{UndoManager, AbstractUndoableEdit}
 import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
 
@@ -98,6 +98,24 @@ object ScripturaPlayground extends SimpleSwingApplication:
       dividerLocation = screenSize.width / 2
     }
 
+    def captureStdOut(block: => Unit): String =
+      val originalOut = System.out
+      val outputStream = new ByteArrayOutputStream()
+      val printStream = new PrintStream(outputStream)
+
+      // Redirect stdout to the custom PrintStream
+      System.setOut(printStream)
+
+      try {
+        block // Execute the block of code
+      } finally {
+        // Reset stdout to its original state
+        System.setOut(originalOut)
+      }
+
+      // Return captured output as a string
+      outputStream.toString
+
     // Event handling for the Run button
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
@@ -111,10 +129,12 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)
 
-        r.render(ast)
-        t.end()
+        errorOutput.text = captureStdOut {
+          r.render(ast)
+          t.end()
+        }
+
         multiPagePanel.setImages(doc.pages.toList.asInstanceOf[List[BufferedImage]])
-        errorOutput.text = ""
       } catch
         case error: Throwable =>
           val sw = new StringWriter
