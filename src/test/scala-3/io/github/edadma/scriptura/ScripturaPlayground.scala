@@ -5,7 +5,9 @@ import scala.swing.event.*
 import java.awt.image.BufferedImage
 import javax.swing.{BorderFactory, ImageIcon}
 import java.awt.{Color, Toolkit}
+import java.io.{PrintWriter, StringWriter}
 import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument, HorizontalMode}
+
 import pprint.pprintln
 
 class MultiPagePanel extends BoxPanel(Orientation.Vertical):
@@ -85,7 +87,11 @@ object ScripturaPlayground extends SimpleSwingApplication:
         errorOutput.text = ""
       } catch
         case error: Throwable =>
-          errorOutput.text = error.toString
+          val sw = new StringWriter
+          val pw = new PrintWriter(sw)
+
+          error.printStackTrace(pw)
+          errorOutput.text = sw.toString
           multiPagePanel.setImages(Nil)
     }
 

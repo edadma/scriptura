@@ -22,6 +22,7 @@ val commands =
             val r = context.asInstanceOf[Typesetter].result
 
             context.asInstanceOf[Typesetter].pop()
+            r
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>"),
   )

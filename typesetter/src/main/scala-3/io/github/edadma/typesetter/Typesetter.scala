@@ -254,9 +254,7 @@ abstract class Typesetter:
 
         Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
 
-  infix def add(text: String): Typesetter =
-    if mode.isInstanceOf[VerticalMode] then start()
-    add(charBox(text))
+  infix def add(text: String): Typesetter = add(charBox(text))
 
 //  def textBox(text: String): CharBox =
 //    val rep =
