@@ -37,7 +37,7 @@ object Command {
     }
   }
 
-  def invoke(renderer: Renderer, lambda: AST, arg: Any): Any = {
+  def invoke(renderer: Renderer[?], lambda: AST, arg: Any): Any = {
     renderer.enterScope()
     renderer.set("_", arg)
 
@@ -54,7 +54,7 @@ object Command {
       new Command(" ", 0) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: ?,
@@ -63,7 +63,7 @@ object Command {
       new Command("*", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -77,7 +77,7 @@ object Command {
       new Command("+", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -96,7 +96,7 @@ object Command {
       new Command("-", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -110,7 +110,7 @@ object Command {
       new Command("/", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -124,7 +124,7 @@ object Command {
       new Command("/=", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -134,7 +134,7 @@ object Command {
       new Command("<", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -149,7 +149,7 @@ object Command {
       new Command("<=", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -164,7 +164,7 @@ object Command {
       new Command("=", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -174,7 +174,7 @@ object Command {
       new Command(">", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -189,7 +189,7 @@ object Command {
       new Command(">=", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -204,7 +204,7 @@ object Command {
       new Command("[]", 0) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -214,7 +214,7 @@ object Command {
       new Command("^", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -228,7 +228,7 @@ object Command {
       new Command("abs", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -242,7 +242,7 @@ object Command {
       new Command("append", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -257,7 +257,7 @@ object Command {
       new Command("ceil", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -271,7 +271,7 @@ object Command {
       new Command("contains", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -290,7 +290,7 @@ object Command {
       new Command("date", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -306,7 +306,7 @@ object Command {
       new Command("default", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -321,7 +321,7 @@ object Command {
       new Command("distinct", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -336,7 +336,7 @@ object Command {
       new Command("downcase", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -351,7 +351,7 @@ object Command {
       new Command("drop", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -369,7 +369,7 @@ object Command {
       new Command("escape", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -383,7 +383,7 @@ object Command {
       new Command("escapeFull", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -399,7 +399,7 @@ object Command {
 
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -427,20 +427,20 @@ object Command {
       new Command("filter", 2, false) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
         ): Any =
           (args.head, renderer eval args.tail.head.asInstanceOf[AST]) match {
-            case (lambda: AST, s: Seq[_]) => s filter (e => truthy(invoke(renderer, lambda, e)))
+            case (lambda: AST, s: Seq[_]) => s filter (e => truthy(invoke(Renderer[?], lambda, e)))
             case (a, b)                   => problem(pos, s"expected arguments <lambda <sequence>, given $a, $b")
           }
       },
       new Command("floor", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -454,7 +454,7 @@ object Command {
       new Command("head", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -472,7 +472,7 @@ object Command {
 //
 //        def apply(
 //            pos: CharReader,
-//            renderer: Renderer,
+//            renderer: Renderer[?],
 //            args: List[Any],
 //            optional: Map[String, Any],
 //            context: Any,
@@ -494,7 +494,7 @@ object Command {
       new Command("isEmpty", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -510,7 +510,7 @@ object Command {
       new Command("join", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -526,7 +526,7 @@ object Command {
       new Command("last", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -542,7 +542,7 @@ object Command {
       new Command("lit", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -552,14 +552,14 @@ object Command {
       new Command("map", 2, false) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
         ): Any =
           (args.head, renderer eval args.tail.head.asInstanceOf[AST]) match {
             case (LiteralAST(f: String), s: Seq[_]) => s.asInstanceOf[Seq[Map[String, Any]]] map (_ getOrElse (f, nil))
-            case (lambda: AST, s: Seq[_])           => s map (invoke(renderer, lambda, _))
+            case (lambda: AST, s: Seq[_])           => s map (invoke(Renderer[?], lambda, _))
             case (a, b) =>
               problem(pos, s"expected arguments <variable> <sequence> or <lambda <sequence>>, given $a, $b")
           }
@@ -567,7 +567,7 @@ object Command {
       new Command("max", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -583,7 +583,7 @@ object Command {
       new Command("min", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -599,7 +599,7 @@ object Command {
       new Command("negate", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -613,7 +613,7 @@ object Command {
       new Command("nil", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -625,7 +625,7 @@ object Command {
       new Command("nonEmpty", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -641,7 +641,7 @@ object Command {
       new Command("normalize", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -651,7 +651,7 @@ object Command {
       new Command("now", 0) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -661,7 +661,7 @@ object Command {
       new Command("range", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -677,7 +677,7 @@ object Command {
       new Command("rem", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -693,7 +693,7 @@ object Command {
       new Command("remove", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -709,7 +709,7 @@ object Command {
       new Command("removeFirst", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -742,7 +742,7 @@ object Command {
       new Command("replaceFirst", 3) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -759,7 +759,7 @@ object Command {
       new Command("reverse", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -775,7 +775,7 @@ object Command {
       new Command("round", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -789,7 +789,7 @@ object Command {
       new Command("size", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -806,7 +806,7 @@ object Command {
       new Command("slice", 3) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -828,7 +828,7 @@ object Command {
       new Command("sort", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -857,7 +857,7 @@ object Command {
       new Command("split", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -873,7 +873,7 @@ object Command {
       new Command("tail", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -889,7 +889,7 @@ object Command {
       new Command("take", 2) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -907,7 +907,7 @@ object Command {
       new Command("timestamp", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -924,7 +924,7 @@ object Command {
       new Command("toInteger", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -940,7 +940,7 @@ object Command {
       new Command("toNumber", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -956,7 +956,7 @@ object Command {
       new Command("toString", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -968,7 +968,7 @@ object Command {
 
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -978,7 +978,7 @@ object Command {
       new Command("trim", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -992,7 +992,7 @@ object Command {
       new Command("u", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -1007,7 +1007,7 @@ object Command {
       new Command("upcase", 1) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,
@@ -1021,7 +1021,7 @@ object Command {
       new Command("{}", 0) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[?],
             args: List[Any],
             optional: Map[String, Any],
             context: Any,

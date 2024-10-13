@@ -21,7 +21,7 @@ class Parser(
     var rawEndDelim: String = ">>>",
 ) {
 
-  val commandMap: Map[String, Command] = (Command.builtins ++ commands) map (c => c.name -> c) toMap
+  val commandMap: Map[String, Command[?]] = (Command.builtins ++ commands) map (c => c.name -> c) toMap
   val activeDelims: List[String] = actives map (_.name) sortWith (_ > _)
   private val varRegex = """\.([^.]*)""".r
   private val unicodeRegex = "\\\\u[0-9a-fA-F]{4}".r
