@@ -9,6 +9,8 @@ import java.io.{PrintWriter, StringWriter, ByteArrayOutputStream, PrintStream}
 import javax.swing.undo.{UndoManager, AbstractUndoableEdit}
 import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
 
+import scala.Console.withOut
+
 import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument, HorizontalMode}
 
 import pprint.pprintln
@@ -99,21 +101,12 @@ object ScripturaPlayground extends SimpleSwingApplication:
     }
 
     def captureStdOut(block: => Unit): String =
-      val originalOut = System.out
       val outputStream = new ByteArrayOutputStream()
-      val printStream = new PrintStream(outputStream)
 
-      // Redirect stdout to the custom PrintStream
-      System.setOut(printStream)
-
-      try {
-        block // Execute the block of code
-      } finally {
-        // Reset stdout to its original state
-        System.setOut(originalOut)
+      withOut(outputStream) {
+        block // Execute the block with stdout redirected
       }
 
-      // Return captured output as a string
       outputStream.toString
 
     // Event handling for the Run button
