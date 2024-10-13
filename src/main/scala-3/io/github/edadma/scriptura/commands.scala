@@ -1,6 +1,6 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.typesetter.{Typesetter}
+import io.github.edadma.typesetter.Typesetter
 import io.github.edadma.texish.{AST, Active, Command, Parser, Renderer, problem}
 import io.github.edadma.char_reader.CharReader
 

@@ -1,5 +1,7 @@
 package io.github.edadma.typesetter
 
+import pprint.pprintln
+
 trait HorizontalMode extends Builder:
   override infix def add(box: Box): Unit =
     if nonEmpty then

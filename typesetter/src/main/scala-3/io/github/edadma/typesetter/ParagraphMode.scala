@@ -69,7 +69,7 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
       t.modeStack(1) add newLine
 
       if first then
-        val vlist = t.modeStack(1).asInstanceOf[VBoxBuilder]
+        val vlist = t.modeStack(1).asInstanceOf[VerticalMode]
 
         if vlist.length > 1 then vlist.insert(vlist.length - 2, t.getGlue("parskip"))
         first = false

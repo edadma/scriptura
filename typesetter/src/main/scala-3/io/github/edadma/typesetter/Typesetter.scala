@@ -296,7 +296,7 @@ abstract class Typesetter:
     paragraph()
 
     mode match
-      case v: VBoxBuilder =>
+      case v: VerticalMode =>
         val paragraphMode = new ParagraphMode(this)
 
         modeStack push paragraphMode
