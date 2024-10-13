@@ -291,6 +291,7 @@ abstract class Typesetter:
     mode.done()
 
   def paragraph(): Unit =
+    println("paragraph")
     mode match
       case p: ParagraphMode => p.done()
       case _                =>
@@ -298,8 +299,6 @@ abstract class Typesetter:
   def end(): Unit = while modeStack.nonEmpty do done()
 
   def start(): Unit =
-    paragraph()
-
     mode match
       case v: VerticalMode =>
         val paragraphMode = new ParagraphMode(this)
