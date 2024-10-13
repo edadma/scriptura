@@ -174,7 +174,7 @@ abstract class Typesetter:
     "Regular",
   )
 
-  currentFont = makeFont("noto", 16, Set("regular"))
+  currentFont = makeFont("alegreya", 20, Set("regular"))
   set(defaultParameters)
   modeStack push new PageMode(this)
 
