@@ -13,8 +13,8 @@ import scala.io
 import scala.language.postfixOps
 import scala.util.matching.Regex
 
-abstract class Command(val name: String, val arity: Int, val eval: Boolean = true)
-    extends ((CharReader, Renderer, List[Any], Map[String, Any], Any) => Any) {
+abstract class Command[C](val name: String, val arity: Int, val eval: Boolean = true)
+    extends ((CharReader, Renderer[C], List[Any], Map[String, Any], C) => Any) {
   override def toString = s"""Command: "$name""""
 }
 
@@ -49,7 +49,7 @@ object Command {
 
   private val escapeRegex = """([^\w _.,!:;?-])""".r
 
-  val builtins: Seq[Command] =
+  val builtins: Seq[Command[?]] =
     List(
       new Command(" ", 0) {
         def apply(
@@ -57,7 +57,7 @@ object Command {
             renderer: Renderer,
             args: List[Any],
             optional: Map[String, Any],
-            context: Any,
+            context: ?,
         ): Any = " "
       },
       new Command("*", 2) {
@@ -722,13 +722,13 @@ object Command {
             case Nil                        => ???
           }
       },
-      new Command("replace", 3) {
+      new Command[?]("replace", 3) {
         def apply(
             pos: CharReader,
-            renderer: Renderer,
+            renderer: Renderer[C],
             args: List[Any],
             optional: Map[String, Any],
-            context: Any,
+            context: ?,
         ): Any =
           args match {
             case List(l1: String, l2: String, r: String) => r.replace(l1, l2)

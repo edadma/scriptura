@@ -4,9 +4,9 @@ import scala.language.postfixOps
 
 import pprint.pprintln
 
-abstract class Renderer:
+abstract class Renderer[C]:
   val config: Map[String, Any]
-  val context: Any
+  val context: C
 
   def output(v: Any): Unit
 

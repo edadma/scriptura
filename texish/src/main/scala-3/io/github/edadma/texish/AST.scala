@@ -12,7 +12,7 @@ case class GroupAST(statements: Seq[AST]) extends AST
 case class LiteralAST(v: Any) extends AST
 case object BlankAST extends AST
 case class VariableAST(name: String) extends AST
-case class CommandAST(pos: CharReader, c: Command, args: List[AST], optional: Map[String, AST]) extends AST
+case class CommandAST(pos: CharReader, c: Command[?], args: List[AST], optional: Map[String, AST]) extends AST
 case class ActiveAST(pos: CharReader, a: Active) extends AST
 case class MacroAST(mac: Macro, args: Seq[AST]) extends AST
 case class BreakAST(pos: CharReader) extends AST
