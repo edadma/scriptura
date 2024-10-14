@@ -21,12 +21,8 @@ abstract class Typesetter:
   )
 
   protected[typesetter] var document: Document = uninitialized
-
-  setDocument(new SimpleDocument)
-
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected[typesetter] val scopes = mutable.Stack[Map[String, Any]](Map.empty)
-  protected[typesetter] val modeStack = mutable.Stack[Mode](document)
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   def init(): Unit
@@ -184,6 +180,10 @@ abstract class Typesetter:
 
   currentFont = makeFont("alegreya", 20, Set("regular"))
   set(defaultParameters)
+  setDocument(new SimpleDocument)
+
+  protected[typesetter] val modeStack = mutable.Stack[Mode](document)
+
   modeStack push new PageMode(this)
 
   def mode: Mode = modeStack.top
@@ -351,8 +351,8 @@ abstract class Typesetter:
       "lineskiplimit" -> 0.0,
       "spaceskip" -> Glue(currentFont.space, 1),
       "xspaceskip" -> Glue(currentFont.space * 1.5, 1),
-      "hsize" -> 800.0,
-      "vsize" -> 500.0,
+      "hsize" -> 6.5 * in,
+      "vsize" -> 9 * in,
       "parindent" -> in / 2,
       "parfillskip" -> FilGlue,
       "leftskip" -> ZeroGlue,
@@ -360,9 +360,15 @@ abstract class Typesetter:
       "parskip" -> FilGlue,
       "hangindent" -> 0.0,
       "hangafter" -> 1.0,
+      "hoffset" -> 1 * in,
+      "voffset" -> 1 * in,
 
       //
       "imageScaling" -> 1.0,
+      "pagewidth" -> 8.5 * in,
+      "pageheight" -> 11 * in,
+      "paperwidth" -> 8.5 * in,
+      "paperheight" -> 11 * in,
     )
 
 end Typesetter

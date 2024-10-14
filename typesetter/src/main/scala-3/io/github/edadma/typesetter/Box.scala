@@ -5,7 +5,7 @@ trait Box:
 
   def descent: Double
 
-  def height: Double // ascent + descent
+  def height: Double = ascent + descent
 
   def width: Double
 

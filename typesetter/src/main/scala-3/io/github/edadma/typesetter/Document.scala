@@ -13,7 +13,7 @@ abstract class Document extends Mode:
 
   def page(b: Box): Box
 
-  def add(box: Box): Unit = pages += t.render(page(box), t.getNumber("hsize"), t.getNumber("vsize"))
+  infix def add(box: Box): Unit = pages += t.render(page(box), t.getNumber("pagewidth"), t.getNumber("pageheight"))
 
   override def done(): Unit = pop
 

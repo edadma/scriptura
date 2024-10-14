@@ -113,10 +113,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
       try {
-        val t =
-          new Graphics2DTypesetter:
-            set("hsize", 600)
-        //          debug = true
+        val t = new Graphics2DTypesetter { debug = true }
         val p = new ScripturaParser
         val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)
@@ -144,3 +141,9 @@ object ScripturaPlayground extends SimpleSwingApplication:
     size = new Dimension(screenSize.width, screenSize.height)
 
     override def closeOperation(): Unit = dispose()
+
+/*
+\vfil
+\hbox to:\hsize{\hfil asdf \hfil}
+\vfil
+ */
