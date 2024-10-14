@@ -22,14 +22,12 @@ class MultiPagePanel extends BoxPanel(Orientation.Vertical):
     for (img <- images)
       val label = new Label:
         icon = new ImageIcon(img)
-        border = BorderFactory.createLineBorder(Color.BLACK, 1) // Adds a border around each page
+        border = BorderFactory.createLineBorder(Color.BLACK, 1)
 
-      val wrapper = new BoxPanel(Orientation.Vertical) {
-        contents += label
-        border = BorderFactory.createEmptyBorder(10, 10, 0, 10) // Adds margin around each page
-      }
-
-      contents += wrapper
+      contents +=
+        new BoxPanel(Orientation.Vertical):
+          contents += label
+          border = BorderFactory.createEmptyBorder(10, 10, 0, 10)
 
     revalidate()
     repaint()
