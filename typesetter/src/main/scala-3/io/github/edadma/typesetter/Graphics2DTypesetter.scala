@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage
 
 import scala.compiletime.uninitialized
 
-class Graphics2DTypesetter(val document: Document) extends Typesetter:
+class Graphics2DTypesetter extends Typesetter:
 
   var page: BufferedImage = uninitialized
   var g: Graphics2D = uninitialized

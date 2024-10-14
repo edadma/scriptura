@@ -2,7 +2,7 @@ package io.github.edadma.typesetter
 
 import scala.collection.mutable.ArrayBuffer
 
-class TestDocument(inset: Int = 0) extends Document:
+class SimpleDocument extends Document:
   val pages = new ArrayBuffer[Any]
 
   def init(): Unit = ()
@@ -11,7 +11,4 @@ class TestDocument(inset: Int = 0) extends Document:
 
   override def done(): Unit = pop
 
-  def add(box: Box): Unit =
-    val pagebox = box
-
-    pages += t.render(pagebox, t.getNumber("hsize"), t.getNumber("vsize"))
+  def add(box: Box): Unit = pages += t.render(box, t.getNumber("hsize"), t.getNumber("vsize"))

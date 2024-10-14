@@ -15,7 +15,7 @@ object Main extends SimpleSwingApplication:
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
-        val doc = new TestDocument(5)
+        val doc = new SimpleDocument(5)
         val t =
           new Graphics2DTypesetter(doc):
             set("hsize", 400)

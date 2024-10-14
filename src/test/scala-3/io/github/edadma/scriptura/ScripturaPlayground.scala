@@ -11,7 +11,7 @@ import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
 
 import scala.Console.withOut
 
-import io.github.edadma.typesetter.{Graphics2DTypesetter, TestDocument, HorizontalMode}
+import io.github.edadma.typesetter.{Graphics2DTypesetter, SimpleDocument, HorizontalMode}
 
 import pprint.pprintln
 
@@ -113,9 +113,8 @@ object ScripturaPlayground extends SimpleSwingApplication:
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
       try {
-        val doc = new TestDocument()
         val t =
-          new Graphics2DTypesetter(doc):
+          new Graphics2DTypesetter:
             set("hsize", 600)
         //          debug = true
         val p = new ScripturaParser
@@ -127,7 +126,9 @@ object ScripturaPlayground extends SimpleSwingApplication:
           t.end()
         }
 
-        multiPagePanel.setImages(doc.pages.toList.asInstanceOf[List[BufferedImage]])
+        multiPagePanel.setImages(
+          t.getDocument.asInstanceOf[SimpleDocument].pages.toList.asInstanceOf[List[BufferedImage]],
+        )
       } catch
         case error: Throwable =>
           val sw = new StringWriter

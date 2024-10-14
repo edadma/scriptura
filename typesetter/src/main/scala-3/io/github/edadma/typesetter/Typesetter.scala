@@ -7,8 +7,6 @@ import scala.language.postfixOps
 
 abstract class Typesetter:
 
-  val document: Document
-
   var debug: Boolean = false
   var currentFontXHeight: Double = uninitialized
   var currentFont: Font = uninitialized
@@ -21,6 +19,10 @@ abstract class Typesetter:
       baseline: Option[Double],
       ligatures: Set[String],
   )
+
+  protected[typesetter] var document: Document = uninitialized
+
+  setDocument(new SimpleDocument)
 
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected[typesetter] val scopes = mutable.Stack[Map[String, Any]](Map.empty)
@@ -57,9 +59,15 @@ abstract class Typesetter:
 
   def drawImage(image: Any, x: Double, y: Double): Unit
 
+  def setDocument(d: Document): Unit = {
+    document = d
+    d.ts = this
+    d.init()
+  }
+
+  def getDocument: Document = document
+
   init()
-  document.ts = this
-  document.init()
 
   loadTypeface(
     "noto",
