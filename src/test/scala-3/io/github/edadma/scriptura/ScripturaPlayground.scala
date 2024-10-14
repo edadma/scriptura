@@ -113,7 +113,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
     listenTo(runButton)
     reactions += { case ButtonClicked(`runButton`) =>
       try {
-        val doc = new TestDocument(5)
+        val doc = new TestDocument()
         val t =
           new Graphics2DTypesetter(doc):
             set("hsize", 600)

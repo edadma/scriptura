@@ -22,10 +22,10 @@ class Graphics2DTypesetter(val document: Document) extends Typesetter:
     page = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB)
     g = page.createGraphics()
 
-  def render(box: Box, xinset: Int = 0, yinset: Int = 0): Any =
+  def render(box: Box, width: Double = 0, height: Double = 0): Any =
     page = new BufferedImage(
-      getNumber("hsize").toInt + 2 * xinset,
-      getNumber("vsize").toInt + 2 * yinset,
+      width.toInt,
+      height.toInt,
       BufferedImage.TYPE_INT_ARGB,
     )
     g = page.createGraphics()
@@ -33,7 +33,7 @@ class Graphics2DTypesetter(val document: Document) extends Typesetter:
     g.fillRect(0, 0, page.getWidth, page.getHeight)
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
-    box.draw(this, xinset, yinset + box.ascent)
+    box.draw(this, 0, box.ascent)
     page
 
   def getDPI: Double = Toolkit.getDefaultToolkit.getScreenResolution
