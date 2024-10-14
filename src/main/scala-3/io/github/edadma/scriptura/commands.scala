@@ -1,11 +1,24 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.typesetter.{FilGlue, FillGlue, Typesetter}
+import io.github.edadma.typesetter.{FilGlue, FillGlue, ImageBox, Typesetter}
 import io.github.edadma.texish.{AST, Active, Command, Parser, Renderer, problem}
 import io.github.edadma.char_reader.CharReader
 
 val commands =
   List(
+    new Command("image", 1):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args.head match {
+          case p: String => new ImageBox(context.asInstanceOf[Typesetter], p)
+          case a         => problem(pos, s"expected a path: $a")
+        }
+    ,
     new Command("hbox", 1, false):
       def apply(
           pos: CharReader,

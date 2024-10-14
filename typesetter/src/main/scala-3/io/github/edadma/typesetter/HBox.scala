@@ -5,7 +5,6 @@ class HBox(val boxes: Seq[Box]) extends ContentBox:
   val width: Double = boxes.map(_.width).sum
   val ascent: Double = if boxes.isEmpty then 0 else boxes.map(_.ascent).max
   val descent: Double = if boxes.isEmpty then 0 else boxes.map(_.descent).max
-  val height: Double = ascent + descent
   val xAdvance: Double = boxes.map(_.xAdvance).sum
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =

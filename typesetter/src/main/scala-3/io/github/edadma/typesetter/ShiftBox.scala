@@ -4,7 +4,6 @@ class ShiftBox(val box: Box, val shift: Double) extends ContentBox:
 
   val ascent: Double = box.ascent // The original box's ascent remains unchanged
   val descent: Double = box.descent // The original box's descent remains unchanged
-  val height: Double = box.height // The overall height is still the same
   val width: Double = box.width // The width is unchanged
   val xAdvance: Double = box.xAdvance // xAdvance remains the same
 

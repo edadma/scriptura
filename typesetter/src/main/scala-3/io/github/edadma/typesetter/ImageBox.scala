@@ -8,7 +8,6 @@ class ImageBox(t: Typesetter, path: String, scaledWidth: Option[Double] = None, 
   val width: Double = scaledWidth getOrElse imageWidth * imageScaling
   val ascent: Double = scaledHeight getOrElse imageHeight * imageScaling
   val descent: Double = 0
-  val height: Double = ascent
   val xAdvance: Double = width
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =

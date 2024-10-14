@@ -3,7 +3,7 @@ package io.github.edadma.typesetter
 class VBox(val boxes: Seq[Box]) extends ContentBox:
 
   val width: Double = if boxes.isEmpty then 0 else boxes.map(_.width).max
-  val height: Double = boxes.map(_.height).sum
+  override val height: Double = boxes.map(_.height).sum
   val descent: Double = if boxes.isEmpty then 0 else boxes.last.descent
   val ascent: Double = height - descent
   val xAdvance: Double = width

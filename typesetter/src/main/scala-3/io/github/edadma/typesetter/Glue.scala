@@ -9,7 +9,6 @@ class Glue(
 ) extends SpaceBox:
 
   val descent: Double = naturalSize
-  val height: Double = naturalSize
   val width: Double = naturalSize // Initially, it's the natural width
   val xAdvance: Double = naturalSize // Same as width initially
 
