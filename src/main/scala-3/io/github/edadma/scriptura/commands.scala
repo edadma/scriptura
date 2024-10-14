@@ -1,6 +1,6 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.typesetter.{FilGlue, Typesetter}
+import io.github.edadma.typesetter.{FilGlue, FillGlue, Typesetter}
 import io.github.edadma.texish.{AST, Active, Command, Parser, Renderer, problem}
 import io.github.edadma.char_reader.CharReader
 
@@ -94,6 +94,26 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        FilGlue,
+        FilGlue
+    ,
+    new Command("hfill", 0, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        FillGlue
+    ,
+    new Command("vfill", 0, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        FillGlue,
   )
 //\vfil \hbox {\hfil asdf \hfil} \vfil
