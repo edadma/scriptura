@@ -11,7 +11,7 @@ import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
 
 import scala.Console.withOut
 
-import io.github.edadma.typesetter.{Graphics2DTypesetter, HorizontalMode, TestDocument}
+import io.github.edadma.typesetter.{Graphics2DTypesetter, HorizontalMode, TestDocument, SimpleDocument}
 
 import pprint.pprintln
 
@@ -115,7 +115,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
       try {
         val t = new Graphics2DTypesetter {
           debug = true
-          setDocument(new TestDocument)
+          setDocument(new SimpleDocument)
         }
         val p = new ScripturaParser
         val r = new ScripturaRenderer(t, Map.empty)
@@ -127,7 +127,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
         }
 
         multiPagePanel.setImages(
-          t.getDocument.asInstanceOf[TestDocument].pages.toList.asInstanceOf[List[BufferedImage]],
+          t.getDocument.pages.toList.asInstanceOf[List[BufferedImage]],
         )
       } catch
         case error: Throwable =>
