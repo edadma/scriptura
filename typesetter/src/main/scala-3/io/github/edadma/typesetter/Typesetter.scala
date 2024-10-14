@@ -147,15 +147,26 @@ abstract class Typesetter:
     "Thin",
     ("Thin", "Italic"),
   )
+
+  private val alegreyaMissing = Set(
+    `LATIN SMALL LIGATURE FFI`,
+    `LATIN SMALL LIGATURE FFL`,
+    `LATIN SMALL LIGATURE FF`,
+    `LONG LEFT RIGHT ARROW`,
+    `LONG LEFT RIGHT DOUBLE ARROW`,
+    `LONG LEFTWARDS ARROW`,
+    `LONG RIGHTWARDS ARROW`,
+    `LONG LEFTWARDS DOUBLE ARROW`,
+    `LONG RIGHTWARDS DOUBLE ARROW`,
+    `LEFTWARDS DOUBLE ARROW`,
+    `RIGHTWARDS DOUBLE ARROW`,
+    `LEFT RIGHT DOUBLE ARROW`,
+  )
+
   loadTypeface(
     "alegreya",
     "fonts/Alegreya/static/Alegreya",
-    Set(
-      `LATIN SMALL LIGATURE FI`,
-      `LATIN SMALL LIGATURE FL`,
-      `LEFT DOUBLE QUOTATION MARK`,
-      `RIGHT DOUBLE QUOTATION MARK`,
-    ),
+    Ligatures.ALL diff alegreyaMissing,
     Set(),
     "Black",
     ("Black", "Italic"),

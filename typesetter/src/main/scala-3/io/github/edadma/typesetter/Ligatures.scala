@@ -2,6 +2,8 @@ package io.github.edadma.typesetter
 
 import scala.annotation.tailrec
 
+import pprint.pprintln
+
 object Ligatures:
   @tailrec
   def replace(s: String, replacements: List[(String, String)], allowed: Set[String]): String =
@@ -24,7 +26,9 @@ object Ligatures:
 
   private[typesetter] val REPRESENTATIONS = List(
     "``" -> `LEFT DOUBLE QUOTATION MARK`,
+    "`" -> `LEFT SINGLE QUOTATION MARK`,
     "''" -> `RIGHT DOUBLE QUOTATION MARK`,
+    "'" -> `RIGHT SINGLE QUOTATION MARK`,
     "---" -> `EM DASH`,
     "<-->" -> `LONG LEFT RIGHT ARROW`,
     "<==>" -> `LONG LEFT RIGHT DOUBLE ARROW`,
@@ -41,6 +45,8 @@ object Ligatures:
     "--" -> `EN DASH`,
     "..." -> `HORIZONTAL ELLIPSIS`,
   )
+
+  val ALL: Set[String] = (Map() ++ LIGATURES ++ REPRESENTATIONS).values.toSet
 
   private val EXCEPTIONS = List(
     "fful",
