@@ -113,10 +113,23 @@ abstract class Typesetter:
     "Italic",
     ("Bold", "Italic"),
   )
+
+  private val gentiumbookMissing = Set(
+    `LONG LEFT RIGHT ARROW`,
+    `LONG LEFT RIGHT DOUBLE ARROW`,
+    `LONG LEFTWARDS ARROW`,
+    `LONG RIGHTWARDS ARROW`,
+    `LONG LEFTWARDS DOUBLE ARROW`,
+    `LONG RIGHTWARDS DOUBLE ARROW`,
+    `LEFTWARDS DOUBLE ARROW`,
+    `RIGHTWARDS DOUBLE ARROW`,
+    `LEFT RIGHT DOUBLE ARROW`,
+  )
+
   loadTypeface(
     "gentiumbook",
     "fonts/GentiumBookPlus/GentiumBookPlus",
-    "\uFB03\uFB04\uFB01\uFB02\uFB00",
+    Ligatures.ALL diff gentiumbookMissing,
     Set(),
     "Regular",
     "Bold",
@@ -184,7 +197,7 @@ abstract class Typesetter:
   loadTypeface(
     "alegreya",
     "fonts/AlegreyaSC/AlegreyaSC",
-    "\uFB01\uFB02",
+    Ligatures.ALL diff alegreyaMissing,
     Set("smallcaps"),
     "Black",
     ("Black", "Italic"),
@@ -198,7 +211,7 @@ abstract class Typesetter:
     "Regular",
   )
 
-  currentFont = makeFont("alegreya", 24, Set("regular"))
+  currentFont = makeFont("gentiumbook", 24, Set("regular"))
   set(defaultParameters)
   setDocument(new SimpleDocument)
   modeStack push new PageMode(this)
