@@ -18,7 +18,7 @@ val commands =
           case List(a: AST) =>
             context
               .asInstanceOf[Typesetter]
-              .hbox(if optional contains "to" then optional("to").asInstanceOf[BigDecimal].toDouble else null)
+              .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
             renderer.render(a)
 
             val r = context.asInstanceOf[Typesetter].result
