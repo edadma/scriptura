@@ -113,7 +113,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
       try {
         val t = new Graphics2DTypesetter {
           debug = true
-          setDocument(new SimpleDocument)
+          setDocument(new TestDocument)
         }
         val p = new ScripturaParser
         val r = new ScripturaRenderer(t, Map.empty)

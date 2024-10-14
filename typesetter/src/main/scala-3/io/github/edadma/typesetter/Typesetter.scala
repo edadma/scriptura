@@ -23,6 +23,7 @@ abstract class Typesetter:
   protected[typesetter] var document: Document = uninitialized
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected[typesetter] val scopes = mutable.Stack[Map[String, Any]](Map.empty)
+  protected[typesetter] val modeStack = mutable.Stack[Mode](null) // gets set by setDocument
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   def init(): Unit
@@ -57,6 +58,7 @@ abstract class Typesetter:
 
   def setDocument(d: Document): Unit = {
     document = d
+    modeStack(modeStack.length - 1) = d
     d.ts = this
     d.init()
   }
@@ -181,9 +183,6 @@ abstract class Typesetter:
   currentFont = makeFont("alegreya", 24, Set("regular"))
   set(defaultParameters)
   setDocument(new SimpleDocument)
-
-  protected[typesetter] val modeStack = mutable.Stack[Mode](document)
-
   modeStack push new PageMode(this)
 
   def mode: Mode = modeStack.top
@@ -204,7 +203,12 @@ abstract class Typesetter:
 
   def set(name: String, value: Double | Glue): Unit = scopes(0) += (name -> value)
 
-  def set(pairs: Seq[(String, Any)]): Unit = scopes(0) ++= pairs
+  def set(pairs: Seq[(String, Any)]): Unit =
+    scopes(0) ++=
+      pairs map {
+        case (k, n: Number) => (k, n.doubleValue)
+        case (k, v)         => (k, v)
+      }
 
   def enter(): Unit = scopes push scopes.top
 
