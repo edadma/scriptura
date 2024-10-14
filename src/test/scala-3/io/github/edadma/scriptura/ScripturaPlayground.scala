@@ -112,7 +112,8 @@ object ScripturaPlayground extends SimpleSwingApplication:
     reactions += { case ButtonClicked(`runButton`) =>
       try {
         val t = new Graphics2DTypesetter {
-          debug = true
+//          debug = true
+//          ligatures = false
           setDocument(new TestDocument)
         }
         val p = new ScripturaParser

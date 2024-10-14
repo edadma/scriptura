@@ -13,6 +13,8 @@ abstract class Typesetter:
   var currentColor: Color = Color("black")
   val converter = UnitConverter(this)
   val pages = new ArrayBuffer[Any]
+  var ligatures: Boolean = true
+  var representations: Boolean = true
 
   case class Typeface(
       fonts: mutable.HashMap[Set[String], Any], // todo: find a nicer target independent type other than Any
@@ -148,7 +150,12 @@ abstract class Typesetter:
   loadTypeface(
     "alegreya",
     "fonts/Alegreya/static/Alegreya",
-    "\uFB01\uFB02",
+    Set(
+      `LATIN SMALL LIGATURE FI`,
+      `LATIN SMALL LIGATURE FL`,
+      `LEFT DOUBLE QUOTATION MARK`,
+      `RIGHT DOUBLE QUOTATION MARK`,
+    ),
     Set(),
     "Black",
     ("Black", "Italic"),
@@ -248,7 +255,7 @@ abstract class Typesetter:
   def loadTypeface(
       typeface: String,
       basepath: String,
-      ligatures: String,
+      ligatures: String | Set[String],
       every: Set[String],
       styles: (Product | String)*,
   ): Unit =
@@ -261,7 +268,9 @@ abstract class Typesetter:
       loadFont(
         typeface,
         s"$basepath-$styleName.ttf",
-        ligatures map (_.toString) toSet,
+        ligatures match
+          case l: String      => l map (_.toString) toSet
+          case s: Set[String] => s,
         styleSet ++ every.map(_.toLowerCase),
       )
   end loadTypeface
@@ -294,15 +303,11 @@ abstract class Typesetter:
 
   infix def add(text: String): Typesetter = add(charBox(text))
 
-//  def textBox(text: String): CharBox =
-//    val rep =
-//      if representations then Ligatures.replace(text, Ligatures.REPRESENTATIONS, currentFont.ligatures) else text
-//
-//    charBox(if ligatures then Ligatures(rep, currentFont.ligatures) else rep)
-//    charBox(text)
+  def charBox(s: String): CharBox =
+    val rep =
+      if representations then Ligatures.replace(s, Ligatures.REPRESENTATIONS, currentFont.ligatures) else s
 
-  // todo: charBox should do what textBox did in "compositor" (dealing with ligatures of all kinds)
-  def charBox(s: String): CharBox = new CharBox(this, s)
+    new CharBox(this, if ligatures then Ligatures(rep, currentFont.ligatures) else rep)
 
   infix def add(box: Box): Typesetter =
     mode add box
