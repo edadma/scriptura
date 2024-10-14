@@ -27,7 +27,7 @@ abstract class Typesetter:
 
   def init(): Unit
 
-  def render(box: Box, width: Double = 0, height: Double = 0): Any
+  def render(box: Box, width: Double, height: Double, xoffset: Double = 0, yoffset: Double = 0): Any
 
   def getDPI: Double
 
@@ -178,7 +178,7 @@ abstract class Typesetter:
     "Regular",
   )
 
-  currentFont = makeFont("alegreya", 20, Set("regular"))
+  currentFont = makeFont("alegreya", 24, Set("regular"))
   set(defaultParameters)
   setDocument(new SimpleDocument)
 
