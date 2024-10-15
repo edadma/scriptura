@@ -24,7 +24,7 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
         typesetter add s
         newlineCount = 0
       case b: Box          => typesetter add b
-      case f: (() => Unit) => f()
+      case f: Function0[?] => f()
       case d: Double =>
         output(
           if (d % 1 == 0) d.toInt.toString
