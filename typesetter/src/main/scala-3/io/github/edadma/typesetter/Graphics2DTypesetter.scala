@@ -18,11 +18,11 @@ class Graphics2DTypesetter extends Typesetter:
 
   private val frc = g.getFontRenderContext
 
-  def init(): Unit =
+  def initTarget(): Unit =
     page = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB)
     g = page.createGraphics()
 
-  def render(box: Box, width: Double, height: Double, xoffset: Double = 0, yoffset: Double = 0): Any =
+  def createPageTarget(width: Double, height: Double): Unit =
     page = new BufferedImage(
       width.toInt,
       height.toInt,
@@ -33,8 +33,12 @@ class Graphics2DTypesetter extends Typesetter:
     g.fillRect(0, 0, page.getWidth, page.getHeight)
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+
+  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any =
     box.draw(this, xoffset, yoffset + box.ascent)
     page
+
+  def ejectPageTarget(): Unit = ()
 
   def getDPI: Double = Toolkit.getDefaultToolkit.getScreenResolution
 
