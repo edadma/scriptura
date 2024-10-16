@@ -32,6 +32,26 @@ val commands =
             () => context.asInstanceOf[Typesetter].selectFont(family, size.doubleValue, style.split("\\s+").toSet)
           case _ => problem(pos, "expected arguments <family> <size> <style>")
     ,
+    new Command("noindent", 0):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        () => context.asInstanceOf[Typesetter].noindent()
+    ,
+    new Command("indent", 0):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        () => context.asInstanceOf[Typesetter].indent()
+    ,
     new Command("image", 1):
       def apply(
           pos: CharReader,

@@ -375,9 +375,16 @@ abstract class Typesetter:
 
         modeStack push paragraphMode
 
-        if indentParagraph /*&& !firstParagraph*/ then paragraphMode add HSpaceBox(getNumber("parindent"))
-//        else firstParagraph = false
+        if indentParagraph then paragraphMode add HSpaceBox(getNumber("parindent"))
       case _ =>
+
+  def indent(): Unit =
+    indentParagraph = true
+    start()
+
+  def noindent(): Unit =
+    indentParagraph = false
+    start()
 
   private def defaultParameters =
     List(
