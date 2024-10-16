@@ -6,12 +6,13 @@ import scala.compiletime.uninitialized
 abstract class Document extends Mode:
   private[typesetter] var ts: Typesetter = uninitialized
   val pages = new ArrayBuffer[Any]
+  var page: Int = 0
 
   def t: Typesetter = ts
 
   def init(): Unit
 
-  def page(b: Box): Box
+  def layout(b: Box): Box
 
   infix def add(box: Box): Unit
 
