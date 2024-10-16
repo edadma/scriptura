@@ -263,7 +263,7 @@ abstract class Typesetter:
 
   def setStyle(style: Set[String]): Font = selectFont(currentFont.typeface, currentFont.size, style)
 
-  def typeface(name: String): Font = selectFont(name, currentFont.size, currentFont.style)
+  def typeface(name: String): Font = selectFont(name, currentFont.size, Set.empty)
 
   def setStyle(style: String*): Font = setStyle(style.toSet)
 
