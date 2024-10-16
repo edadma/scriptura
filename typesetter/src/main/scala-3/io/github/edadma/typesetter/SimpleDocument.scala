@@ -6,7 +6,7 @@ class SimpleDocument extends Document:
   def layout(b: Box): Box = b
 
   infix def add(box: Box): Unit =
-    t.createPageTarget(t.getNumber("pagewidth"), t.getNumber("pageheight"))
+    t.createPageTarget(t.getNumber("paperwidth"), t.getNumber("paperheight"))
     pages += t.renderToTarget(
       layout(box),
       t.getNumber("hoffset"),

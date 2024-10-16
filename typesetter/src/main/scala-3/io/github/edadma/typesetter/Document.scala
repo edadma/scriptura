@@ -7,6 +7,7 @@ abstract class Document extends Mode:
   private[typesetter] var ts: Typesetter = uninitialized
   val pages = new ArrayBuffer[Any]
   var page: Int = 0
+  var eject: Boolean = false
 
   def t: Typesetter = ts
 
@@ -16,6 +17,9 @@ abstract class Document extends Mode:
 
   infix def add(box: Box): Unit
 
-  override def done(): Unit = pop
+  override def done(): Unit =
+    pop
+
+    if eject then t.ejectPageTarget()
 
   def result: Box = ???

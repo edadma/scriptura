@@ -15,9 +15,8 @@ object Main extends SimpleSwingApplication:
       override def paintComponent(g: Graphics2D): Unit = {
         super.paintComponent(g)
 
-        val doc = new SimpleDocument(5)
         val t =
-          new Graphics2DTypesetter(doc):
+          new Graphics2DTypesetter:
             set("hsize", 400)
 //            debug = true
 
@@ -66,7 +65,7 @@ object Main extends SimpleSwingApplication:
         t.paragraph()
         t.add(FillGlue)
         t.end()
-        g.drawImage(doc.pages.head.asInstanceOf[BufferedImage], null, 0, 0)
+        g.drawImage(t.document.pages.head.asInstanceOf[BufferedImage], null, 0, 0)
       }
     }
 
