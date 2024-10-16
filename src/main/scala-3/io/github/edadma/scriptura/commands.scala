@@ -6,6 +6,32 @@ import io.github.edadma.char_reader.CharReader
 
 val commands =
   List(
+    new Command("typeface", 1, true):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(family: String) =>
+            () => context.asInstanceOf[Typesetter].typeface(family)
+          case _ => problem(pos, "expected arguments <family>")
+    ,
+    new Command("font", 3, true):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(family: String, size: Number, style: String) =>
+            () => context.asInstanceOf[Typesetter].selectFont(family, size.doubleValue, style.split("\\s+").toSet)
+          case _ => problem(pos, "expected arguments <family> <size> <style>")
+    ,
     new Command("image", 1):
       def apply(
           pos: CharReader,

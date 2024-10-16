@@ -33,7 +33,7 @@ abstract class Typesetter:
   def createPageTarget(width: Double, height: Double): Unit
 
   def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any
-  
+
   def ejectPageTarget(): Unit
 
   def getDPI: Double
@@ -262,6 +262,8 @@ abstract class Typesetter:
   def nosmallcaps(): Unit = removeStyle("smallcaps")
 
   def setStyle(style: Set[String]): Font = selectFont(currentFont.typeface, currentFont.size, style)
+
+  def typeface(name: String): Font = selectFont(name, currentFont.size, currentFont.style)
 
   def setStyle(style: String*): Font = setStyle(style.toSet)
 
