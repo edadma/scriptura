@@ -4,7 +4,7 @@ import scala.swing.*
 import scala.swing.event.*
 import scala.io.Source
 import java.awt.image.BufferedImage
-import javax.swing.{BorderFactory, ImageIcon, KeyStroke}
+import javax.swing.{AbstractAction, BorderFactory, ImageIcon, KeyStroke}
 import java.awt.{Color, Toolkit}
 import java.io.{FileWriter, BufferedWriter, PrintWriter, StringWriter, ByteArrayOutputStream, PrintStream, File}
 import javax.swing.undo.{UndoManager, AbstractUndoableEdit}
@@ -81,6 +81,26 @@ object ScripturaPlayground extends SimpleSwingApplication:
     }
     val runButton = new Button("Run")
 
+    // Define the key stroke for Ctrl-R
+    val ctrlRKeyStroke = KeyStroke.getKeyStroke("control R")
+
+    // Get the InputMap and ActionMap from the root pane
+    val inputMap = peer.getRootPane.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW)
+    val actionMap = peer.getRootPane.getActionMap
+
+    // Bind the Ctrl-R keystroke to the "pushButton" action
+    inputMap.put(ctrlRKeyStroke, "pushButton")
+
+    // Define the action to perform when Ctrl-R is pressed
+    actionMap.put(
+      "pushButton",
+      new AbstractAction {
+        override def actionPerformed(e: ActionEvent): Unit = {
+          runAction()
+        }
+      },
+    )
+
     val multiPagePanel = new MultiPagePanel
     val outputScrollPane = new ScrollPane(multiPagePanel)
 
@@ -118,6 +138,8 @@ object ScripturaPlayground extends SimpleSwingApplication:
     // Set the menu bar
     menuBar = new MenuBar {
       contents += fileMenu
+      contents += Swing.HStrut(20)
+      contents += runButton
     }
 
     // Function to handle opening a file
@@ -178,13 +200,11 @@ object ScripturaPlayground extends SimpleSwingApplication:
 
       outputStream.toString
 
-    // Event handling for the Run button
-    listenTo(runButton)
-    reactions += { case ButtonClicked(`runButton`) =>
+    def runAction(): Unit =
       try {
         val t = new Graphics2DTypesetter {
-//          debug = true
-//          ligatures = false
+          //          debug = true
+          //          ligatures = false
           setDocument(new TestDocument)
         }
         val p = new ScripturaParser
@@ -207,7 +227,11 @@ object ScripturaPlayground extends SimpleSwingApplication:
           error.printStackTrace(pw)
           errorOutput.text = sw.toString
           multiPagePanel.setImages(Nil)
-    }
+    end runAction
+
+    // Event handling for the Run button
+    listenTo(runButton)
+    reactions += { case ButtonClicked(`runButton`) => runAction() }
 
     // Set up the main frame
     contents = splitPane
