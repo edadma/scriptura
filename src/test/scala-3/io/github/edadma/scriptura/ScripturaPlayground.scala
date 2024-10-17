@@ -2,12 +2,14 @@ package io.github.edadma.scriptura
 
 import scala.swing.*
 import scala.swing.event.*
+import scala.io.Source
 import java.awt.image.BufferedImage
 import javax.swing.{BorderFactory, ImageIcon, KeyStroke}
 import java.awt.{Color, Toolkit}
-import java.io.{PrintWriter, StringWriter, ByteArrayOutputStream, PrintStream}
+import java.io.{FileWriter, BufferedWriter, PrintWriter, StringWriter, ByteArrayOutputStream, PrintStream, File}
 import javax.swing.undo.{UndoManager, AbstractUndoableEdit}
 import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
+import javax.swing.filechooser.FileNameExtensionFilter
 
 import scala.Console.withOut
 
@@ -91,6 +93,75 @@ object ScripturaPlayground extends SimpleSwingApplication:
       contents += new FlowPanel(FlowPanel.Alignment.Center)(runButton)
     }
 
+    // Define the File menu with Open and Save items
+    val fileMenu = new Menu("File") {
+      // Open MenuItem
+      val openItem = new MenuItem(Action("Open") {
+        openFile()
+      }) {
+        mnemonic = Key.O
+        peer.setAccelerator(KeyStroke.getKeyStroke("ctrl O"))
+      }
+
+      // Save MenuItem
+      val saveItem = new MenuItem(Action("Save") {
+        saveFile()
+      }) {
+        mnemonic = Key.S
+        peer.setAccelerator(KeyStroke.getKeyStroke("ctrl S"))
+      }
+
+      contents += openItem
+      contents += saveItem
+    }
+
+    // Set the menu bar
+    menuBar = new MenuBar {
+      contents += fileMenu
+    }
+
+    // Function to handle opening a file
+    def openFile(): Unit = {
+      val chooser = new FileChooser(new File("."))
+      chooser.title = "Open Script File"
+      chooser.fileFilter = new FileNameExtensionFilter("Script Files (*.script)", "script")
+      val result = chooser.showOpenDialog(this)
+      if (result == FileChooser.Result.Approve) {
+        val file = chooser.selectedFile
+        try {
+          val source = Source.fromFile(file)
+          inputArea.text = source.mkString
+          source.close()
+        } catch {
+          case ex: Exception =>
+            Dialog.showMessage(this, s"Failed to open file:\n${ex.getMessage}", "Error", Dialog.Message.Error)
+        }
+      }
+    }
+
+    // Function to handle saving a file
+    def saveFile(): Unit = {
+      val chooser = new FileChooser(new File("."))
+      chooser.title = "Save Script File"
+      chooser.fileFilter = new FileNameExtensionFilter("Script Files (*.script)", "script")
+      val result = chooser.showSaveDialog(this)
+      if (result == FileChooser.Result.Approve) {
+        var file = chooser.selectedFile
+        // Ensure the file has a .script extension
+        if (!file.getName.toLowerCase.endsWith(".script")) {
+          file = new File(file.getAbsolutePath + ".script")
+        }
+        try {
+          val writer = new PrintWriter(file)
+          writer.write(inputArea.text)
+          writer.close()
+        } catch {
+          case ex: Exception =>
+            Dialog.showMessage(this, s"Failed to save file:\n${ex.getMessage}", "Error", Dialog.Message.Error)
+        }
+      }
+    }
+
     // Main split pane
     val splitPane = new SplitPane(Orientation.Vertical, leftPanel, outputScrollPane) {
       oneTouchExpandable = true
@@ -143,9 +214,3 @@ object ScripturaPlayground extends SimpleSwingApplication:
     size = new Dimension(screenSize.width, screenSize.height)
 
     override def closeOperation(): Unit = dispose()
-
-/*
-\vfil
-\hbox to:\hsize{\hfil asdf \hfil}
-\vfil
- */

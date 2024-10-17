@@ -40,7 +40,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        () => context.asInstanceOf[Typesetter].pagebreak()
+        () => context.asInstanceOf[Typesetter].newpage()
     ,
     new Command("noindent", 0):
       def apply(

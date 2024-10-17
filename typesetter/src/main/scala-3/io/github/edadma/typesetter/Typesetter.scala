@@ -361,10 +361,10 @@ abstract class Typesetter:
   def done(): Unit =
     mode.done()
 
-  def pagebreak(): Unit =
+  def newpage(): Unit =
     paragraph()
     mode match
-      case p: PageMode => p.pagebreak()
+      case p: PageMode => p.newpage()
       case _           =>
 
   def paragraph(): Unit =

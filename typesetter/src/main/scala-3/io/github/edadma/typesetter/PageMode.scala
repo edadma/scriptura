@@ -9,11 +9,11 @@ class PageMode(t: Typesetter) extends VBoxBuilder(t):
 
     if size > t.getNumber("vsize") then
       trimEnd(length - len)
-      pagebreak()
+      newpage()
       super.add(box)
     end if
 
-  def pagebreak(): Unit =
+  def newpage(): Unit =
     t.document add result
     clear()
 
