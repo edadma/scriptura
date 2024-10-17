@@ -13,7 +13,7 @@ import javax.swing.filechooser.FileNameExtensionFilter
 
 import scala.Console.withOut
 
-import io.github.edadma.typesetter.{Graphics2DTypesetter, HorizontalMode, TestDocument, SimpleDocument}
+import io.github.edadma.typesetter.*
 
 import pprint.pprintln
 
@@ -205,7 +205,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val t = new Graphics2DTypesetter {
           //          debug = true
           //          ligatures = false
-          setDocument(new TestDocument)
+          setDocument(new TestFoldedDocument)
         }
         val p = new ScripturaParser
         val r = new ScripturaRenderer(t, Map.empty)
@@ -236,5 +236,6 @@ object ScripturaPlayground extends SimpleSwingApplication:
     // Set up the main frame
     contents = splitPane
     size = new Dimension(screenSize.width, screenSize.height)
+    inputArea.requestFocus()
 
     override def closeOperation(): Unit = dispose()

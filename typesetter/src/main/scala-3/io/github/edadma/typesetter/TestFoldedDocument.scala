@@ -1,9 +1,25 @@
 package io.github.edadma.typesetter
 
-class TestFoldedDocument extends TestDocument:
+class TestFoldedDocument extends Document:
   val folds = 2
 
-  override infix def add(box: Box): Unit =
+  def init(): Unit =
+    t.set(
+      Seq(
+        "paperwidth" -> 400,
+        "paperheight" -> 400,
+        "pagewidth" -> 400,
+        "pageheight" -> 400,
+        "hsize" -> 300,
+        "vsize" -> 300,
+        "hoffset" -> 50,
+        "voffset" -> 50,
+      ),
+    )
+
+  def layout(b: Box): Box = b
+
+  infix def add(box: Box): Unit =
     val fold = page % folds
     val width = t.getNumber("paperwidth") / folds
 
