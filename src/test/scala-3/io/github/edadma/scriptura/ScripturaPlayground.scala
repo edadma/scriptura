@@ -6,16 +6,15 @@ import scala.io.Source
 import java.awt.image.BufferedImage
 import javax.swing.{AbstractAction, BorderFactory, ImageIcon, KeyStroke}
 import java.awt.{Color, Toolkit}
-import java.io.{PrintWriter, StringWriter, ByteArrayOutputStream, File}
+import java.io.{ByteArrayOutputStream, File, PrintWriter, StringWriter}
 import javax.swing.undo.UndoManager
-import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
+import java.awt.event.{ActionEvent, InputEvent, KeyEvent}
 import javax.swing.filechooser.FileNameExtensionFilter
-
 import scala.Console.withOut
-
 import io.github.edadma.typesetter.*
-
 import pprint.pprintln
+
+import scala.language.postfixOps
 
 class MultiPagePanel extends BoxPanel(Orientation.Vertical):
   def setImages(images: List[BufferedImage]): Unit =
@@ -216,9 +215,13 @@ object ScripturaPlayground extends SimpleSwingApplication:
           t.end()
         }
 
-        multiPagePanel.setImages(
-          t.getDocument.pages.toList.asInstanceOf[List[BufferedImage]],
-        )
+        val pages = t.getDocument.pages.toList.asInstanceOf[List[BufferedImage]]
+        val maxDividerLocation =
+          splitPane.size.width - splitPane.rightComponent.minimumSize.width - 2 /*border*/ - 2 * 10 /*margin*/ - 7
+
+        multiPagePanel.setImages(pages)
+
+        splitPane.dividerLocation = maxDividerLocation - pages.map(_.getWidth).max
       } catch
         case error: Throwable =>
           val sw = new StringWriter
