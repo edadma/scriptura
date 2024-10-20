@@ -1,1 +1,22 @@
-one\newpage two\newpage three\newpage four\newpage five\newpage six
+\hbox to:\hsize {one \hfil}
+\vfil
+
+\newpage
+\hbox to:\hsize {two \hfil}
+\vfil
+
+\newpage
+\hbox to:\hsize {three \hfil}
+\vfil
+
+\newpage
+\hbox to:\hsize {four \hfil}
+\vfil
+
+\newpage
+\hbox to:\hsize {five \hfil}
+\vfil
+
+\newpage
+\hbox to:\hsize {six \hfil}
+\vfil

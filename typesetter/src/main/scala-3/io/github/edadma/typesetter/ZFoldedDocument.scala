@@ -9,7 +9,7 @@ class ZFoldedDocument extends Document:
     val LETTER_HEIGHT = 11 * t.in
     val LETTER_WIDTH_THIRD = LETTER_WIDTH / 3
     val LETTER_HEIGHT_HALF = LETTER_HEIGHT / 2
-    val MARGIN = 5 * t.mm
+    val MARGIN = 2 * t.mm
 
     t.set(
       Seq(

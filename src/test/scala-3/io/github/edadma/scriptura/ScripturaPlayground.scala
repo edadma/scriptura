@@ -205,8 +205,8 @@ object ScripturaPlayground extends SimpleSwingApplication:
     def runAction(): Unit =
       try {
         val t = new Graphics2DTypesetter {
-          //          debug = true
-          //          ligatures = false
+          // debug = true
+          // ligatures = false
           setDocument(new ZFoldedDocument)
         }
         val p = new ScripturaParser
