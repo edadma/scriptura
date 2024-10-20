@@ -467,30 +467,20 @@ object Command {
             case Nil             => ???
           }
       },
-//      new Command("include", 1) { // todo: can't run under js
-//        val dir = new Const[String]
-//
-//        def apply(
-//            pos: CharReader,
-//            renderer: Renderer,
-//            args: List[Any],
-//            optional: Map[String, Any],
-//            context: Any,
-//        ): Any = {
-//          val file = new File(dir(renderer.config("include").toString), args.head.toString)
+      new Command("include", 1) { // todo: can't run under js
+        def apply(
+            pos: CharReader,
+            renderer: Renderer,
+            args: List[Any],
+            optional: Map[String, Any],
+            context: Any,
+        ): Any = {
 //          val charset = optional get "charset" map (_.toString)
-//
-//          renderer.eval(
-//            renderer.parser.parse(
-//              util
-//                .Using(if (charset.isDefined) io.Source.fromFile(file) else io.Source.fromFile(file)(charset get))(
-//                  _.mkString,
-//                )
-//                .get,
-//            ),
-//          )
-//        }
-//      },
+
+          renderer.eval(renderer.parser.parse(readFile(args.head.toString)))
+          ()
+        }
+      },
       new Command("isEmpty", 1) {
         def apply(
             pos: CharReader,

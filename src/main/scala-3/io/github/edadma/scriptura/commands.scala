@@ -165,6 +165,26 @@ val commands =
       ): Any =
         FilGlue
     ,
+    new Command("hss", 0, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        InfGlue
+    ,
+    new Command("vss", 0, false):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        InfGlue
+    ,
     new Command("hfill", 0, false):
       def apply(
           pos: CharReader,
