@@ -6,8 +6,8 @@ import scala.io.Source
 import java.awt.image.BufferedImage
 import javax.swing.{AbstractAction, BorderFactory, ImageIcon, KeyStroke}
 import java.awt.{Color, Toolkit}
-import java.io.{FileWriter, BufferedWriter, PrintWriter, StringWriter, ByteArrayOutputStream, PrintStream, File}
-import javax.swing.undo.{UndoManager, AbstractUndoableEdit}
+import java.io.{PrintWriter, StringWriter, ByteArrayOutputStream, File}
+import javax.swing.undo.undoManager
 import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
 import javax.swing.filechooser.FileNameExtensionFilter
 
