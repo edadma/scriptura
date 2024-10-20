@@ -5,7 +5,7 @@ import scala.compiletime.uninitialized
 
 abstract class Document extends Mode:
   private[typesetter] var ts: Typesetter = uninitialized
-  val pages = new ArrayBuffer[Any]
+  val printedPages = new ArrayBuffer[Any]
   var page: Int = 0
   var eject: Boolean = false
 

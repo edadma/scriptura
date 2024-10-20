@@ -18,7 +18,7 @@ class ZFoldedDocument extends Document:
 //        "pagewidth" -> 400,
 //        "pageheight" -> 400,
         "hsize" -> (LETTER_WIDTH_THIRD - 2 * MARGIN),
-        "vsize" -> (LETTER_HEIGHT_HALF - MARGIN),
+        "vsize" -> (LETTER_HEIGHT_HALF - 2 * MARGIN),
         "hoffset" -> MARGIN,
         "voffset" -> MARGIN,
       ),
@@ -30,12 +30,12 @@ class ZFoldedDocument extends Document:
     val folds = vfolds * hfolds
     val fold = page % folds
     val hfold = page % hfolds
-    val vfold = page % vfolds
+    val vfold = page / hfolds
     val width = t.getNumber("paperwidth") / hfolds
     val height = t.getNumber("paperheight") / vfolds
 
     if fold == 0 then
-      pages += t.createPageTarget(t.getNumber("paperwidth"), t.getNumber("paperheight"))
+      printedPages += t.createPageTarget(t.getNumber("paperwidth"), t.getNumber("paperheight"))
       eject = true
 
     t.renderToTarget(
