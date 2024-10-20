@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage
 import javax.swing.{AbstractAction, BorderFactory, ImageIcon, KeyStroke}
 import java.awt.{Color, Toolkit}
 import java.io.{PrintWriter, StringWriter, ByteArrayOutputStream, File}
-import javax.swing.undo.undoManager
+import javax.swing.undo.UndoManager
 import java.awt.event.{InputEvent, KeyEvent, ActionEvent}
 import javax.swing.filechooser.FileNameExtensionFilter
 
@@ -205,8 +205,9 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val t = new Graphics2DTypesetter {
           //          debug = true
           //          ligatures = false
-          setDocument(new TestFoldedDocument)
+          setDocument(new SimpleDocument)
         }
+        println(t.getDPI)
         val p = new ScripturaParser
         val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)
