@@ -207,7 +207,6 @@ object ScripturaPlayground extends SimpleSwingApplication:
           //          ligatures = false
           setDocument(new SimpleDocument)
         }
-        println(t.getDPI)
         val p = new ScripturaParser
         val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)

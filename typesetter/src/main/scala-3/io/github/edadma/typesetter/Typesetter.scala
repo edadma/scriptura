@@ -30,9 +30,9 @@ abstract class Typesetter:
 
   def initTarget(): Unit
 
-  def createPageTarget(width: Double, height: Double): Unit
+  def createPageTarget(width: Double, height: Double): Any
 
-  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any
+  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Unit
 
   def ejectPageTarget(): Unit
 

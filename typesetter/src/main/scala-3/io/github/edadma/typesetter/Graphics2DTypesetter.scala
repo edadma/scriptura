@@ -22,7 +22,7 @@ class Graphics2DTypesetter extends Typesetter:
     page = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB)
     g = page.createGraphics()
 
-  def createPageTarget(width: Double, height: Double): Unit =
+  def createPageTarget(width: Double, height: Double): Any =
     page = new BufferedImage(
       width.toInt,
       height.toInt,
@@ -33,10 +33,10 @@ class Graphics2DTypesetter extends Typesetter:
     g.fillRect(0, 0, page.getWidth, page.getHeight)
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
     g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
-
-  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Any =
-    box.draw(this, xoffset, yoffset + box.ascent)
     page
+
+  def renderToTarget(box: Box, xoffset: Double = 0, yoffset: Double = 0): Unit =
+    box.draw(this, xoffset, yoffset + box.ascent)
 
   def ejectPageTarget(): Unit = ()
 
