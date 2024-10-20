@@ -32,12 +32,12 @@ class ZFoldedDocument extends Document:
     val hfold = page % hfolds
     val vfold = page % vfolds
     val width = t.getNumber("paperwidth") / hfolds
-    val height = t.getNumber("paperheight") / hfolds
+    val height = t.getNumber("paperheight") / vfolds
 
     if fold == 0 then
       pages += t.createPageTarget(t.getNumber("paperwidth"), t.getNumber("paperheight"))
       eject = true
-  
+
     t.renderToTarget(
       layout(box),
       hfold * width + t.getNumber("hoffset"),
