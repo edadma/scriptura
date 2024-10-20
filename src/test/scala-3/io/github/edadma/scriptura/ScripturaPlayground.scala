@@ -5,13 +5,14 @@ import scala.swing.event.*
 import scala.io.Source
 import java.awt.image.BufferedImage
 import javax.swing.{AbstractAction, BorderFactory, ImageIcon, KeyStroke}
-import java.awt.{Color, Toolkit}
+import java.awt.{Font, Color, Toolkit}
 import java.io.{ByteArrayOutputStream, File, PrintWriter, StringWriter}
 import javax.swing.undo.UndoManager
 import java.awt.event.{ActionEvent, InputEvent, KeyEvent}
 import javax.swing.filechooser.FileNameExtensionFilter
 import scala.Console.withOut
-import io.github.edadma.typesetter.*
+import io.github.edadma.typesetter.{Graphics2DTypesetter, ZFoldedDocument}
+
 import pprint.pprintln
 
 import scala.language.postfixOps
@@ -40,10 +41,12 @@ object ScripturaPlayground extends SimpleSwingApplication:
     title = "Scriptura Playground"
 
     // Left panel components
-    val inputArea = new TextArea {
+    private val inputArea = new TextArea {
       rows = 20
       lineWrap = true
       wordWrap = true
+      font = new Font("Monospaced", Font.PLAIN, 14)
+      lineWrap = false
     }
 
     val undoManager = new UndoManager()
@@ -52,7 +55,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
       undoManager.addEdit(event.getEdit)
     }
 
-    val undoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK)
+    private val undoKey = KeyStroke.getKeyStroke(KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK)
     inputArea.peer.getInputMap.put(undoKey, "Undo")
     inputArea.peer.getActionMap.put(
       "Undo",
