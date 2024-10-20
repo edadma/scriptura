@@ -230,6 +230,8 @@ abstract class Typesetter:
 
   def cm: Double = in / 2.54
 
+  def mm: Double = cm / 10
+
   def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
 
   def getGlue(name: String): Glue = get(name).asInstanceOf[Glue]
