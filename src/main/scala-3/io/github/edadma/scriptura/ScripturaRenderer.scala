@@ -36,6 +36,7 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
   def set(name: String, value: Any): Unit =
     value match
       case n: BigDecimal => typesetter.set(name, n.toDouble)
+      case v             => typesetter.set(name, v)
 
   def get(name: String): Any = typesetter.get(name)
 

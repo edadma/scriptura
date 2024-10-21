@@ -248,7 +248,7 @@ abstract class Typesetter:
 
   infix def getNumber(name: String): Double = get(name).asInstanceOf[Double]
 
-  def set(name: String, value: Double | Glue): Unit = scopes(0) += (name -> value)
+  def set(name: String, value: Any): Unit = scopes(0) += (name -> value)
 
   def set(pairs: Seq[(String, Any)]): Unit =
     scopes(0) ++=
@@ -260,7 +260,7 @@ abstract class Typesetter:
   def enter(): Unit = scopes push scopes.top
 
   def exit(): Unit =
-    val s = scopes.pop
+    scopes.pop
 
     scopes.top get "font" match
       case Some(font: Font) => currentFont = font
