@@ -1,5 +1,7 @@
 package io.github.edadma.typesetter
 
+import pprint.pprintln
+
 import scala.collection.mutable
 import scala.collection.mutable.ArrayBuffer
 import scala.compiletime.uninitialized
@@ -254,15 +256,20 @@ abstract class Typesetter:
         case (k, v)         => (k, v)
       }
 
-  def enter(): Unit = scopes push scopes.top
+  def enter(): Unit =
+    println("enter")
+    scopes push scopes.top
 
   def exit(): Unit =
+    println("exit")
     val s = scopes.pop
 
     s get "font" match
-      case Some(font: Font) => currentFont = font
-      case Some(o)          => sys.error(s"font object has wrong type: '${o.getClass}'")
-      case None             =>
+      case Some(font: Font) =>
+        pprintln(font)
+        currentFont = font
+      case Some(o) => sys.error(s"font object has wrong type: '${o.getClass}'")
+      case None    =>
 
   def italic(): Unit = addStyle("italic")
 
@@ -330,8 +337,12 @@ abstract class Typesetter:
   def selectFont(typeface: String, size: Double, styleSet: Set[String]): Font =
     val f = makeFont(typeface, size, styleSet)
 
+    println("selectFont")
     if f != currentFont then
+      println((scopes.size, if scopes.size > 1 then scopes(1).contains("font")))
+
       if scopes.size > 1 && !scopes(1).contains("font") then scopes(1) += ("font" -> currentFont)
+
       currentFont = f
       set("baselineskip", Glue(f.size))
 
