@@ -15,4 +15,4 @@ class RuleBox(t: Typesetter, val width: Double, thickness: Double, color: Color,
 
   def draw(t: Typesetter, x: Double, y: Double): Unit =
     t.setColor(color)
-    t.fillRect(x, y + ascent, width, thickness)
+    t.fillRect(x, y - ascent, width, thickness)
