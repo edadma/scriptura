@@ -45,9 +45,9 @@ class Graphics2DTypesetter extends Typesetter:
   xrandr | grep -w connected
   eDP-1 connected primary 1920x1080+0+0 (normal left inverted right x axis y axis) 340mm x 190mm
 
-  DPI is approx. 144
+  DPI is 143.435294114
    */
-  def getDPI: Double = 144 // Toolkit.getDefaultToolkit.getScreenResolution
+  def getDPI: Double = 143.435294114 // Toolkit.getDefaultToolkit.getScreenResolution
 
   def setFont(font: Any): Unit = g.setFont(font.asInstanceOf[JFont])
 

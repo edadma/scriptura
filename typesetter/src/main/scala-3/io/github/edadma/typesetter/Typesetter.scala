@@ -222,14 +222,14 @@ abstract class Typesetter:
     "Regular",
   )
 
-  currentFont = makeFont("gentiumbook", 24, Set("regular"))
+  selectFont("gentiumbook", 24, Set("regular"))
   set(defaultParameters)
   setDocument(new SimpleDocument)
   modeStack push new PageMode(this)
 
   def mode: Mode = modeStack.top
 
-  def setFont(f: Font): Unit = setFont(f.renderFont /*, f.size*/ )
+  def setFont(f: Font): Unit = setFont(f.renderFont)
 
   def in: Double = getDPI
 
@@ -256,7 +256,13 @@ abstract class Typesetter:
 
   def enter(): Unit = scopes push scopes.top
 
-  def exit(): Unit = scopes.pop
+  def exit(): Unit =
+    val s = scopes.pop
+
+    s get "font" match
+      case Some(font: Font) => currentFont = font
+      case Some(o)          => sys.error(s"font object has wrong type: '${o.getClass}'")
+      case None             =>
 
   def italic(): Unit = addStyle("italic")
 
@@ -322,7 +328,13 @@ abstract class Typesetter:
   def selectFont(typeface: String, size: Double, style: String*): Font = selectFont(typeface, size, style.toSet)
 
   def selectFont(typeface: String, size: Double, styleSet: Set[String]): Font =
-    currentFont = makeFont(typeface, size, styleSet)
+    val f = makeFont(typeface, size, styleSet)
+
+    if f != currentFont then
+      if scopes.size > 1 && !scopes(1).contains("font") then scopes(1) += ("font" -> currentFont)
+      currentFont = f
+      set("baselineskip", Glue(f.size))
+
     currentFont
 
   def makeFont(typeface: String, size: Double, styleSet: Set[String]): Font =
@@ -413,9 +425,9 @@ abstract class Typesetter:
   private def defaultParameters =
     List(
       "baselineskip" -> Glue(
-        currentFont.size
-        /** 1.2 */
-          * pt,
+        currentFont.size,
+          /** 1.2 */
+//          * pt,
       ),
       "lineskip" -> Glue(1 * pt),
       "lineskiplimit" -> 0.0,
