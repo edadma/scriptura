@@ -72,10 +72,8 @@ val commands =
           context: Any,
       ): Any =
         args.head match {
-          case p: String =>
-            println(s"image $p")
-            new ImageBox(context.asInstanceOf[Typesetter], p)
-          case a => problem(pos, s"expected a path: $a")
+          case p: String => context.asInstanceOf[Typesetter].image(p)
+          case a         => problem(pos, s"expected a path: $a")
         }
     ,
     new Command("vskip", 1, true):

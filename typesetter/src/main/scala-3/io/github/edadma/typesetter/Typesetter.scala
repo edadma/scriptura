@@ -400,6 +400,8 @@ abstract class Typesetter:
     modeStack push new HBoxBuilder(this, toSize)
     this
 
+  def image(path: String): Unit = add(new ImageBox(this, path))
+
   def done(): Unit =
     mode.done()
 

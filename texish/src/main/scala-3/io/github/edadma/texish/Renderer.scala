@@ -27,10 +27,11 @@ abstract class Renderer:
 
   def render(ast: AST): Unit =
     def out(a: AST): Unit =
-      println(("out()", a))
       deval(a) match
         case "" =>
-        case v  => output(v)
+        case v  =>
+//          sys.error(v)
+          output(v)
 
     ast match
       case GroupAST(b) =>
