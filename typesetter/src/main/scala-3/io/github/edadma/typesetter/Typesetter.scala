@@ -8,7 +8,6 @@ import scala.language.postfixOps
 abstract class Typesetter:
 
   var debug: Boolean = false
-  var currentFontXHeight: Double = uninitialized
   var currentFont: Font = uninitialized
   var currentColor: Color = Color("black")
   val converter = UnitConverter(this)
