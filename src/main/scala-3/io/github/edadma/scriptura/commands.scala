@@ -1,6 +1,6 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.typesetter.{InfGlue, FilGlue, FillGlue, ImageBox, Typesetter}
+import io.github.edadma.typesetter.{FilGlue, FillGlue, ImageBox, InfGlue, RuleBox, Typesetter}
 import io.github.edadma.texish.{AST, Active, Command, Parser, Renderer, problem}
 import io.github.edadma.char_reader.CharReader
 
@@ -144,6 +144,24 @@ val commands =
               context.asInstanceOf[Typesetter].nosmallcaps()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
+    ,
+    new Command("rule", 2, true):
+      def apply(
+          pos: CharReader,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(width: BigDecimal, thickness: BigDecimal) =>
+            RuleBox(
+              context.asInstanceOf[Typesetter],
+              width.toDouble,
+              thickness.toDouble,
+              shift = if optional contains "shift" then optional("shift").asInstanceOf[Number].doubleValue else 0,
+            )
+          case _ => problem(pos, "expected arguments <width> <thickness>")
     ,
     new Command("hfil", 0, false):
       def apply(

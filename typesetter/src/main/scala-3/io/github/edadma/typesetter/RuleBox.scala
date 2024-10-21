@@ -1,6 +1,8 @@
 package io.github.edadma.typesetter
 
-class RuleBox(t: Typesetter, val width: Double, thickness: Double, shift: Double = 0) extends NoGlueBox:
+class RuleBox(t: Typesetter, val width: Double, thickness: Double, color: Color, shift: Double) extends NoGlueBox:
+  def this(t: Typesetter, width: Double, thickness: Double, shift: Double = 0) =
+    this(t, width, thickness, t.currentColor, shift)
   require(width >= 0, "rule width is non-negative")
   require(thickness >= 0, "rule thickness is non-negative")
 
@@ -11,4 +13,6 @@ class RuleBox(t: Typesetter, val width: Double, thickness: Double, shift: Double
 
   val xAdvance: Double = width
 
-  def draw(t: Typesetter, x: Double, y: Double): Unit = t.fillRect(x, y + ascent, width, height)
+  def draw(t: Typesetter, x: Double, y: Double): Unit =
+    t.setColor(color)
+    t.fillRect(x, y + ascent, width, thickness)
