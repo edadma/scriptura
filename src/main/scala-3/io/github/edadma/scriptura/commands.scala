@@ -30,7 +30,7 @@ val commands =
       ): Any =
         args match
           case List(typeface: String, size: Number, style: String) =>
-            () => context.asInstanceOf[Typesetter].selectFont(typeface, size.doubleValue, style.split("\\s+").toSet)
+            context.asInstanceOf[Typesetter].selectFont(typeface, size.doubleValue, style.split("\\s+").toSet)
           case _ => problem(pos, "expected arguments <typeface> <size> <style>")
     ,
     new Command("newpage", 0):
@@ -41,7 +41,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        () => context.asInstanceOf[Typesetter].newpage()
+        context.asInstanceOf[Typesetter].newpage()
     ,
     new Command("noindent", 0):
       def apply(
@@ -51,7 +51,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        () => context.asInstanceOf[Typesetter].noindent()
+        context.asInstanceOf[Typesetter].noindent()
     ,
     new Command("indent", 0):
       def apply(
@@ -61,7 +61,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        () => context.asInstanceOf[Typesetter].indent()
+        context.asInstanceOf[Typesetter].indent()
     ,
     new Command("image", 1):
       def apply(
@@ -72,8 +72,10 @@ val commands =
           context: Any,
       ): Any =
         args.head match {
-          case p: String => new ImageBox(context.asInstanceOf[Typesetter], p)
-          case a         => problem(pos, s"expected a path: $a")
+          case p: String =>
+            println(s"image $p")
+            new ImageBox(context.asInstanceOf[Typesetter], p)
+          case a => problem(pos, s"expected a path: $a")
         }
     ,
     new Command("vskip", 1, true):
@@ -98,16 +100,15 @@ val commands =
       ): Any =
         args match
           case List(a: AST) =>
-            () =>
-              context
-                .asInstanceOf[Typesetter]
-                .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
-              renderer.render(a)
+            context
+              .asInstanceOf[Typesetter]
+              .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
+            renderer.render(a)
 
 //              val r = context.asInstanceOf[Typesetter].result
 //
 //              context.asInstanceOf[Typesetter].pop()
-              context.asInstanceOf[Typesetter].done()
+            context.asInstanceOf[Typesetter].done()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -121,10 +122,9 @@ val commands =
       ): Any =
         args match
           case List(a: AST) =>
-            () =>
-              context.asInstanceOf[Typesetter].bold()
-              renderer.render(a)
-              context.asInstanceOf[Typesetter].nobold()
+            context.asInstanceOf[Typesetter].bold()
+            renderer.render(a)
+            context.asInstanceOf[Typesetter].nobold()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -138,10 +138,9 @@ val commands =
       ): Any =
         args match
           case List(a: AST) =>
-            () =>
-              context.asInstanceOf[Typesetter].italic()
-              renderer.render(a)
-              context.asInstanceOf[Typesetter].noitalic()
+            context.asInstanceOf[Typesetter].italic()
+            renderer.render(a)
+            context.asInstanceOf[Typesetter].noitalic()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -155,10 +154,9 @@ val commands =
       ): Any =
         args match
           case List(a: AST) =>
-            () =>
-              context.asInstanceOf[Typesetter].smallcaps()
-              renderer.render(a)
-              context.asInstanceOf[Typesetter].nosmallcaps()
+            context.asInstanceOf[Typesetter].smallcaps()
+            renderer.render(a)
+            context.asInstanceOf[Typesetter].nosmallcaps()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -170,13 +168,12 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        () =>
-          val t = context.asInstanceOf[Typesetter]
-          val width = optional.getOrElse("width", t getNumber "hsize").asInstanceOf[Number].doubleValue
-          val ascent = optional.getOrElse("ascent", 3).asInstanceOf[Number].doubleValue
-          val descent = optional.getOrElse("descent", 0).asInstanceOf[Number].doubleValue
+        val t = context.asInstanceOf[Typesetter]
+        val width = optional.getOrElse("width", t getNumber "hsize").asInstanceOf[Number].doubleValue
+        val ascent = optional.getOrElse("ascent", 3).asInstanceOf[Number].doubleValue
+        val descent = optional.getOrElse("descent", 0).asInstanceOf[Number].doubleValue
 
-          t add RuleBox(t, width, ascent, descent)
+        t add RuleBox(t, width, ascent, descent)
     ,
     new Command("hfil", 0, false):
       def apply(
