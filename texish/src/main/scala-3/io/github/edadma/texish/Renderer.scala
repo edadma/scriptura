@@ -8,6 +8,7 @@ import scala.annotation.tailrec
 abstract class Renderer:
   val config: Map[String, Any]
   val context: Any
+  val parser: Parser
 
   def output(v: Any): Unit
 
@@ -120,7 +121,7 @@ abstract class Renderer:
         else group(res)
       case LiteralAST(v) => v
       case CommandAST(pos, c, args, optional) =>
-        c(pos, this, if (c.eval) args map eval else args, optional map { case (k, v) => k -> eval(v) }, context)
+        c(pos, parser, this, if (c.eval) args map eval else args, optional map { case (k, v) => k -> eval(v) }, context)
       case ActiveAST(pos, a) => a(pos, this)
       case ForAST(pos, expr, body, els) =>
         val buf = new StringBuilder

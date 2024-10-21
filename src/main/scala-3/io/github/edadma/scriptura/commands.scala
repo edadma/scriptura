@@ -9,6 +9,7 @@ val commands =
     new Command("typeface", 1, true):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -23,6 +24,7 @@ val commands =
     new Command("font", 3, true):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -37,6 +39,7 @@ val commands =
     new Command("newpage", 0):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -47,6 +50,7 @@ val commands =
     new Command("noindent", 0):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -57,6 +61,7 @@ val commands =
     new Command("indent", 0):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -67,6 +72,7 @@ val commands =
     new Command("image", 1):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -82,6 +88,7 @@ val commands =
     new Command("vskip", 1, true):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -96,6 +103,7 @@ val commands =
     new Command("hbox", 1, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -118,6 +126,7 @@ val commands =
     new Command("bold", 1, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -135,6 +144,7 @@ val commands =
     new Command("italic", 1, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -152,6 +162,7 @@ val commands =
     new Command("smallcaps", 1, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -169,6 +180,7 @@ val commands =
     new Command("hrule", 0, true):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -185,6 +197,7 @@ val commands =
     new Command("hfil", 0, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -196,6 +209,7 @@ val commands =
     new Command("vfil", 0, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -207,6 +221,7 @@ val commands =
     new Command("hss", 0, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -218,6 +233,7 @@ val commands =
     new Command("vss", 0, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -229,6 +245,7 @@ val commands =
     new Command("hfill", 0, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],
@@ -240,6 +257,7 @@ val commands =
     new Command("vfill", 0, false):
       def apply(
           pos: CharReader,
+          parser: Parser,
           renderer: Renderer,
           args: List[Any],
           optional: Map[String, Any],

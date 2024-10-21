@@ -5,7 +5,7 @@ import io.github.edadma.typesetter.{Typesetter, HorizontalMode, VerticalMode, Bo
 
 import pprint.pprintln
 
-class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]) extends Renderer:
+class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any], val parser: Parser) extends Renderer:
   val context: Any = typesetter
   var newlineCount: Int = 0
 

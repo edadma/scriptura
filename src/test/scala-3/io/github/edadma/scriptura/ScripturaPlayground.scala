@@ -210,7 +210,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
           setDocument(new ZFoldedDocument)
         }
         val p = new ScripturaParser
-        val r = new ScripturaRenderer(t, Map.empty)
+        val r = new ScripturaRenderer(t, Map.empty, p)
         val ast = p.parse(inputArea.text)
 
         errorOutput.text = captureStdOut {
