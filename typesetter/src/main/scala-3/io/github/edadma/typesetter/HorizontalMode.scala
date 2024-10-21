@@ -11,7 +11,6 @@ trait HorizontalMode extends Builder:
               !(l.text.last == '.' && Abbreviation(l.text.dropRight(1))) &&
               ".!?:;".contains(l.text.last) =>
           super.add(t.getGlue("xspaceskip"))
-          super.add(box)
         case (_, b: CharBox) if b.text == " " => super.add(t.getGlue("spaceskip"))
         case _                                => super.add(box)
 
