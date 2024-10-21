@@ -145,7 +145,7 @@ val commands =
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
-    new Command("rule", 2, true):
+    new Command("hrule", 0, true):
       def apply(
           pos: CharReader,
           renderer: Renderer,
@@ -153,15 +153,13 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        args match
-          case List(width: BigDecimal, thickness: BigDecimal) =>
-            RuleBox(
-              context.asInstanceOf[Typesetter],
-              width.toDouble,
-              thickness.toDouble,
-              shift = if optional contains "shift" then optional("shift").asInstanceOf[Number].doubleValue else 0,
-            )
-          case _ => problem(pos, "expected arguments <width> <thickness>")
+        () =>
+          val t = context.asInstanceOf[Typesetter]
+          val width = optional.getOrElse("width", t getNumber "hsize").asInstanceOf[Number].doubleValue
+          val ascent = optional.getOrElse("ascent", 3).asInstanceOf[Number].doubleValue
+          val descent = optional.getOrElse("descent", 0).asInstanceOf[Number].doubleValue
+
+          t add RuleBox(t, width, ascent, descent)
     ,
     new Command("hfil", 0, false):
       def apply(

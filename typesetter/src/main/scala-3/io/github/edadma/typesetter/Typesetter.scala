@@ -232,11 +232,11 @@ abstract class Typesetter:
 
   def mm: Double = cm / 10
 
-  def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
+  infix def get(name: String): Any = scopes.top.getOrElse(name, UNDEFINED)
 
-  def getGlue(name: String): Glue = get(name).asInstanceOf[Glue]
+  infix def getGlue(name: String): Glue = get(name).asInstanceOf[Glue]
 
-  def getNumber(name: String): Double = get(name).asInstanceOf[Double]
+  infix def getNumber(name: String): Double = get(name).asInstanceOf[Double]
 
   def set(name: String, value: Double | Glue): Unit = scopes(0) += (name -> value)
 
