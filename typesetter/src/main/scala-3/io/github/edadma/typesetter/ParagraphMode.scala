@@ -16,7 +16,9 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
       @tailrec
       def line(): Unit =
         if boxes.nonEmpty then
-          if hbox.size + boxes.head.width <= t.getNumber("hsize") then
+          if hbox.size + boxes.head.width <= t.getNumber("hsize") || hbox.isEmpty then
+            if hbox.isEmpty then println(s"Warning: box too big for line: ${boxes.head}")
+
             hbox add boxes.remove(0)
             line()
           else
