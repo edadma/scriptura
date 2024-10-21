@@ -218,14 +218,6 @@ object ScripturaPlayground extends SimpleSwingApplication:
           t.end()
         }
 
-//        r.render(ast)
-//        t.end()
-
-//        pprintln(t.modeStack)
-//        t.done()
-//        pprintln(t.modeStack)
-//        sys.error("asdf")
-
         val pages = t.getDocument.printedPages.toList.asInstanceOf[List[BufferedImage]]
         val maxDividerLocation =
           splitPane.size.width - splitPane.rightComponent.minimumSize.width - 2 /*border*/ - 2 * 10 /*margin*/ - 7

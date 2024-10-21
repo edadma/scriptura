@@ -225,7 +225,7 @@ abstract class Typesetter:
     "Regular",
   )
 
-  selectFont("gentiumbook", 24, Set("regular"))
+  selectFont("gentiumbook", 18, Set("regular"))
   set(defaultParameters)
   setDocument(new SimpleDocument)
   modeStack push new PageMode(this)
@@ -257,20 +257,15 @@ abstract class Typesetter:
         case (k, v)         => (k, v)
       }
 
-  def enter(): Unit =
-    println("enter")
-    scopes push scopes.top
+  def enter(): Unit = scopes push scopes.top
 
   def exit(): Unit =
-    println("exit")
     val s = scopes.pop
 
     scopes.top get "font" match
-      case Some(font: Font) =>
-        pprintln(font)
-        currentFont = font
-      case Some(o) => sys.error(s"font object has wrong type: '${o.getClass}'")
-      case None    =>
+      case Some(font: Font) => currentFont = font
+      case Some(o)          => sys.error(s"font object has wrong type: '${o.getClass}'")
+      case None             =>
 
   def italic(): Unit = addStyle("italic")
 
@@ -338,10 +333,7 @@ abstract class Typesetter:
   def selectFont(typeface: String, size: Double, styleSet: Set[String]): Font =
     val f = makeFont(typeface, size, styleSet)
 
-    println((f, currentFont))
     if f != currentFont then
-      println((scopes.size, if scopes.size > 1 then scopes(1).contains("font")))
-
       if scopes.size > 1 && !scopes(1).contains("font") then scopes(1) += ("font" -> currentFont)
 
       currentFont = f

@@ -35,13 +35,11 @@ abstract class Renderer:
 
     ast match
       case GroupAST(b) =>
-        println("enter group")
         enterScope()
         b foreach {
           case x: GroupAST => render(x)
           case x           => out(x)
         }
-        println("exit group")
         exitScope()
       case _ => out(ast)
 
