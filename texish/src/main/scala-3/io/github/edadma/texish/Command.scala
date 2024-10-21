@@ -504,7 +504,7 @@ object Command {
             optional: Map[String, Any],
             context: Any,
         ): Any = {
-          renderer.render(renderer.parser.parse(readFile(args.head.toString)))
+          renderer.render(parser.parse(readFile(args.head.toString)))
           ()
         }
       },
