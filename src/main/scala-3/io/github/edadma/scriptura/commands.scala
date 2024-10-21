@@ -31,6 +31,7 @@ val commands =
         args match
           case List(typeface: String, size: Number, style: String) =>
             context.asInstanceOf[Typesetter].selectFont(typeface, size.doubleValue, style.split("\\s+").toSet)
+            ()
           case _ => problem(pos, "expected arguments <typeface> <size> <style>")
     ,
     new Command("newpage", 0):
@@ -72,8 +73,10 @@ val commands =
           context: Any,
       ): Any =
         args.head match {
-          case p: String => context.asInstanceOf[Typesetter].image(p)
-          case a         => problem(pos, s"expected a path: $a")
+          case p: String =>
+            context.asInstanceOf[Typesetter].image(p)
+            ()
+          case a => problem(pos, s"expected a path: $a")
         }
     ,
     new Command("vskip", 1, true):
@@ -85,8 +88,10 @@ val commands =
           context: Any,
       ): Any =
         args match
-          case List(d: Number) => Glue(d.doubleValue, 0, 0, 0)
-          case _               => problem(pos, "expected arguments <dimen>")
+          case List(d: Number) =>
+            context.asInstanceOf[Typesetter].glue(d.doubleValue, 0, 0)
+            ()
+          case _ => problem(pos, "expected arguments <dimen>")
     ,
     new Command("hbox", 1, false):
       def apply(
@@ -123,6 +128,7 @@ val commands =
             context.asInstanceOf[Typesetter].bold()
             renderer.render(a)
             context.asInstanceOf[Typesetter].nobold()
+            ()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -139,6 +145,7 @@ val commands =
             context.asInstanceOf[Typesetter].italic()
             renderer.render(a)
             context.asInstanceOf[Typesetter].noitalic()
+            ()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -155,6 +162,7 @@ val commands =
             context.asInstanceOf[Typesetter].smallcaps()
             renderer.render(a)
             context.asInstanceOf[Typesetter].nosmallcaps()
+            ()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -172,6 +180,7 @@ val commands =
         val descent = optional.getOrElse("descent", 0).asInstanceOf[Number].doubleValue
 
         t add RuleBox(t, width, ascent, descent)
+        ()
     ,
     new Command("hfil", 0, false):
       def apply(
@@ -181,7 +190,8 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        FilGlue
+        context.asInstanceOf[Typesetter].fil
+        ()
     ,
     new Command("vfil", 0, false):
       def apply(
@@ -191,7 +201,8 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        FilGlue
+        context.asInstanceOf[Typesetter].fil
+        ()
     ,
     new Command("hss", 0, false):
       def apply(
@@ -201,7 +212,8 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        InfGlue
+        context.asInstanceOf[Typesetter].add(InfGlue)
+        ()
     ,
     new Command("vss", 0, false):
       def apply(
@@ -211,7 +223,8 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        InfGlue
+        context.asInstanceOf[Typesetter].add(InfGlue)
+        ()
     ,
     new Command("hfill", 0, false):
       def apply(
@@ -221,7 +234,8 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        FillGlue
+        context.asInstanceOf[Typesetter].fill
+        ()
     ,
     new Command("vfill", 0, false):
       def apply(
@@ -231,6 +245,6 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        FillGlue,
+        context.asInstanceOf[Typesetter].fill
+        (),
   )
-//\vfil \hbox {\hfil asdf \hfil} \vfil

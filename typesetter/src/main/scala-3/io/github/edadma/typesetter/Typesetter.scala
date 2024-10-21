@@ -385,10 +385,12 @@ abstract class Typesetter:
     mode add box
     this
 
-  infix def addGlue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): Typesetter =
+  def glue(naturalWidth: Double, stretch: Double = 0, shrink: Double = 0): Typesetter =
     add(Glue(naturalWidth, stretch, shrink))
 
-  infix def addFil(): Typesetter = add(FilGlue)
+  def fil: Typesetter = add(FilGlue)
+
+  def fill: Typesetter = add(FillGlue)
 
   def noBreakSpace: Typesetter = add(getGlue("spaceskip").noBreak)
 
@@ -400,7 +402,9 @@ abstract class Typesetter:
     modeStack push new HBoxBuilder(this, toSize)
     this
 
-  def image(path: String): Unit = add(new ImageBox(this, path))
+  def image(path: String): Typesetter =
+    add(new ImageBox(this, path))
+    this
 
   def done(): Unit =
     mode.done()
