@@ -5,6 +5,7 @@ class Font(
     val size: Double,
     //                 extents: FontExtents,
     val space: Double,
+    val xHeight: Double,
     val style: Set[String],
     val renderFont: Any,
     val baseline: Option[Double],

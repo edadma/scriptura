@@ -28,9 +28,9 @@ val commands =
           context: Any,
       ): Any =
         args match
-          case List(family: String, size: Number, style: String) =>
-            () => context.asInstanceOf[Typesetter].selectFont(family, size.doubleValue, style.split("\\s+").toSet)
-          case _ => problem(pos, "expected arguments <family> <size> <style>")
+          case List(typeface: String, size: Number, style: String) =>
+            () => context.asInstanceOf[Typesetter].selectFont(typeface, size.doubleValue, style.split("\\s+").toSet)
+          case _ => problem(pos, "expected arguments <typeface> <size> <style>")
     ,
     new Command("newpage", 0):
       def apply(
@@ -97,15 +97,16 @@ val commands =
       ): Any =
         args match
           case List(a: AST) =>
-            context
-              .asInstanceOf[Typesetter]
-              .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
-            renderer.render(a)
+            () =>
+              context
+                .asInstanceOf[Typesetter]
+                .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
+              renderer.render(a)
 
-            val r = context.asInstanceOf[Typesetter].result
-
-            context.asInstanceOf[Typesetter].pop()
-            r
+//              val r = context.asInstanceOf[Typesetter].result
+//
+//              context.asInstanceOf[Typesetter].pop()
+              context.asInstanceOf[Typesetter].done()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
@@ -124,7 +125,8 @@ val commands =
               renderer.render(a)
               context.asInstanceOf[Typesetter].nobold()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
-          case _       => problem(pos, "expected arguments <text>"),
+          case _       => problem(pos, "expected arguments <text>")
+    ,
     new Command("italic", 1, false):
       def apply(
           pos: CharReader,
@@ -140,7 +142,8 @@ val commands =
               renderer.render(a)
               context.asInstanceOf[Typesetter].noitalic()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
-          case _       => problem(pos, "expected arguments <text>"),
+          case _       => problem(pos, "expected arguments <text>")
+    ,
     new Command("smallcaps", 1, false):
       def apply(
           pos: CharReader,

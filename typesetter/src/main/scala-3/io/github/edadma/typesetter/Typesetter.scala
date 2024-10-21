@@ -52,7 +52,7 @@ abstract class Typesetter:
 
   def loadFont(path: String): Any
 
-  def getTextExtents(text: String): TextExtents
+  def getTextExtents(text: String, font: Any): TextExtents
 
   def makeFont(font: Any, size: Double): Any
 
@@ -116,6 +116,14 @@ abstract class Typesetter:
     "Bold",
     "Italic",
     ("Bold", "Italic"),
+  )
+  loadTypeface(
+    "charm",
+    "fonts/Charm/Charm",
+    Ligatures.ALL,
+    Set(),
+    "Regular",
+    "Bold",
   )
 
   private val gentiumbookMissing = Set(
@@ -312,10 +320,10 @@ abstract class Typesetter:
       case None                                => sys.error(s"typeface '$typeface' not found")
       case Some(Typeface(fonts, _, ligatures)) => typefaces(typeface) = Typeface(fonts, Some(baseline), ligatures)
 
-  def selectFont(family: String, size: Double, style: String*): Font = selectFont(family, size, style.toSet)
+  def selectFont(typeface: String, size: Double, style: String*): Font = selectFont(typeface, size, style.toSet)
 
-  def selectFont(family: String, size: Double, styleSet: Set[String]): Font =
-    currentFont = makeFont(family, size, styleSet)
+  def selectFont(typeface: String, size: Double, styleSet: Set[String]): Font =
+    currentFont = makeFont(typeface, size, styleSet)
     currentFont
 
   def makeFont(typeface: String, size: Double, styleSet: Set[String]): Font =
@@ -331,7 +339,16 @@ abstract class Typesetter:
           )
         val derivedFont = makeFont(font, size)
 
-        Font(typeface, size, charWidth(derivedFont, ' '), styleSet, derivedFont, baseline, ligatures)
+        Font(
+          typeface,
+          size,
+          charWidth(derivedFont, ' '),
+          getTextExtents("x", derivedFont).height,
+          styleSet,
+          derivedFont,
+          baseline,
+          ligatures,
+        )
 
   infix def add(text: String): Typesetter = add(charBox(text))
 

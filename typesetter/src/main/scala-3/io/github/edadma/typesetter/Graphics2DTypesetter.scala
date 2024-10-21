@@ -1,26 +1,25 @@
 package io.github.edadma.typesetter
 
-import java.awt.{Font => JFont, Graphics2D, RenderingHints, Toolkit}
-import java.awt.font.TextLayout
+import java.awt.{Graphics2D, RenderingHints, Font as JFont}
+import java.awt.font.{FontRenderContext, TextLayout}
 import java.io.File
 import javax.imageio.ImageIO
 import java.awt.image.BufferedImage
-
 import scala.compiletime.uninitialized
 
 class Graphics2DTypesetter extends Typesetter:
 
-  var page: BufferedImage = uninitialized
-  var g: Graphics2D = uninitialized
+  private var page: BufferedImage = uninitialized
+  private var g: Graphics2D = uninitialized
+  private var frc: FontRenderContext = uninitialized
 
   g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
   g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
 
-  private val frc = g.getFontRenderContext
-
   def initTarget(): Unit =
     page = new BufferedImage(10, 10, BufferedImage.TYPE_INT_ARGB)
     g = page.createGraphics()
+    frc = g.getFontRenderContext
 
   def createPageTarget(width: Double, height: Double): Any =
     page = new BufferedImage(
@@ -65,8 +64,8 @@ class Graphics2DTypesetter extends Typesetter:
 
   def loadFont(path: String): JFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, new java.io.File(path))
 
-  def getTextExtents(text: String): TextExtents =
-    val layout = new TextLayout(text, currentFont.renderFont.asInstanceOf[JFont], frc)
+  def getTextExtents(text: String, font: Any): TextExtents =
+    val layout = new TextLayout(text, font.asInstanceOf[JFont], frc)
     val bounds = layout.getBounds
 
     val ascent = -bounds.getY
