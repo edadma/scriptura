@@ -496,20 +496,44 @@ object Command {
             case Nil             => ???
           }
       },
-//      new Command("include", 1) {
-//        def apply(
-//            pos: CharReader,
-//            parser: Parser,
-//            renderer: Renderer,
-//            args: List[Any],
-//            optional: Map[String, Any],
-//            context: Any,
-//        ): Any = {
-//          renderer.render(parser.parse(readFile(args.head.toString)))
-//          pprintln(parser.macros)
-//          ()
-//        }
-//      },
+      new Command("accent", 2) {
+        private val accents =
+          Map(
+            ("'", "e") -> "é",
+            ("'", "E") -> "É",
+            ("`", "e") -> "è",
+            ("`", "E") -> "È",
+            ("^", "e") -> "ê",
+            ("^", "E") -> "Ê",
+            ("\"", "e") -> "ë",
+            ("\"", "E") -> "Ë",
+            ("`", "a") -> "à",
+            ("`", "A") -> "À",
+            ("\"", "u") -> "ü",
+            ("\"", "U") -> "Ü",
+            ("^", "u") -> "û",
+            ("^", "U") -> "Û",
+            ("\"", "i") -> "ï",
+            ("\"", "I") -> "Ï",
+            ("c", "c") -> "ç",
+          )
+
+        def apply(
+            pos: CharReader,
+            parser: Parser,
+            renderer: Renderer,
+            args: List[Any],
+            optional: Map[String, Any],
+            context: Any,
+        ): Any =
+          args match {
+            case List(accent: String, base: String) =>
+              accents get (accent, base) match
+                case Some(c) => c
+                case None    => problem(pos, s"accented character not found: $accent $base")
+            //            case List(a) => problem(pos, s"expected string or sequence argument: $a")
+          }
+      },
       new Command("isEmpty", 1) {
         def apply(
             pos: CharReader,
