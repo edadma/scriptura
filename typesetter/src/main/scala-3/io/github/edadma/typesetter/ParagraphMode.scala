@@ -17,7 +17,7 @@ class ParagraphMode(val t: Typesetter) extends HorizontalMode:
       def line(): Unit =
         if boxes.nonEmpty then
           if hbox.size + boxes.head.width <= t.getNumber("hsize") || hbox.isEmpty then
-            if hbox.isEmpty then println(s"Warning: box too big for line: ${boxes.head}")
+            if hbox.isEmpty then println(s"Warning: overflow: ${boxes.head}")
 
             hbox add boxes.remove(0)
             line()
