@@ -2,6 +2,7 @@
 package io.github.edadma.texish
 
 import io.github.edadma.char_reader.CharReader
+import io.github.edadma.cross_platform.readFile
 
 import java.io.File
 import java.time.format.DateTimeFormatter
@@ -467,20 +468,20 @@ object Command {
             case Nil             => ???
           }
       },
-      new Command("include", 1) { // todo: can't run under js
-        def apply(
-            pos: CharReader,
-            renderer: Renderer,
-            args: List[Any],
-            optional: Map[String, Any],
-            context: Any,
-        ): Any = {
-//          val charset = optional get "charset" map (_.toString)
-
-          renderer.eval(renderer.parser.parse(readFile(args.head.toString)))
-          ()
-        }
-      },
+//      new Command("include", 1) { // todo: can't run under js
+//        def apply(
+//            pos: CharReader,
+//            renderer: Renderer,
+//            args: List[Any],
+//            optional: Map[String, Any],
+//            context: Any,
+//        ): Any = {
+////          val charset = optional get "charset" map (_.toString)
+//
+//          renderer.eval(renderer.parse(readFile(args.head.toString)))
+//          ()
+//        }
+//      },
       new Command("isEmpty", 1) {
         def apply(
             pos: CharReader,
