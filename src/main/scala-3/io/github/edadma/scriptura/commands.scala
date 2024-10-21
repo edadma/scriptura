@@ -15,10 +15,8 @@ val commands =
           context: Any,
       ): Any =
         args match
-          case List(typeface: String) =>
-            println(123)
-            context.asInstanceOf[Typesetter].typeface(typeface)
-          case _ => problem(pos, "expected arguments <family>")
+          case List(typeface: String) => context.asInstanceOf[Typesetter].typeface(typeface)
+          case _                      => problem(pos, "expected arguments <family>")
     ,
     new Command("font", 3, true):
       def apply(

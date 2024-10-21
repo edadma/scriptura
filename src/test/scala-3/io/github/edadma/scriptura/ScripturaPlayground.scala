@@ -218,6 +218,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
 //          t.end()
 //        }
 
+        pprintln(ast)
         r.render(ast)
         t.end()
 
