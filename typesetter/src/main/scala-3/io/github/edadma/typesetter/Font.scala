@@ -10,4 +10,10 @@ class Font(
     val renderFont: Any,
     val baseline: Option[Double],
     val ligatures: Set[String],
-)
+):
+  override def equals(obj: Any): Boolean =
+    obj match
+      case that: Font => this.typeface == that.typeface && this.size == that.size && this.style == this.style
+      case _          => false
+
+  override def toString: String = s"Font(typeface=$typeface)"

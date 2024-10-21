@@ -26,7 +26,8 @@ abstract class Typesetter:
   protected[typesetter] var document: Document = uninitialized
   protected val typefaces = new mutable.HashMap[String, Typeface]
   protected[typesetter] val scopes = mutable.Stack[Map[String, Any]](Map.empty)
-  protected[typesetter] val modeStack = mutable.Stack[Mode](null) // gets set by setDocument
+  /*protected[typesetter]*/
+  val modeStack = mutable.Stack[Mode](null) // gets set by setDocument
   var indentParagraph: Boolean = true // todo: this should go into page mode maybe
 
   def initTarget(): Unit
@@ -264,7 +265,7 @@ abstract class Typesetter:
     println("exit")
     val s = scopes.pop
 
-    s get "font" match
+    scopes.top get "font" match
       case Some(font: Font) =>
         pprintln(font)
         currentFont = font
@@ -337,7 +338,7 @@ abstract class Typesetter:
   def selectFont(typeface: String, size: Double, styleSet: Set[String]): Font =
     val f = makeFont(typeface, size, styleSet)
 
-    println("selectFont")
+    println((f, currentFont))
     if f != currentFont then
       println((scopes.size, if scopes.size > 1 then scopes(1).contains("font")))
 
@@ -413,7 +414,8 @@ abstract class Typesetter:
       case p: ParagraphMode => p.done()
       case _                =>
 
-  def end(): Unit = while modeStack.nonEmpty do done()
+  def end(): Unit =
+    while modeStack.nonEmpty do done()
 
   def start(): Unit =
     mode match

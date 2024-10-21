@@ -1,6 +1,7 @@
 package io.github.edadma.typesetter
 
 class CharBox(t: Typesetter, val text: String, font: Font, color: Color) extends ContentBox:
+  println(("charbox", text, font))
   def this(t: Typesetter, text: String) = this(t, text, t.currentFont, t.currentColor)
 
   val TextExtents(_, yBearing, width, heightValue, xAdvance, _) = t.getTextExtents(text, font.renderFont)
@@ -19,4 +20,5 @@ class CharBox(t: Typesetter, val text: String, font: Font, color: Color) extends
 
   def newCharBox(s: String): CharBox = new CharBox(t, s, font, color)
 
-  override def toString: String = s"CharBox(ascent=$ascent, descent=$descent, width=$width, \"$text\")"
+  override def toString: String =
+    s"CharBox(ascent=$ascent, descent=$descent, width=$width, typeface=${font.typeface}, \"$text\")"

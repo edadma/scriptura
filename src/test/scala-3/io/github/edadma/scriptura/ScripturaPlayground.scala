@@ -213,14 +213,18 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)
 
-//        errorOutput.text = captureStdOut {
-//          r.render(ast)
-//          t.end()
-//        }
+        errorOutput.text = captureStdOut {
+          r.render(ast)
+          t.end()
+        }
 
-        pprintln(ast)
-        r.render(ast)
-        t.end()
+//        r.render(ast)
+//        t.end()
+
+//        pprintln(t.modeStack)
+//        t.done()
+//        pprintln(t.modeStack)
+//        sys.error("asdf")
 
         val pages = t.getDocument.printedPages.toList.asInstanceOf[List[BufferedImage]]
         val maxDividerLocation =

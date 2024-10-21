@@ -26,11 +26,23 @@ abstract class Renderer:
   val undefined: UNDEFINED.type = UNDEFINED
 
   def render(ast: AST): Unit =
-    def out(ast: AST): Unit = output(deval(ast))
+    def out(a: AST): Unit =
+      println(("out()", a))
+      deval(a) match
+        case "" =>
+        case v  => output(v)
 
     ast match
-      case GroupAST(b) => b foreach out
-      case _           => out(ast)
+      case GroupAST(b) =>
+        println("enter group")
+        enterScope()
+        b foreach {
+          case x: GroupAST => render(x)
+          case x           => out(x)
+        }
+        println("exit group")
+        exitScope()
+      case _ => out(ast)
 
   def deval(ast: AST): String = display(eval(ast))
 
