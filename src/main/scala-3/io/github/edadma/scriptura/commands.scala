@@ -84,8 +84,9 @@ val commands =
           context: Any,
       ): Any =
         args match
-          case List(d: Number) => Glue(d, 0, 0, 0)
-          case _               => problem(pos, "expected arguments <dimen>"),
+          case List(d: Number) => Glue(d.doubleValue, 0, 0, 0)
+          case _               => problem(pos, "expected arguments <dimen>")
+    ,
     new Command("hbox", 1, false):
       def apply(
           pos: CharReader,
