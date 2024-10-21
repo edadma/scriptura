@@ -9,9 +9,9 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
   val context: Any = typesetter
   var newlineCount: Int = 0
 
-  override def output(v: Any): Unit =
+  def output(v: Any): Unit =
     v match
-      case s: Seq[Any]                                                               => s foreach output
+//      case s: Seq[Any]                                                               => s foreach output
       case "\n" if newlineCount == 0 && typesetter.mode.isInstanceOf[HorizontalMode] => newlineCount += 1
       case "\n" if newlineCount == 1 =>
         newlineCount += 1
@@ -23,20 +23,22 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
         typesetter.start()
         typesetter add s
         newlineCount = 0
-      case b: Box          => typesetter add b
-      case f: Function0[?] => f()
+      case b: Box => typesetter add b
+//      case f: Function0[?] => f()
       case d: Double =>
         output(
           if (d % 1 == 0) d.toInt.toString
           else d.toString,
         )
 
-  override def set(name: String, value: Any): Unit =
+  def group(vals: Seq[Any]): Any = vals.mkString
+
+  def set(name: String, value: Any): Unit =
     value match
       case n: BigDecimal => typesetter.set(name, n.toDouble)
 
-  override def get(name: String): Any = typesetter.get(name)
+  def get(name: String): Any = typesetter.get(name)
 
-  override def enterScope(): Unit = typesetter.enter()
+  def enterScope(): Unit = typesetter.enter()
 
-  override def exitScope(): Unit = typesetter.exit()
+  def exitScope(): Unit = typesetter.exit()

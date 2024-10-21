@@ -1,14 +1,17 @@
 package io.github.edadma.texish
 
 import scala.language.postfixOps
-
 import pprint.pprintln
+
+import scala.annotation.tailrec
 
 abstract class Renderer:
   val config: Map[String, Any]
   val context: Any
 
   def output(v: Any): Unit
+
+  def group(vals: Seq[Any]): Any
 
   def set(name: String, value: Any): Unit
 
@@ -23,9 +26,11 @@ abstract class Renderer:
   val undefined: UNDEFINED.type = UNDEFINED
 
   def render(ast: AST): Unit =
-    eval(ast) match
-      case () =>
-      case v  => output(v)
+    def out(ast: AST): Unit = output(deval(ast))
+
+    ast match
+      case GroupAST(b) => b foreach out
+      case _           => out(ast)
 
   def deval(ast: AST): String = display(eval(ast))
 
@@ -101,7 +106,7 @@ abstract class Renderer:
         exitScope()
 
         if (res.length == 1) res.head
-        else res
+        else group(res)
       case LiteralAST(v) => v
       case CommandAST(pos, c, args, optional) =>
         c(pos, this, if (c.eval) args map eval else args, optional map { case (k, v) => k -> eval(v) }, context)

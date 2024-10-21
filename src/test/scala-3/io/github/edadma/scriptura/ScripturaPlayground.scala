@@ -213,10 +213,13 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val r = new ScripturaRenderer(t, Map.empty)
         val ast = p.parse(inputArea.text)
 
-        errorOutput.text = captureStdOut {
-          r.render(ast)
-          t.end()
-        }
+//        errorOutput.text = captureStdOut {
+//          r.render(ast)
+//          t.end()
+//        }
+
+        r.render(ast)
+        t.end()
 
         val pages = t.getDocument.printedPages.toList.asInstanceOf[List[BufferedImage]]
         val maxDividerLocation =
@@ -224,7 +227,12 @@ object ScripturaPlayground extends SimpleSwingApplication:
 
         multiPagePanel.setImages(pages)
 
-        splitPane.dividerLocation = maxDividerLocation - pages.map(_.getWidth).max
+        val pagesWidth =
+          pages.map(_.getWidth) match
+            case Nil => 0
+            case ws  => ws.max
+
+        splitPane.dividerLocation = maxDividerLocation - pagesWidth
       } catch
         case error: Throwable =>
           val sw = new StringWriter
