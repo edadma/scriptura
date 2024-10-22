@@ -12,7 +12,9 @@ trait HorizontalMode extends Builder:
               ".!?:;".contains(l.text.last) =>
           super.add(t.getGlue("xspaceskip"))
         case (_, b: CharBox) if b.text == " " => super.add(t.getGlue("spaceskip"))
-        case _                                => super.add(box)
+        case (l: CharBox, b: CharBox) if l.font == b.font && l.color == b.color =>
+          update(length - 1, l.newCharBox(l.text ++ b.text))
+        case _ => super.add(box)
 
 //        case (_, _: (HBox | Glue))            => super.add(box)
 //        case (_: (SpaceBox | Glue), _)        => super.add(box)

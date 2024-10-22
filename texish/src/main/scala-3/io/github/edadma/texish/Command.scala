@@ -509,13 +509,18 @@ object Command {
             ("\"", "E") -> "Ë",
             ("`", "a") -> "à",
             ("`", "A") -> "À",
+            ("^", "a") -> "â",
+            ("^", "A") -> "Â",
             ("\"", "u") -> "ü",
             ("\"", "U") -> "Ü",
             ("^", "u") -> "û",
             ("^", "U") -> "Û",
             ("\"", "i") -> "ï",
             ("\"", "I") -> "Ï",
+            ("^", "i") -> "î",
+            ("^", "I") -> "Î",
             ("c", "c") -> "ç",
+            ("c", "C") -> "Ç",
           )
 
         def apply(
@@ -531,7 +536,7 @@ object Command {
               accents get (accent, base) match
                 case Some(c) => c
                 case None    => problem(pos, s"accented character not found: $accent $base")
-            //            case List(a) => problem(pos, s"expected string or sequence argument: $a")
+            case _ => problem(pos, "expected <accent> <base>")
           }
       },
       new Command("isEmpty", 1) {

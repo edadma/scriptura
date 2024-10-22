@@ -1,6 +1,6 @@
 package io.github.edadma.typesetter
 
-class CharBox(t: Typesetter, val text: String, font: Font, color: Color) extends ContentBox:
+class CharBox(t: Typesetter, val text: String, val font: Font, val color: Color) extends ContentBox:
   def this(t: Typesetter, text: String) = this(t, text, t.currentFont, t.currentColor)
 
   val TextExtents(_, yBearing, width, heightValue, xAdvance, _) = t.getTextExtents(text, font.renderFont)

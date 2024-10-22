@@ -1,2 +1,7 @@
 \def centerline text {\hbox to:\hsize {\hss\text\hss}}
 \def ' letter {\accent "'" \letter}
+\def ` letter {\accent ` \letter}
+\def ^ letter {\accent ^ \letter}
+\def " letter {\accent '"' \letter}
+\def c letter {\accent c \letter}
+
