@@ -1,7 +1,7 @@
 ThisBuild / licenses += "ISC" -> url("https://opensource.org/licenses/ISC")
 ThisBuild / versionScheme     := Some("semver-spec")
 
-lazy val scriptura = crossProject(JSPlatform, JVMPlatform, NativePlatform)
+lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
   .in(file("."))
   .settings(
     name         := "scriptura",
@@ -27,7 +27,7 @@ lazy val scriptura = crossProject(JSPlatform, JVMPlatform, NativePlatform)
     libraryDependencies ++= Seq(
       "com.github.scopt" %%% "scopt"      % "4.1.0",
       "com.lihaoyi"      %%% "pprint"     % "0.9.0",
-      "io.github.edadma" %%% "typesetter" % "0.0.3",
+      "io.github.edadma" %%% "typesetter" % "0.0.5",
       "io.github.edadma" %%% "texish"     % "0.0.10",
     ),
   )
@@ -39,11 +39,11 @@ lazy val scriptura = crossProject(JSPlatform, JVMPlatform, NativePlatform)
   )
   .nativeSettings(
   )
-  .jsSettings(
-    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
-    //    Test / scalaJSUseMainModuleInitializer := true,
-    //    Test / scalaJSUseTestModuleInitializer := false,
-    Test / scalaJSUseMainModuleInitializer := false,
-    Test / scalaJSUseTestModuleInitializer := true,
-    scalaJSUseMainModuleInitializer        := true,
-  )
+//  .jsSettings(
+//    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),
+//    //    Test / scalaJSUseMainModuleInitializer := true,
+//    //    Test / scalaJSUseTestModuleInitializer := false,
+//    Test / scalaJSUseMainModuleInitializer := false,
+//    Test / scalaJSUseTestModuleInitializer := true,
+//    scalaJSUseMainModuleInitializer        := true,
+//  )
