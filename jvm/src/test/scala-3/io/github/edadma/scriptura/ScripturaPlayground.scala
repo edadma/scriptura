@@ -43,6 +43,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
     private val inputArea = new TextArea {
       rows = 20
       lineWrap = true
+      lineWrap = true
       wordWrap = true
       font = new Font("Monospaced", Font.PLAIN, 14)
       lineWrap = false
