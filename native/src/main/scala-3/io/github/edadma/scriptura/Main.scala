@@ -78,7 +78,7 @@ def run(args: String*): Unit =
     case c @ Config(Some(file), null, _, _, _, _, _, _) => config(c.copy(output = file.toString))
     case c @ Config(_, _, null, _, _, _, false, _)      => config(c.copy(typ = "pdf"))
     case c @ Config(_, _, null, _, _, _, true, _)       => config(c.copy(typ = "png"))
-    case c                                              => // app(c)
+    case c                                              => app(c)
   }
 
   OParser.parse(parser, args, Config()) match {
