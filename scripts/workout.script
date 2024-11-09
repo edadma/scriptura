@@ -1,0 +1,11 @@
+\include scripts/macros.script
+
+\centerline {My Lame Gym Workout}
+
+\vskip 20
+
+\halign {
+    Bench press
+    }
+
+\vfill
