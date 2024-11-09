@@ -1,4 +1,4 @@
 package io.github.edadma.scriptura
 
 @main def run(): Unit =
-  println("Scala JVM is awesome!")
+  println("Scala Native is awesome!")
