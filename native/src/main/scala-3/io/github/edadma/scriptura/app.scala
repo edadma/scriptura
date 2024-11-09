@@ -2,6 +2,7 @@ package io.github.edadma.scriptura
 
 import io.github.edadma.char_reader.CharReader
 import io.github.edadma.texish.{Active, Command, Parser, Renderer}
+import io.github.edadma.typesetter.{CairoPDFTypesetter, Typesetter}
 import pprint.*
 
 import java.io.FileOutputStream
@@ -32,15 +33,15 @@ def app(args: Config): Unit =
 
     if !Files.isWritable(output.getParent) then problem(s"'$output' is not writable")
 
-    val doc =
+    val t: Typesetter =
       args match
         case Config(_, _, "pdf", paper, _, _, _, _) =>
           val p =
             paper match
               case "a4"     => // Paper.A4
               case "letter" => // Paper.LETTER
+          CairoPDFTypesetter(output.toString) // todo: image scaling
 
-          CairoPDFTypesetter("a.pdf") // todo: image scaling
 //        case Config(_, _, "png", _, resolution, size, _, _) =>
 //          val (width, height) =
 //            resolution match
@@ -53,9 +54,13 @@ def app(args: Config): Unit =
 
     if args.usfx then () // USFX.fromString(doc, in)
     else
-      val t =
+      val p   = new ScripturaParser
+      val r   = new ScripturaRenderer(t, Map.empty, p)
+      val ast = p.parse(in)
+
+      r.render(ast)
     end if
 
-    doc.output()
-    doc.destroy()
+    t.end()
+    t.destroy()
   end process
