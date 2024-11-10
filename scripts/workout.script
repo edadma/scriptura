@@ -2,12 +2,20 @@
 
 \centerline {My Lame Gym Workout}
 
-\vskip 20
+\vskip 50
+
+\hbox to:\hsize {\hfil\hrule width:60 ascent:2\hfil}
+
+\vskip 40
+
+\set cgap 15
+\set sgap 10
 
 \halign {
-    #\hfil&#\hfil\cr
-    Bench press&____\cr
-    Overhead press&____
+    #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
+    &Monday&Wednesday&Friday\cr
+    Bench press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
+    Overhead press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___
     }
 
 \vfill
