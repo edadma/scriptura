@@ -25,3 +25,5 @@ project/.bloop/
 .bloop/
 .metals/
 *.code-workspace
+
+*.pdf

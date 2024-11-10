@@ -5,7 +5,9 @@
 \vskip 20
 
 \halign {
-    Bench press
+    #\hfil&#\hfil\cr
+    Bench press&____\cr
+    Overhead press&____
     }
 
 \vfill

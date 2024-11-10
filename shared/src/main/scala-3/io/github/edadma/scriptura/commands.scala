@@ -69,6 +69,17 @@ val commands =
       ): Any =
         context.asInstanceOf[Typesetter].indent()
     ,
+    new Command("cr", 0):
+      def apply(
+          pos: CharReader,
+          parser: Parser,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        context.asInstanceOf[Typesetter].op("newLine")
+    ,
     new Command("image", 1):
       def apply(
           pos: CharReader,
@@ -186,9 +197,9 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        val t = context.asInstanceOf[Typesetter]
-        val width = optional.getOrElse("width", t getNumber "hsize").asInstanceOf[Number].doubleValue
-        val ascent = optional.getOrElse("ascent", 3).asInstanceOf[Number].doubleValue
+        val t       = context.asInstanceOf[Typesetter]
+        val width   = optional.getOrElse("width", t getNumber "hsize").asInstanceOf[Number].doubleValue
+        val ascent  = optional.getOrElse("ascent", 3).asInstanceOf[Number].doubleValue
         val descent = optional.getOrElse("descent", 0).asInstanceOf[Number].doubleValue
 
         t add RuleBox(t, width, ascent, descent)
