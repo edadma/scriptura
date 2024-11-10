@@ -112,6 +112,21 @@ val commands =
             ()
           case _ => problem(pos, "expected arguments <dimen>")
     ,
+    new Command("hskip", 1, true):
+      def apply(
+          pos: CharReader,
+          parser: Parser,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(d: Number) =>
+            context.asInstanceOf[Typesetter].glue(d.doubleValue, 0, 0)
+            ()
+          case _ => problem(pos, "expected arguments <dimen>")
+    ,
     new Command("hbox", 1, false):
       def apply(
           pos: CharReader,
