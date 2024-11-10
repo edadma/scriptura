@@ -79,6 +79,7 @@ val commands =
           context: Any,
       ): Any =
         context.asInstanceOf[Typesetter].op("newLine")
+        ()
     ,
     new Command("image", 1):
       def apply(
@@ -126,10 +127,23 @@ val commands =
               .asInstanceOf[Typesetter]
               .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
             renderer.render(a)
-
-//              val r = context.asInstanceOf[Typesetter].result
-//
-//              context.asInstanceOf[Typesetter].pop()
+            context.asInstanceOf[Typesetter].done()
+          case List(a) => problem(pos, s"expected arguments <text>: $a")
+          case _       => problem(pos, "expected arguments <text>")
+    ,
+    new Command("halign", 1, false):
+      def apply(
+          pos: CharReader,
+          parser: Parser,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            context.asInstanceOf[Typesetter].halign
+            renderer.render(a)
             context.asInstanceOf[Typesetter].done()
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")

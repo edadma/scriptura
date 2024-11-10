@@ -42,11 +42,19 @@ object ScripturaPlayground extends SimpleSwingApplication:
     // Left panel components
     private val inputArea = new TextArea {
       rows = 20
-      lineWrap = true
-      lineWrap = true
-      wordWrap = true
       font = new Font("Monospaced", Font.PLAIN, 14)
       lineWrap = false
+
+      // Define an action to insert two spaces
+      val insertSpacesAction = new AbstractAction {
+        override def actionPerformed(e: ActionEvent): Unit = {
+          peer.replaceSelection("  ")
+        }
+      }
+
+      // Map the Tab key to the custom action
+      peer.getInputMap.put(KeyStroke.getKeyStroke("TAB"), "insert-spaces")
+      peer.getActionMap.put("insert-spaces", insertSpacesAction)
     }
 
     val undoManager = new UndoManager()
@@ -87,7 +95,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
     val ctrlRKeyStroke = KeyStroke.getKeyStroke("control R")
 
     // Get the InputMap and ActionMap from the root pane
-    val inputMap = peer.getRootPane.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW)
+    val inputMap  = peer.getRootPane.getInputMap(javax.swing.JComponent.WHEN_IN_FOCUSED_WINDOW)
     val actionMap = peer.getRootPane.getActionMap
 
     // Bind the Ctrl-R keystroke to the "pushButton" action
@@ -103,7 +111,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
       },
     )
 
-    val multiPagePanel = new MultiPagePanel
+    val multiPagePanel   = new MultiPagePanel
     val outputScrollPane = new ScrollPane(multiPagePanel)
 
     // Adding components to the left panel
@@ -209,8 +217,8 @@ object ScripturaPlayground extends SimpleSwingApplication:
           // ligatures = false
           setDocument(new ZFoldedDocument)
         }
-        val p = new ScripturaParser
-        val r = new ScripturaRenderer(t, Map.empty, p)
+        val p   = new ScripturaParser
+        val r   = new ScripturaRenderer(t, Map.empty, p)
         val ast = p.parse(inputArea.text)
 
         errorOutput.text = captureStdOut {

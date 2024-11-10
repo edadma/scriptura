@@ -10,10 +10,12 @@ class ScripturaParser extends Parser(
         new Active("#") {
           def apply(pos: CharReader, r: Renderer, context: Any): Any =
             context.asInstanceOf[Typesetter].op("placeholder")
+            ()
         },
         new Active("&") {
           def apply(pos: CharReader, r: Renderer, context: Any): Any =
             context.asInstanceOf[Typesetter].op("newColumn")
+            ()
         },
       ),
       blanks = true,
