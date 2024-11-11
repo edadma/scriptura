@@ -12,10 +12,10 @@
 \set sgap 10
 
 \halign {
-    #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
-    &Monday&Wednesday&Friday\cr
-    Bench press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-    Overhead press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___
-    }
+#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
+&Monday&Wednesday&Friday\cr
+Bench press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
+Overhead press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___
+}
 
 \vfill
