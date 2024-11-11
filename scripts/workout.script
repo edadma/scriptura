@@ -4,7 +4,7 @@
 
 \vskip 50
 
-\hbox to:\hsize {\hfil\hrule width:60 ascent:1\hfil}
+\centerline {Week of ______}
 
 \vskip 40
 
@@ -15,13 +15,15 @@
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
 &Monday&Wednesday&Friday\cr
 Bench press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
+Peck deck&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Overhead press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Deadlifts&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Barbell rows&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Barbell curls&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Triceps extensions&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Lat pulldowns&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Peck deck&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
+Leg curls&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
+Leg extensions&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Crunches&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___
 }
 
