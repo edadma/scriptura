@@ -8,8 +8,8 @@
 
 \vskip 40
 
-\set cgap 15
-\set sgap 8
+\set cgap 12
+\set sgap 5
 
 \halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
@@ -20,6 +20,7 @@ Overhead press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap _
 Bent-over raises&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Barbell curls&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Triceps extensions&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
+Squats&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Deadlifts&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Barbell rows&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
 Lat pulldowns&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
