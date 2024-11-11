@@ -4,7 +4,7 @@
 
 \vskip 50
 
-\centerline {Week of ______}
+\centerline {Week of ________}
 
 \vskip 40
 
@@ -14,19 +14,19 @@
 \halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
 &Monday&Wednesday&Friday\cr
-Bench press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Peck deck&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Overhead press&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Bent-over raises&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Barbell curls&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Triceps extensions&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Squats&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Deadlifts&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Barbell rows&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Lat pulldowns&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Leg curls&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Leg extensions&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___\cr
-Crunches&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___&___\hskip\sgap ___\hskip\sgap ___
+Bench press&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Peck deck&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Overhead press&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Bent-over raises&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Barbell curls&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Triceps extensions&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Squats&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Deadlifts&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Barbell rows&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Lat pulldowns&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Leg curls&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Leg extensions&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
+Crunches&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____
 }
 
 \vfill
