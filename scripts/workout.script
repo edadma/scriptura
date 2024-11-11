@@ -4,12 +4,12 @@
 
 \vskip 50
 
-\hbox to:\hsize {\hfil\hrule width:60 ascent:2\hfil}
+\hbox to:\hsize {\hfil\hrule width:60 ascent:1\hfil}
 
 \vskip 40
 
 \set cgap 15
-\set sgap 10
+\set sgap 8
 
 \halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
