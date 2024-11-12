@@ -11,12 +11,12 @@
 \set cgap 12
 \set sgap 5
 
-\def sets {____\hskip\sgap ____\hskip\sgap ____}
+\def sets {____\hskip\sgap ____\hskip\sgap ____\hskip\sgap ____}
 \def exercise {\sets&\sets&\sets}
 
 \halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
-&\hfil Monday&\hfil Wednesday&\hfil Friday\cr
+&\hfil\underline{Monday}&\hfil\underline{Wednesday}&\hfil\underline{Friday}\cr
 Bench press&\exercise\cr
 Peck deck&\exercise\cr
 Overhead press&\exercise\cr
