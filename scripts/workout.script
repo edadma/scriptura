@@ -4,29 +4,32 @@
 
 \vskip 50
 
-\centerline {Week of ________}
+\centerline {Week of ___________}
 
 \vskip 40
 
 \set cgap 12
 \set sgap 5
 
+\def sets {____\hskip\sgap ____\hskip\sgap ____}
+\def exercise {\sets&\sets&\sets}
+
 \halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
-&Monday&Wednesday&Friday\cr
-Bench press&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Peck deck&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Overhead press&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Bent-over raises&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Barbell curls&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Triceps extensions&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Squats&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Deadlifts&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Barbell rows&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Lat pulldowns&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Leg curls&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Leg extensions&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____\cr
-Crunches&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____&____\hskip\sgap ____\hskip\sgap ____
+&\hfil Monday&\hfil Wednesday&\hfil Friday\cr
+Bench press&\exercise\cr
+Peck deck&\exercise\cr
+Overhead press&\exercise\cr
+Bent-over raises&\exercise\cr
+Barbell curls&\exercise\cr
+Triceps extensions&\exercise\cr
+Squats&\exercise\cr
+Deadlifts&\exercise\cr
+Barbell rows&\exercise\cr
+Lat pulldowns&\exercise\cr
+Leg curls&\exercise\cr
+Leg extensions&\exercise\cr
+Crunches&\exercise
 }
 
 \vfill

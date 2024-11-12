@@ -142,7 +142,7 @@ val commands =
               .asInstanceOf[Typesetter]
               .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
             renderer.render(a)
-            context.asInstanceOf[Typesetter].done()
+            context.asInstanceOf[Typesetter].mode.exit
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
