@@ -157,8 +157,9 @@ val commands =
       ): Any =
         args match
           case List(a: Box) => new UnderlineBox(context.asInstanceOf[Typesetter], a)
-          case List(a)      => problem(pos, s"expected arguments <box>: $a")
-          case _            => problem(pos, "expected arguments <box>")
+          case List(a) =>
+            new UnderlineBox(context.asInstanceOf[Typesetter], context.asInstanceOf[Typesetter].charBox(a.toString))
+          case _ => problem(pos, "expected arguments <box>")
     ,
     new Command("halign", 1, false):
       def apply(
