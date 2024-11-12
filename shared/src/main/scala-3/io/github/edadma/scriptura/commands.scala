@@ -146,7 +146,7 @@ val commands =
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
-    new Command("underline", 1, false):
+    new Command("underline", 1, true):
       def apply(
           pos: CharReader,
           parser: Parser,
@@ -156,11 +156,9 @@ val commands =
           context: Any,
       ): Any =
         args match
-          case List(a: AST) =>
-            renderer.render(a)
-            new UnderlineBox(context.asInstanceOf[Typesetter], context.asInstanceOf[Typesetter].mode.exit)
-          case List(a) => problem(pos, s"expected arguments <text>: $a")
-          case _       => problem(pos, "expected arguments <text>")
+          case List(a: Box) => new UnderlineBox(context.asInstanceOf[Typesetter], a)
+          case List(a)      => problem(pos, s"expected arguments <box>: $a")
+          case _            => problem(pos, "expected arguments <box>")
     ,
     new Command("halign", 1, false):
       def apply(
