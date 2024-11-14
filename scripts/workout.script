@@ -1,5 +1,8 @@
 \include scripts/macros.script
 
+\set hoffset 36
+\set hsize 540
+
 {\font nosifer 30 regular \centerline {The Gym Workout}}
 
 \vskip 50

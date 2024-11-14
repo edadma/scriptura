@@ -40,4 +40,5 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
 
   def enterScope(): Unit = typesetter.enter()
 
-  def exitScope(): Unit = typesetter.exit()
+  def exitScope(): Unit = 
+    typesetter.exit()
