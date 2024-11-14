@@ -19,8 +19,7 @@ class ScripturaRenderer(val typesetter: Typesetter, val config: Map[String, Any]
       case " " if newlineCount > 0 || typesetter.mode.isInstanceOf[VerticalMode] =>
       case s: String =>
         if newlineCount == 1 then typesetter add " "
-        typesetter.start()
-        typesetter add s
+        typesetter.start add s
         newlineCount = 0
       case b: Box => typesetter add b
 //      case f: Function0[?] => f()

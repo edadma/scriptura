@@ -1,6 +1,6 @@
 \include scripts/macros.script
 
-\centerline {The Gym Workout}
+{\font nosifer 30 regular \centerline {The Gym Workout}}
 
 \vskip 50
 

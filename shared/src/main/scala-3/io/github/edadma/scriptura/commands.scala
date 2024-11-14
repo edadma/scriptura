@@ -56,7 +56,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        context.asInstanceOf[Typesetter].noindent()
+        context.asInstanceOf[Typesetter].noindent
     ,
     new Command("indent", 0):
       def apply(
@@ -67,7 +67,7 @@ val commands =
           optional: Map[String, Any],
           context: Any,
       ): Any =
-        context.asInstanceOf[Typesetter].indent()
+        context.asInstanceOf[Typesetter].indent
     ,
     new Command("cr", 0):
       def apply(
