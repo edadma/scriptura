@@ -1,15 +1,17 @@
 \include scripts/macros.script
 
 \set hoffset 36
+\set voffset 36
 \set hsize 540
+\set vsize 720
 
-{\font nosifer 30 regular \centerline {The Gym Workout}}
+{\font nosifer 28 regular \centerline {The Gym Workout}}
 
 \vskip 50
 
 \centerline {Week of ___________}
 
-\vskip 40
+\vskip 50
 
 \set cgap 12
 \set sgap 5
@@ -19,13 +21,19 @@
 
 \halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
-&\hfil\underline{Monday}&\hfil\underline{Wednesday}&\hfil\underline{Friday}\cr
+&\hfil\underline{\hbox{\font noto 18 regular Monday}}&\hfil\underline{\hbox{\font noto 18 regular Wednesday}}&\hfil\underline{\hbox{\font noto 18 regular Friday}}\cr
+\noalign{\vskip 18}
+\underline{\hbox{\font noto 18 regular Chest/Arms/Shoulders}}&&&\cr
+\noalign{\vskip 12}
 Bench press&\exercise\cr
 Peck deck&\exercise\cr
 Overhead press&\exercise\cr
 Bent-over raises&\exercise\cr
 Barbell curls&\exercise\cr
 Triceps extensions&\exercise\cr
+\noalign{\vskip 18}
+\underline{\hbox{\font noto 18 regular Legs/Back}}&&&\cr
+\noalign{\vskip 12}
 Squats&\exercise\cr
 Deadlifts&\exercise\cr
 Barbell rows&\exercise\cr

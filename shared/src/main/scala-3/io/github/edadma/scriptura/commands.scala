@@ -146,6 +146,43 @@ val commands =
           case List(a) => problem(pos, s"expected arguments <text>: $a")
           case _       => problem(pos, "expected arguments <text>")
     ,
+    new Command("vbox", 1, false):
+      def apply(
+          pos: CharReader,
+          parser: Parser,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            context
+              .asInstanceOf[Typesetter]
+              .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
+            renderer.render(a)
+            context.asInstanceOf[Typesetter].mode.exit
+          case List(a) => problem(pos, s"expected arguments <text>: $a")
+          case _       => problem(pos, "expected arguments <text>")
+    ,
+    new Command("noalign", 1, false):
+      def apply(
+          pos: CharReader,
+          parser: Parser,
+          renderer: Renderer,
+          args: List[Any],
+          optional: Map[String, Any],
+          context: Any,
+      ): Any =
+        args match
+          case List(a: AST) =>
+            context.asInstanceOf[Typesetter].op("noalign-begin")
+            renderer.render(a)
+            context.asInstanceOf[Typesetter].op("noalign-end")
+            ()
+          case List(a) => problem(pos, s"expected arguments <text>: $a")
+          case _       => problem(pos, "expected arguments <text>")
+    ,
     new Command("underline", 1, true):
       def apply(
           pos: CharReader,
