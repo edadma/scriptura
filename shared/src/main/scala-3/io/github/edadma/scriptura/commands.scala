@@ -159,7 +159,7 @@ val commands =
           case List(a: AST) =>
             context
               .asInstanceOf[Typesetter]
-              .hbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
+              .vbox(if optional contains "to" then optional("to").asInstanceOf[Number].doubleValue else null)
             renderer.render(a)
             context.asInstanceOf[Typesetter].mode.exit
           case List(a) => problem(pos, s"expected arguments <text>: $a")

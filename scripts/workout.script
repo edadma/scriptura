@@ -19,7 +19,7 @@
 \def sets {____\hskip\sgap ____\hskip\sgap ____\hskip\sgap ____}
 \def exercise {\sets&\sets&\sets}
 
-\halign {
+\centerline{\vbox\halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
 &\hfil\underline{\hbox{\font noto 18 regular Monday}}&\hfil\underline{\hbox{\font noto 18 regular Wednesday}}&\hfil\underline{\hbox{\font noto 18 regular Friday}}\cr
 \noalign{\vskip 18\underline{\hbox{\font noto 16 regular Chest/Arms/Shoulders}}\vskip 12}
@@ -37,6 +37,6 @@ Lat pulldowns&\exercise\cr
 Leg curls&\exercise\cr
 Leg extensions&\exercise\cr
 Crunches&\exercise
-}
+}}
 
 \vfill
