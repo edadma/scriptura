@@ -5,7 +5,7 @@
 \set hsize 540
 \set vsize 720
 
-{\font nosifer 28 regular \centerline {The Gym Workout}}
+{\font rubik-wet-paint 32 regular \centerline {The Gym Workout}}
 
 \vskip 50
 
@@ -22,14 +22,14 @@
 \centerline{\vbox\halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
 &\hfil\underline{\hbox{\font noto 18 regular Monday}}&\hfil\underline{\hbox{\font noto 18 regular Wednesday}}&\hfil\underline{\hbox{\font noto 18 regular Friday}}\cr
-\noalign{\vskip 18\underline{\hbox{\font noto 16 regular Chest/Arms/Shoulders}}\vskip 12}
+\noalign{\vskip 16\underline{\hbox{\font noto 16 regular Chest/Arms/Shoulders}}\vskip 10}
 Bench press&\exercise\cr
 Peck deck&\exercise\cr
 Overhead press&\exercise\cr
 Bent-over raises&\exercise\cr
 Barbell curls&\exercise\cr
 Triceps extensions&\exercise\cr
-\noalign{\vskip 18\underline{\hbox{\font noto 16 regular Legs/Back}}\vskip 12}
+\noalign{\vskip 16\underline{\hbox{\font noto 16 regular Legs/Back}}\vskip 10}
 Squats&\exercise\cr
 Deadlifts&\exercise\cr
 Barbell rows&\exercise\cr

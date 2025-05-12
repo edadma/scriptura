@@ -6,7 +6,7 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
   .settings(
     name         := "scriptura",
     version      := "0.0.1",
-    scalaVersion := "3.5.2",
+    scalaVersion := "3.7.0",
     scalacOptions ++=
       Seq(
         "-deprecation",
@@ -16,18 +16,15 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
         "-language:implicitConversions",
         "-language:existentials",
         "-language:dynamics",
-        "-Xasync",
       ),
     organization           := "io.github.edadma",
-    githubOwner            := "edadma",
-    githubRepository       := name.value,
     publishMavenStyle      := true,
     Test / publishArtifact := false,
     licenses += "ISC"      -> url("https://opensource.org/licenses/ISC"),
     libraryDependencies ++= Seq(
       "com.github.scopt" %%% "scopt"      % "4.1.0",
       "com.lihaoyi"      %%% "pprint"     % "0.9.0",
-      "io.github.edadma" %%% "typesetter" % "0.0.16",
+      "io.github.edadma" %%% "typesetter" % "0.0.18",
       "io.github.edadma" %%% "texish"     % "0.0.12b",
     ),
   )

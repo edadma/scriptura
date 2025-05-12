@@ -1,6 +1,6 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.typesetter.{Graphics2DTypesetter, ZFoldedDocument}
+import io.github.edadma.typesetter.{Graphics2DTypesetter, ZFoldedDocument, SimpleDocument}
 import pprint.pprintln
 
 import java.awt.event.{ActionEvent, InputEvent, KeyEvent}
@@ -215,7 +215,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val t = new Graphics2DTypesetter {
           // debug = true
           // ligatures = false
-          setDocument(new ZFoldedDocument)
+          setDocument(new SimpleDocument)
         }
         val p   = new ScripturaParser
         val r   = new ScripturaRenderer(t, Map.empty, p)
