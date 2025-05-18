@@ -24,7 +24,7 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
     libraryDependencies ++= Seq(
       "com.github.scopt" %%% "scopt"      % "4.1.0",
       "com.lihaoyi"      %%% "pprint"     % "0.9.0",
-      "io.github.edadma" %%% "typesetter" % "0.0.1",
+      "io.github.edadma" %%% "typesetter" % "0.0.2",
       "io.github.edadma" %%% "texish"     % "0.0.1",
     ),
   )
