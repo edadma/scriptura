@@ -215,7 +215,7 @@ object ScripturaPlayground extends SimpleSwingApplication:
         val t = new Graphics2DTypesetter {
           // debug = true
           // ligatures = false
-          setDocument(new SimpleDocument)
+          setDocument(new ZFoldedDocument)
         }
         val p   = new ScripturaParser
         val r   = new ScripturaRenderer(t, Map.empty, p)

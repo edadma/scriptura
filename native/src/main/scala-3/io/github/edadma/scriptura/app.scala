@@ -2,7 +2,7 @@ package io.github.edadma.scriptura
 
 import io.github.edadma.char_reader.CharReader
 import io.github.edadma.texish.{Active, Command, Parser, Renderer}
-import io.github.edadma.typesetter.{CairoPDFTypesetter, Typesetter}
+import io.github.edadma.typesetter.{CairoPDFTypesetter, Typesetter, ZFoldedDocument}
 import pprint.*
 
 import java.io.FileOutputStream
@@ -40,7 +40,9 @@ def app(args: Config): Unit =
             paper match
               case "a4"     => // Paper.A4
               case "letter" => // Paper.LETTER
-          CairoPDFTypesetter(output.toString) // todo: image scaling
+          new CairoPDFTypesetter(output.toString) {
+            setDocument(new ZFoldedDocument)
+          }
 
 //        case Config(_, _, "png", _, resolution, size, _, _) =>
 //          val (width, height) =
