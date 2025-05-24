@@ -28,18 +28,24 @@ def app(args: Config): Unit =
     }
   else process(input, "")
 
-  def process(in: String, suffix: String): Unit =
+  def process(input: String, suffix: String): Unit =
     val output = Paths.get(s"${args.output}$suffix.${args.typ}").normalize.toAbsolutePath
 
     if !Files.isWritable(output.getParent) then problem(s"'$output' is not writable")
 
     val t: Typesetter =
       args match
-        case Config(_, _, "pdf", paper, _, _, _, _) =>
-          val p =
-            paper match
-              case "a4"     => // Paper.A4
-              case "letter" => // Paper.LETTER
+        case Config(_, _, "pdf", Some("a4"), _, _, _, _) =>
+          new CairoPDFTypesetter(output.toString) {
+            set("paperwidth", 210 * mm)
+            set("paperheight", 297 * mm)
+          }
+        case Config(_, _, "pdf", Some("letter"), _, _, _, _) =>
+          new CairoPDFTypesetter(output.toString) {
+            set("paperwidth", 8.5 * in)
+            set("paperheight", 11 * in)
+          }
+        case Config(_, _, "pdf", None, _, _, _, _) =>
           new CairoPDFTypesetter(output.toString)
 
 //        case Config(_, _, "png", _, resolution, size, _, _) =>
@@ -56,7 +62,7 @@ def app(args: Config): Unit =
     else
       val p   = new ScripturaParser
       val r   = new ScripturaRenderer(t, Map.empty, p)
-      val ast = p.parse(in)
+      val ast = p.parse(input)
 
       r.render(ast)
     end if

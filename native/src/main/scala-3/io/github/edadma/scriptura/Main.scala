@@ -6,7 +6,7 @@ case class Config(
     input: Option[File] = None,
     output: String = null,
     typ: String = null,
-    paper: String = "letter",
+    paper: Option[String] = None,
     resolution: String = "hd",
     size: Double = 14,
     multi: Boolean = false,
@@ -36,7 +36,7 @@ def run(args: String*): Unit =
         .text("output file (defaults to <input>.<type>)"),
       opt[String]('p', "paper")
         .valueName("<a4 | letter>")
-        .action((x, c) => c.copy(paper = x))
+        .action((x, c) => c.copy(paper = Some(x)))
         .validate({
           case "a4" | "letter" => success
           case _               => failure("only 'a4' or 'letter' are allowed as paper types")
