@@ -24,7 +24,7 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
     libraryDependencies ++= Seq(
       "com.github.scopt" %%% "scopt"      % "4.1.0",
       "com.lihaoyi"      %%% "pprint"     % "0.9.0",
-      "io.github.edadma" %%% "typesetter" % "0.0.6c",
+      "io.github.edadma" %%% "typesetter" % "0.0.6f",
       "io.github.edadma" %%% "texish"     % "0.0.1",
     ),
     resolvers += "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases",
