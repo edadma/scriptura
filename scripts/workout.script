@@ -16,16 +16,17 @@
 \set cgap 12
 \set sgap 5
 
-\def sets {____\hskip\sgap ____\hskip\sgap ____\hskip\sgap ____}
+\def sets {______\hskip\sgap ______\hskip\sgap ______}
 \def exercise {\sets&\sets&\sets}
 
 \centerline{\vbox\halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
-&\hfil\underline{\hbox{\font noto 18 regular Tuesday}}&\hfil\underline{\hbox{\font noto 18 regular Thursday}}&\hfil\underline{\hbox{\font noto 18 regular Saturday}}\cr
+&\hfil\underline{\hbox{\font noto 18 regular Monday}}&\hfil\underline{\hbox{\font noto 18 regular Thursday}}&\hfil\underline{\hbox{\font noto 18 regular Saturday}}\cr
 \noalign{\vskip 16\underline{\hbox{\font noto 16 regular Chest/Arms/Shoulders}}\vskip 10}
 Bench press&\exercise\cr
 Peck deck&\exercise\cr
 Overhead press&\exercise\cr
+Lateral raises&\exercise\cr
 Bent-over raises&\exercise\cr
 Barbell curls&\exercise\cr
 Triceps extensions&\exercise\cr
@@ -35,6 +36,7 @@ Squats&\exercise\cr
 Deadlifts&\exercise\cr
 Barbell rows&\exercise\cr
 Lat pulldowns&\exercise\cr
+Pull-overs&\exercise\cr
 Leg curls&\exercise\cr
 Leg extensions&\exercise\cr
 Crunches&\exercise
