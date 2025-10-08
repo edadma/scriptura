@@ -6,7 +6,7 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
   .settings(
     name         := "scriptura",
     version      := "0.0.1",
-    scalaVersion := "3.7.0",
+    scalaVersion := "3.7.3",
     scalacOptions ++=
       Seq(
         "-deprecation",

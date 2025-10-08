@@ -21,7 +21,7 @@
 
 \centerline{\vbox\halign {
 #\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
-&\hfil\underline{\hbox{\font noto 18 regular Monday}}&\hfil\underline{\hbox{\font noto 18 regular Wednesday}}&\hfil\underline{\hbox{\font noto 18 regular Friday}}\cr
+&\hfil\underline{\hbox{\font noto 18 regular Tuesday}}&\hfil\underline{\hbox{\font noto 18 regular Thursday}}&\hfil\underline{\hbox{\font noto 18 regular Saturday}}\cr
 \noalign{\vskip 16\underline{\hbox{\font noto 16 regular Chest/Arms/Shoulders}}\vskip 10}
 Bench press&\exercise\cr
 Peck deck&\exercise\cr
@@ -29,6 +29,7 @@ Overhead press&\exercise\cr
 Bent-over raises&\exercise\cr
 Barbell curls&\exercise\cr
 Triceps extensions&\exercise\cr
+Dips&\exercise\cr
 \noalign{\vskip 16\underline{\hbox{\font noto 16 regular Legs/Back}}\vskip 10}
 Squats&\exercise\cr
 Deadlifts&\exercise\cr
