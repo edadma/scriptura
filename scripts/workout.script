@@ -5,9 +5,11 @@
 \set hsize 540
 \set vsize 720
 
+\vskip 20
+
 {\font rubik-wet-paint 32 regular \centerline {The Gym Workout}}
 
-\vskip 60
+\vskip 50
 
 \centerline {Week of ___________}
 
