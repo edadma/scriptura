@@ -1,0 +1,51 @@
+\include scripts/macros.script
+
+\set hoffset 36
+\set voffset 36
+\set hsize 540
+\set vsize 720
+
+\vskip 20
+
+{\font nosifer 28 regular \centerline {The Gym Workout}}
+
+\vskip 50
+
+\centerline {Week of ___________}
+
+\vskip 50
+
+\set cgap 25
+\set sgap 10
+
+\def sets {_______\hskip\sgap _______\hskip\sgap _______}
+\def exercise {\sets&\sets}
+
+\centerline{\vbox\halign {
+#\hskip\cgap\hfil&#\hskip\cgap\hfil&#\hfil\cr
+&\hfil\underline{\hbox{\font noto 18 regular Monday}}&\hfil\underline{\hbox{\font noto 18 regular Thursday}}\cr
+\noalign{\vskip 16\underline{\hbox{\font noto 16 regular Chest/Arms/Shoulders}}\vskip 10}
+Bench press&\exercise\cr
+Incline bench press&\exercise\cr
+Decline bench press&\exercise\cr
+Overhead press&\exercise\cr
+Lateral raises&\exercise\cr
+Bent-over raises&\exercise\cr
+Barbell curls&\exercise\cr
+Triceps extensions&\exercise\cr
+Dips&\exercise\cr
+\noalign{\vskip 30}
+&\hfil\underline{\hbox{\font noto 18 regular Tuesday}}&\hfil\underline{\hbox{\font noto 18 regular Saturday}}\cr
+\noalign{\vskip 16\underline{\hbox{\font noto 16 regular Legs/Back}}\vskip 10}
+Squats&\exercise\cr
+Deadlifts&\exercise\cr
+Barbell rows&\exercise\cr
+Lat pulldowns&\exercise\cr
+Pull-overs&\exercise\cr
+Leg raises&\exercise\cr
+Leg curls&\exercise\cr
+Leg extensions&\exercise\cr
+Crunches&\exercise
+}}
+
+\vfill
