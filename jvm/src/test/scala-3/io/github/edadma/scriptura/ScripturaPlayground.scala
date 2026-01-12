@@ -1,7 +1,7 @@
 package io.github.edadma.scriptura
 
+import io.github.edadma.texish.Processor
 import io.github.edadma.typesetter.Graphics2DTypesetter
-import pprint.pprintln
 
 import java.awt.event.{ActionEvent, InputEvent, KeyEvent}
 import java.awt.image.BufferedImage
@@ -213,12 +213,12 @@ object ScripturaPlayground extends SimpleSwingApplication:
     def runAction(): Unit =
       try {
         val t = new Graphics2DTypesetter
-        val p   = new ScripturaParser
-        val r   = new ScripturaRenderer(t, Map.empty, p)
-        val ast = p.parse(inputArea.text)
+        val handler = new ScripturaHandler(t)
+        val proc = new Processor(handler)
+        registerScripturaPrimitives(proc, handler)
 
         errorOutput.text = captureStdOut {
-          r.render(ast)
+          proc.process(inputArea.text)
           t.end()
         }
 

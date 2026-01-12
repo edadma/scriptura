@@ -1,14 +1,9 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.char_reader.CharReader
-import io.github.edadma.texish.{Active, Command, Parser, Renderer}
+import io.github.edadma.texish.Processor
 import io.github.edadma.typesetter.{CairoPDFTypesetter, Typesetter}
-import pprint.*
 
-import java.io.FileOutputStream
 import java.nio.file.{Files, Paths}
-import scala.collection.mutable
-import scala.util.Using
 
 def app(args: Config): Unit =
   val input =
@@ -60,11 +55,10 @@ def app(args: Config): Unit =
 
     if args.usfx then () // USFX.fromString(doc, in)
     else
-      val p   = new ScripturaParser
-      val r   = new ScripturaRenderer(t, Map.empty, p)
-      val ast = p.parse(input)
-
-      r.render(ast)
+      val handler = new ScripturaHandler(t)
+      val proc = new Processor(handler)
+      registerScripturaPrimitives(proc, handler)
+      proc.process(input)
     end if
 
     t.end()

@@ -6,7 +6,7 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
   .settings(
     name         := "scriptura",
     version      := "0.0.1",
-    scalaVersion := "3.7.3",
+    scalaVersion := "3.7.4",
     scalacOptions ++=
       Seq(
         "-deprecation",
@@ -25,7 +25,7 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
       "com.github.scopt" %%% "scopt"      % "4.1.0",
       "com.lihaoyi"      %%% "pprint"     % "0.9.0",
       "io.github.edadma" %%% "typesetter" % "0.0.6",
-      "io.github.edadma" %%% "texish"     % "0.0.1",
+      "io.github.edadma" %%% "texish"     % "0.0.4",
     ),
     resolvers += "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases",
   )
