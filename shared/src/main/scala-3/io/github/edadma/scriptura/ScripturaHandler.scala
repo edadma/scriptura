@@ -18,7 +18,7 @@ class ScripturaHandler(val typesetter: Typesetter) extends Handler:
     if !suppressed then
       // Add space unless in vertical mode (halign cells are not HorizontalMode but accept spaces)
       if !typesetter.mode.isInstanceOf[VerticalMode] && newlineCount == 0 then
-        typesetter add " "
+        typesetter.start add " "
 
   def newline(): Unit =
     if !suppressed then
