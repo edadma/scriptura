@@ -144,14 +144,15 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       t.nosmallcaps()
   })
 
-  // underline - 1 braced arg (produces a box)
+  // underline - 1 body arg (wraps content in underline)
   proc.registerPrimitive("underline", new Primitive {
     def execute(proc: Processor, pos: CharReader): Unit =
-      val arg = evalArg(proc, pos)
-      val box = arg match
-        case Value.Text(s) => t.charBox(s)
-        case other => t.charBox(Value.display(other))
-      handler.addBox(new UnderlineBox(t, box))
+      val body = proc.readArgument(pos)
+      // Create an hbox to capture the content
+      t.hbox(null)
+      proc.processTokenList(body)
+      val box = t.mode.exit
+      if box ne null then handler.addBox(new UnderlineBox(t, box))
   })
 
   // Active characters
