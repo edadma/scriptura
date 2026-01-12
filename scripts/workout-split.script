@@ -1,4 +1,4 @@
-\include scripts/macros.script
+\include{scripts/macros.script}
 
 \set hoffset 36
 \set voffset 36
@@ -7,11 +7,11 @@
 
 \vskip 20
 
-{\font nosifer 28 regular \centerline {The Gym Workout}}
+{\font{nosifer}{28}{regular} \centerline{The Gym Workout}}
 
 \vskip 50
 
-\centerline {Week of ___________}
+\centerline{Week of ___________}
 
 \vskip 50
 

@@ -16,7 +16,8 @@ class ScripturaHandler(val typesetter: Typesetter) extends Handler:
 
   def space(): Unit =
     if !suppressed then
-      if typesetter.mode.isInstanceOf[HorizontalMode] && newlineCount == 0 then
+      // Add space unless in vertical mode (halign cells are not HorizontalMode but accept spaces)
+      if !typesetter.mode.isInstanceOf[VerticalMode] && newlineCount == 0 then
         typesetter add " "
 
   def newline(): Unit =
@@ -31,12 +32,13 @@ class ScripturaHandler(val typesetter: Typesetter) extends Handler:
           // ignore newlines in vertical mode or after paragraph
 
   def get(name: String): Value =
-    typesetter.getVar(name) match
-      case null              => Value.Undefined
-      case s: String         => Value.Text(s)
-      case n: Number         => Value.Num(BigDecimal(n.doubleValue))
-      case b: Boolean        => Value.Bool(b)
-      case v                 => Value.Text(v.toString)
+    typesetter.get(name) match
+      case None              => Value.Undefined
+      case Some(s: String)   => Value.Text(s)
+      case Some(n: Number)   => Value.Num(BigDecimal(n.doubleValue))
+      case Some(b: Boolean)  => Value.Bool(b)
+      case Some(v: Value)    => v  // Return stored Value directly
+      case Some(v)           => Value.Text(v.toString)
 
   def set(name: String, value: Value): Unit =
     val v = value match
@@ -45,7 +47,7 @@ class ScripturaHandler(val typesetter: Typesetter) extends Handler:
       case Value.Bool(b)   => b
       case Value.Nil       => null
       case Value.Undefined => null
-      case other           => Value.display(other)
+      case other           => other  // Store Value directly (Macro, Seq, Map, etc.)
     typesetter.set(name, v)
 
   def enterScope(): Unit = typesetter.enter()

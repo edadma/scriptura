@@ -85,7 +85,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       val toVal = opts.get("to").collect { case Value.Num(n) => n.toDouble }.map(java.lang.Double.valueOf).orNull
       t.hbox(toVal)
       proc.processTokenList(body)
-      t.mode.exit
+      t.mode.done()
   })
 
   // vbox - 1 body arg + optional "to" param
@@ -96,7 +96,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       val toVal = opts.get("to").collect { case Value.Num(n) => n.toDouble }.map(java.lang.Double.valueOf).orNull
       t.vbox(toVal)
       proc.processTokenList(body)
-      t.mode.exit
+      t.mode.done()
   })
 
   // noalign - 1 body arg

@@ -1,6 +1,6 @@
 \def centerline text {\hbox to:\hsize {\hss\text\hss}}
-\def ' letter {\accent "'" \letter}
-\def ` letter {\accent ` \letter}
-\def ^ letter {\accent ^ \letter}
-\def " letter {\accent '"' \letter}
-\def c letter {\accent c \letter}
+\def apostrophe letter {\accent "'" \letter}
+\def grave letter {\accent ` \letter}
+\def circumflex letter {\accent ^ \letter}
+\def umlaut letter {\accent '"' \letter}
+\def cedilla letter {\accent c \letter}
