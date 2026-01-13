@@ -2,7 +2,7 @@ package io.github.edadma.scriptura
 
 import io.github.edadma.char_reader.CharReader
 import io.github.edadma.texish.{Active, Primitive, Processor, Value}
-import io.github.edadma.typesetter.{InfGlue, RuleBox, UnderlineBox}
+import io.github.edadma.typesetter.{Glue, InfGlue, RuleBox, UnderlineBox}
 
 def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Unit =
   val t = handler.typesetter
@@ -24,7 +24,11 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
     def execute(proc: Processor, pos: CharReader): Unit =
       val arg = evalArg(proc, pos)
       arg match
-        case Value.Text(typeface) => t.typeface(typeface)
+        case Value.Text(typeface) =>
+          val font = t.typeface(typeface)
+          // Update spaceskip based on new font's space width (typesetter doesn't do this automatically)
+          t.set("spaceskip", Glue(font.space, 1))
+          t.set("xspaceskip", Glue(font.space * 1.5, 1))
         case _ => handler.error("\\typeface expects a typeface name", pos)
   })
 
@@ -36,7 +40,10 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       val style = evalArg(proc, pos)
       (typeface, size, style) match
         case (Value.Text(tf), Value.Num(sz), Value.Text(st)) =>
-          t.selectFont(tf, sz.toDouble, st.split("\\s+").toSet)
+          val font = t.selectFont(tf, sz.toDouble, st.split("\\s+").toSet)
+          // Update spaceskip based on new font's space width (typesetter doesn't do this automatically)
+          t.set("spaceskip", Glue(font.space, 1))
+          t.set("xspaceskip", Glue(font.space * 1.5, 1))
         case _ => handler.error("\\font expects <typeface> <size> <style>", pos)
   })
 
