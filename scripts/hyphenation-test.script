@@ -1,0 +1,28 @@
+\loadhyphenation{en}{/home/eam/dev/typesetter/shared/src/main/resources/hyph-en-us.tex}
+\loadhyphenation{es}{/home/eam/dev/typesetter/shared/src/main/resources/hyph-es.tex}
+\loadhyphenation{fr}{/home/eam/dev/typesetter/shared/src/main/resources/hyph-fr.tex}
+
+\set hsize {200}
+\typeface{noto}
+
+\language{en}
+The extraordinary responsibilities of the communications representative required
+comprehensive understanding of international organizational methodologies.
+The superintendent acknowledged the disproportionate characteristics of the
+electromagnetic instrumentation.
+
+\vskip{20}
+
+\language{es}
+Las responsabilidades extraordinarias del representante de comunicaciones
+requerían una comprensión integral de las metodologías organizacionales
+internacionales. El superintendente reconoció las características
+desproporcionadas de la instrumentación electromagnética.
+
+\vskip{20}
+
+\language{fr}
+Les responsabilités extraordinaires du représentant des communications
+exigeaient une compréhension approfondie des méthodologies organisationnelles
+internationales. Le surintendant a reconnu les caractéristiques
+disproportionnées de l'instrumentation électromagnétique.

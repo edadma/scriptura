@@ -2,7 +2,7 @@ package io.github.edadma.scriptura
 
 import io.github.edadma.char_reader.CharReader
 import io.github.edadma.texish.{Active, Primitive, Processor, Value}
-import io.github.edadma.typesetter.{Glue, InfGlue, RuleBox, UnderlineBox}
+import io.github.edadma.typesetter.{Glue, Hyphenation, InfGlue, RuleBox, UnderlineBox}
 
 def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Unit =
   val t = handler.typesetter
@@ -18,6 +18,25 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
   proc.registerPrimitive("vfill", SimplePrimitive(() => t.fill))
   proc.registerPrimitive("hss", SimplePrimitive(() => t.add(InfGlue)))
   proc.registerPrimitive("vss", SimplePrimitive(() => t.add(InfGlue)))
+
+  // loadhyphenation - 2 braced args: language name and path to pattern file
+  proc.registerPrimitive("loadhyphenation", new Primitive {
+    def execute(proc: Processor, pos: CharReader): Unit =
+      val lang = evalArg(proc, pos)
+      val path = evalArg(proc, pos)
+      (lang, path) match
+        case (Value.Text(l), Value.Text(p)) => Hyphenation.loadPatterns(l, p)
+        case _ => handler.error("\\loadhyphenation expects {language}{path}", pos)
+  })
+
+  // language - 1 braced arg: switch active hyphenation language
+  proc.registerPrimitive("language", new Primitive {
+    def execute(proc: Processor, pos: CharReader): Unit =
+      val arg = evalArg(proc, pos)
+      arg match
+        case Value.Text(lang) => Hyphenation.setLanguage(lang)
+        case _ => handler.error("\\language expects a language name", pos)
+  })
 
   // typeface - 1 braced arg
   proc.registerPrimitive("typeface", new Primitive {
