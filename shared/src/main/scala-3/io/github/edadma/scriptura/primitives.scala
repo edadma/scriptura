@@ -91,7 +91,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       val body = proc.readArgument(pos)
       val toVal = opts.get("to").collect { case Value.Num(n) => n.toDouble }.map(java.lang.Double.valueOf).orNull
       t.hbox(toVal)
-      proc.processTokenList(body)
+      proc.processTokenList(body) // scoping happens automatically from { } tokens
       t.mode.done()
   })
 
@@ -102,11 +102,11 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       val body = proc.readArgument(pos)
       val toVal = opts.get("to").collect { case Value.Num(n) => n.toDouble }.map(java.lang.Double.valueOf).orNull
       t.vbox(toVal)
-      proc.processTokenList(body)
+      proc.processTokenList(body) // scoping happens automatically from { } tokens
       t.mode.done()
   })
 
-  // noalign - 1 body arg
+  // noalign - 1 body arg (no scoping - it's inline content in table)
   proc.registerPrimitive("noalign", new Primitive {
     def execute(proc: Processor, pos: CharReader): Unit =
       val body = proc.readArgument(pos)
@@ -115,7 +115,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       t.op("noalign-end")
   })
 
-  // halign - 1 body arg
+  // halign - 1 body arg (no scoping - table inherits outer context)
   proc.registerPrimitive("halign", new Primitive {
     def execute(proc: Processor, pos: CharReader): Unit =
       val body = proc.readArgument(pos)
@@ -129,7 +129,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
     def execute(proc: Processor, pos: CharReader): Unit =
       val body = proc.readArgument(pos)
       t.bold()
-      proc.processTokenList(body)
+      proc.processTokenList(body) // scoping happens automatically from { } tokens
       t.nobold()
   })
 
@@ -138,7 +138,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
     def execute(proc: Processor, pos: CharReader): Unit =
       val body = proc.readArgument(pos)
       t.italic()
-      proc.processTokenList(body)
+      proc.processTokenList(body) // scoping happens automatically from { } tokens
       t.noitalic()
   })
 
@@ -147,7 +147,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
     def execute(proc: Processor, pos: CharReader): Unit =
       val body = proc.readArgument(pos)
       t.smallcaps()
-      proc.processTokenList(body)
+      proc.processTokenList(body) // scoping happens automatically from { } tokens
       t.nosmallcaps()
   })
 
@@ -157,7 +157,7 @@ def registerScripturaPrimitives(proc: Processor, handler: ScripturaHandler): Uni
       val body = proc.readArgument(pos)
       // Create an hbox to capture the content
       t.hbox(null)
-      proc.processTokenList(body)
+      proc.processTokenList(body) // scoping happens automatically from { } tokens
       val box = t.mode.exit
       if box ne null then handler.addBox(new UnderlineBox(t, box))
   })
