@@ -1,7 +1,8 @@
-\def headline {\italic{Multi-page machinery} \hfil page \the\pageno}
+\set raggedbottom {1}
+\def headline {\italic{Multi-page machinery} \hfil paragraphs \the\firstmark – \the\botmark}
 \def footline {\hfil — \the\pageno — \hfil}
 
-\for\i {\range 1 18} {Paragraph \the\i of this stress document. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+\for\i {\range 1 18} {\mark\i Paragraph \the\i of this stress document. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
 
 }
 \vfill\eject
