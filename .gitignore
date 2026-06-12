@@ -27,3 +27,4 @@ project/.bloop/
 *.code-workspace
 
 *.pdf
+output-page-*.png
