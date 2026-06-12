@@ -1,0 +1,7 @@
+This is page \the\pageno. The rest of the page is filled and ejected.
+
+\vfill\eject
+Now we are on page \the\pageno, thanks to the document advancing the page number as each page ships.
+
+\vfill\eject
+Finally, page \the\pageno. No eject follows, so the document closes this page itself.
