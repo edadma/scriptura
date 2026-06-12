@@ -1,3 +1,6 @@
+\def headline {\italic{Running header} \hfil page \the\pageno}
+\def footline {\hfil \the\pageno \hfil}
+
 This is page \the\pageno. The rest of the page is filled and ejected.
 
 \vfill\eject
