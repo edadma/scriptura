@@ -1,0 +1,7 @@
+first line
+\vskip 24pt
+after a rigid skip
+\vskip {12pt plus 6pt minus 3pt}
+after a braced glue skip
+\vskip 6pt plus 1fil
+after an unbraced fil skip
