@@ -1,12 +1,17 @@
 ThisBuild / licenses += "ISC" -> url("https://opensource.org/licenses/ISC")
-ThisBuild / versionScheme     := Some("semver-spec")
+ThisBuild / versionScheme      := Some("semver-spec")
+ThisBuild / evictionErrorLevel := Level.Warn
+
+lazy val typesetter = ProjectRef(file("../typesetter"), "typesetterJVM")
+
+lazy val typesetterNative = ProjectRef(file("../typesetter"), "typesetterNative")
 
 lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
   .in(file("."))
   .settings(
     name         := "scriptura",
     version      := "0.0.1",
-    scalaVersion := "3.7.4",
+    scalaVersion := "3.8.4",
     scalacOptions ++=
       Seq(
         "-deprecation",
@@ -22,19 +27,19 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
     Test / publishArtifact := false,
     licenses += "ISC"      -> url("https://opensource.org/licenses/ISC"),
     libraryDependencies ++= Seq(
-      "com.github.scopt" %%% "scopt"      % "4.1.0",
-      "com.lihaoyi"      %%% "pprint"     % "0.9.0",
-      "io.github.edadma" %%% "typesetter" % "0.0.10",
-      "io.github.edadma" %%% "texish"     % "0.0.7",
+      "com.github.scopt" %%% "scopt"  % "4.1.0",
+      "com.lihaoyi"      %%% "pprint" % "0.9.0",
     ),
     resolvers += "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases",
   )
+  .jvmConfigure(_.dependsOn(typesetter))
   .jvmSettings(
     libraryDependencies += "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided",
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %% "scala-swing" % "3.0.0" % "test",
     ),
   )
+  .nativeConfigure(_.dependsOn(typesetterNative))
   .nativeSettings(
   )
 //  .jsSettings(

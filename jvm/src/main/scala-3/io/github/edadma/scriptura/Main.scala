@@ -1,7 +1,7 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.texish.Processor
 import io.github.edadma.typesetter.Graphics2DTypesetter
+import io.github.edadma.typesetter.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.File
 import javax.imageio.ImageIO
@@ -18,9 +18,9 @@ import scala.io.Source
   source.close()
 
   val t = new Graphics2DTypesetter
-  val handler = new ScripturaHandler(t)
+  val handler = new TypesetterHandler(t)
   val proc = new Processor(handler)
-  registerScripturaPrimitives(proc, handler)
+  registerTypesettingPrimitives(proc, handler)
 
   proc.process(scriptContent)
   t.end()

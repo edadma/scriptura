@@ -1,7 +1,7 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.texish.Processor
 import io.github.edadma.typesetter.{CairoPDFTypesetter, Typesetter}
+import io.github.edadma.typesetter.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.nio.file.{Files, Paths}
 
@@ -55,9 +55,9 @@ def app(args: Config): Unit =
 
     if args.usfx then () // USFX.fromString(doc, in)
     else
-      val handler = new ScripturaHandler(t)
+      val handler = new TypesetterHandler(t)
       val proc = new Processor(handler)
-      registerScripturaPrimitives(proc, handler)
+      registerTypesettingPrimitives(proc, handler)
       proc.process(input)
     end if
 
