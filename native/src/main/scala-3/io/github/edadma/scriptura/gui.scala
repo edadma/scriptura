@@ -4,7 +4,7 @@ import io.github.edadma.suit.*
 import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
-import io.github.edadma.typesetter.CairoImageTypesetter
+import io.github.edadma.typesetter.{CairoImageTypesetter, Hyphenation}
 import io.github.edadma.typesetter.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.{ByteArrayOutputStream, PrintWriter, StringWriter}
@@ -39,6 +39,10 @@ private[scriptura] def typeset(source: String): (Vector[Page], String, Boolean) 
   val scale = { val s = DevicePixelRatio.scaleX; if s <= 0 then 1.0 else s }
   val dpi   = ScreenDpi * scale
   val out   = new ByteArrayOutputStream
+
+  // TeX loads hyphenation patterns from its format; do the same so long words break across lines
+  // instead of stretching a paragraph's spaces. Idempotent — the en-US patterns parse once.
+  Hyphenation.enableEnglish()
 
   try
     val t       = new CairoImageTypesetter(dpi)
