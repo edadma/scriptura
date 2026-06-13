@@ -75,18 +75,27 @@ private[scriptura] def typeset(source: String): (Vector[Page], String) =
   */
 private val App: Component[String] =
   component[String] { initial =>
-    val theme                  = Theme.violetLight
-    val (source, setSource, _) = useState(initial)
-    val (pages, setPages, _)   = useState(Vector.empty[Page])
-    val (logText, setLog, _)   = useState("")
+    val theme                          = Theme.violetLight
+    val (source, setSource, _)         = useState(initial)
+    val (pages, setPages, _)           = useState(Vector.empty[Page])
+    val (logText, setLog, _)           = useState("")
+    val (autoRender, setAutoRender, _) = useState(false)
 
-    def run(): Unit =
-      val (ps, log) = typeset(source)
+    // Typeset `text` into pages + log. `run` renders the current editor text on demand (the Run
+    // button); the auto-render effect below renders the latest text whenever it changes.
+    def renderSource(text: String): Unit =
+      val (ps, log) = typeset(text)
       setPages(ps)
       setLog(log)
 
+    def run(): Unit = renderSource(source)
+
     // typeset once on mount so the preview is populated from the start
     useEffect(() => { run(); () => () }, Array())
+
+    // With auto-render on, re-typeset whenever the source changes — and immediately when the
+    // toggle is switched on — so the preview tracks every keystroke; with it off, only Run renders.
+    useEffect(() => { if autoRender then renderSource(source); () => () }, Array(source, autoRender))
 
     // re-blit the current pages; the cleanup (run when the page list changes or the app unmounts)
     // frees the surfaces of the run being replaced, after its widgets have already been removed
@@ -129,8 +138,10 @@ private val App: Component[String] =
                 ),
               ),
             ),
-            row(mainAxisAlignment = MainAxisAlignment.Center)(
+            row(mainAxisAlignment = MainAxisAlignment.Center, crossAxisAlignment = CrossAxisAlignment.Center, spacing = 12)(
               Button("Run", () => run()),
+              Switch(autoRender, setAutoRender),
+              text("Auto-render", color = theme.surfaceText),
             ),
           ),
           ),
