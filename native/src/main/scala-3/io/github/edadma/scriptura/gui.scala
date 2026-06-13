@@ -32,8 +32,10 @@ private val ScreenDpi = 96.0
 
 /** Typeset the editor's source into a list of page surfaces, capturing whatever the engine prints
   * (and any failure's stack trace) as the message log. The returned surfaces belong to the caller.
+  * The boolean is whether typesetting succeeded: on failure the page list is empty and the caller
+  * keeps showing its last good render rather than blanking the preview.
   */
-private[scriptura] def typeset(source: String): (Vector[Page], String) =
+private[scriptura] def typeset(source: String): (Vector[Page], String, Boolean) =
   val scale = { val s = DevicePixelRatio.scaleX; if s <= 0 then 1.0 else s }
   val dpi   = ScreenDpi * scale
   val out   = new ByteArrayOutputStream
@@ -61,12 +63,12 @@ private[scriptura] def typeset(source: String): (Vector[Page], String) =
         .map(s => Page(s, CairoBitmap.wrap(s), new SurfaceHandle, s.getWidth / scale, s.getHeight / scale))
         .toVector
 
-    (pages, out.toString)
+    (pages, out.toString, true)
   catch
     case err: Throwable =>
       val sw = new StringWriter
       err.printStackTrace(new PrintWriter(sw))
-      (Vector.empty, out.toString + sw.toString)
+      (Vector.empty, out.toString + sw.toString, false)
 
 /** The preview editor. The source lives in component state and drives the whole window: pressing
   * Run typesets it into page surfaces, which the right pane blits. An effect keyed on the page
@@ -80,13 +82,19 @@ private val App: Component[String] =
     val (pages, setPages, _)           = useState(Vector.empty[Page])
     val (logText, setLog, _)           = useState("")
     val (autoRender, setAutoRender, _) = useState(false)
+    val (hasError, setError, _)        = useState(false)
 
     // Typeset `text` into pages + log. `run` renders the current editor text on demand (the Run
-    // button); the auto-render effect below renders the latest text whenever it changes.
+    // button); the auto-render effect below renders the latest text whenever it changes. A failed
+    // typeset (common while a command is half-typed) keeps the last good pages on screen and just
+    // raises the error flag — an overlaid badge — rather than blanking the preview, which is jarring.
     def renderSource(text: String): Unit =
-      val (ps, log) = typeset(text)
-      setPages(ps)
+      val (ps, log, ok) = typeset(text)
       setLog(log)
+      if ok then
+        setPages(ps)
+        setError(false)
+      else setError(true)
 
     def run(): Unit = renderSource(source)
 
@@ -107,6 +115,26 @@ private val App: Component[String] =
         pages.map(p =>
           box(border = Color.rgb(0x333333), borderWidth = 1)(
             surface(p.image, p.handle, width = p.w, height = p.h),
+          ),
+        )
+
+    // When the latest typeset failed, a danger badge floats in the preview's top-right corner over
+    // the last good render — a quiet signal that the preview is stale, instead of blanking it.
+    val errorOverlay: Seq[VNode] =
+      if !hasError then Seq.empty
+      else
+        Seq(
+          align(Alignment.topRight)(
+            padding(EdgeInsets.all(12))(
+              box(
+                bg      = theme.danger,
+                radius  = 6,
+                padding = EdgeInsets.symmetric(horizontal = 10, vertical = 6),
+                shadow  = Shadow(color = Color.rgb(0x000000).withAlpha(80), offset = Offset(0, 1), blur = 4),
+              )(
+                text("⚠ Typeset error — see log", color = theme.onPrimary),
+              ),
+            ),
           ),
         )
 
@@ -150,12 +178,14 @@ private val App: Component[String] =
           // when a page is wider than the pane — rather than scaling them to fit. A small inset
           // frames the pages without wasting space, so the document reads close to edge-to-edge.
           box(flex = 1, clip = true, bg = Color.rgb(0x9aa0a6))(
-            scrollArea(both = true)(
-              padding(EdgeInsets.all(8))(
-                col(crossAxisAlignment = CrossAxisAlignment.Start, mainAxisSize = MainAxisSize.Min, spacing = 12)(
-                  previewPages*,
+            stack(Alignment.topLeft)(
+              (scrollArea(both = true)(
+                padding(EdgeInsets.all(8))(
+                  col(crossAxisAlignment = CrossAxisAlignment.Start, mainAxisSize = MainAxisSize.Min, spacing = 12)(
+                    previewPages*,
+                  ),
                 ),
-              ),
+              ) +: errorOverlay)*,
             ),
           ),
         ),
