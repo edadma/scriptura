@@ -8,8 +8,8 @@ import java.nio.file.{Files, Paths}
 def app(args: Config): Unit =
   val input =
     args match
-      case Config(None, _, _, _, _, _, _, _) => scala.io.Source.stdin.mkString
-      case Config(Some(file), _, _, _, _, _, _, _) =>
+      case Config(None, _, _, _, _, _, _, _, _) => scala.io.Source.stdin.mkString
+      case Config(Some(file), _, _, _, _, _, _, _, _) =>
         val path = file.toPath.normalize.toAbsolutePath
 
         if !Files.exists(path) then problem(s"file '$path' not found")
@@ -30,17 +30,17 @@ def app(args: Config): Unit =
 
     val t: Typesetter =
       args match
-        case Config(_, _, "pdf", Some("a4"), _, _, _, _) =>
+        case Config(_, _, "pdf", Some("a4"), _, _, _, _, _) =>
           new CairoPDFTypesetter(output.toString) {
             set("paperwidth", 210 * mm)
             set("paperheight", 297 * mm)
           }
-        case Config(_, _, "pdf", Some("letter"), _, _, _, _) =>
+        case Config(_, _, "pdf", Some("letter"), _, _, _, _, _) =>
           new CairoPDFTypesetter(output.toString) {
             set("paperwidth", 8.5 * in)
             set("paperheight", 11 * in)
           }
-        case Config(_, _, "pdf", None, _, _, _, _) =>
+        case Config(_, _, "pdf", None, _, _, _, _, _) =>
           new CairoPDFTypesetter(output.toString)
 
 //        case Config(_, _, "png", _, resolution, size, _, _) =>

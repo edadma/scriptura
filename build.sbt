@@ -7,6 +7,8 @@ lazy val typesetter = ProjectRef(file("../typesetter"), "typesetterJVM")
 
 lazy val typesetterNative = ProjectRef(file("../typesetter"), "typesetterNative")
 
+lazy val suitNative = ProjectRef(file("../suit"), "suitNative")
+
 lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
   .in(file("."))
   .settings(
@@ -39,8 +41,13 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
       "org.scala-lang.modules" %% "scala-swing" % "3.0.0" % "test",
     ),
   )
-  .nativeConfigure(_.dependsOn(typesetterNative))
+  .nativeConfigure(_.dependsOn(typesetterNative, suitNative))
   .nativeSettings(
+    // suit ships a demo `@main def main` in its native main sources, so its launcher lands on the
+    // classpath alongside this app's CLI entry point; name the CLI explicitly so `run`/`nativeLink`
+    // are unambiguous.
+    Compile / mainClass := Some("io.github.edadma.scriptura.run"),
+    libraryDependencies += "org.scalatest" %%% "scalatest" % "3.2.19" % Test,
   )
 //  .jsSettings(
 //    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(),

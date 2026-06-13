@@ -11,6 +11,7 @@ case class Config(
     size: Double = 14,
     multi: Boolean = false,
     usfx: Boolean = false,
+    gui: Boolean = false,
 )
 
 @main
@@ -69,19 +70,23 @@ def run(args: String*): Unit =
       opt[Unit]('u', "usfx")
         .action((_, c) => c.copy(usfx = true))
         .text("USFX"),
+      opt[Unit]('g', "gui")
+        .action((_, c) => c.copy(gui = true))
+        .text("open the preview GUI (seeded with the input file, if given)"),
       version("version").text("prints the current version"),
     )
   }
 
   def config: PartialFunction[Config, Unit] = {
-    case c @ Config(None, null, _, _, _, _, _, _)       => config(c.copy(output = "out"))
-    case c @ Config(Some(file), null, _, _, _, _, _, _) => config(c.copy(output = file.toString))
-    case c @ Config(_, _, null, _, _, _, false, _)      => config(c.copy(typ = "pdf"))
-    case c @ Config(_, _, null, _, _, _, true, _)       => config(c.copy(typ = "png"))
-    case c                                              => app(c)
+    case c @ Config(None, null, _, _, _, _, _, _, _)       => config(c.copy(output = "out"))
+    case c @ Config(Some(file), null, _, _, _, _, _, _, _) => config(c.copy(output = file.toString))
+    case c @ Config(_, _, null, _, _, _, false, _, _)      => config(c.copy(typ = "pdf"))
+    case c @ Config(_, _, null, _, _, _, true, _, _)       => config(c.copy(typ = "png"))
+    case c                                                 => app(c)
   }
 
   OParser.parse(parser, args, Config()) match {
-    case Some(c) => config(c)
-    case _       =>
+    case Some(c) if c.gui => scripturaGui(c)
+    case Some(c)          => config(c)
+    case _                =>
   }
