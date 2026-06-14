@@ -116,4 +116,15 @@ A wide accent stretches to span several symbols: $\widehat{x + y}$ and
 $\widehat{ABC}$, $\widetilde{abc}$. Accents combine with the rest of math —
 $\hat{x}^2$, $\vec{v} \cdot \vec{w}$, and $\bar{x} = \frac{1}{n} \sum x_i$.
 
+\bold{Stage 5 — big operators with limits}
+
+A large operator carries its bounds at its side inline, $\sum_{i=1}^{n}$ and
+$\int_0^1$, but \italic{limits} stack them over and under and grow the operator:
+the sum $\sum\limits_{i=1}^{n} i = \frac{n(n+1)}{2}$, the product
+$\prod\limits_{k=1}^{n} k = n!$, and a union $\bigcup\limits_{i=1}^{n} A_i$.
+
+Named operators take limits too: the limit $\lim\limits_{x \to 0}
+\frac{\sin x}{x} = 1$ and a supremum $\sup\limits_{n} a_n$. The integral keeps
+its bounds at the side even with $\int\nolimits$, reading $\int_a^b f(x)\, dx$.
+
 \vfill\eject
