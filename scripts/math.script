@@ -140,5 +140,9 @@ $$\int_0^1 \frac{1}{1 + x^2}\, dx = \frac{\pi}{4}.$$
 The quadratic formula, displayed, shows the radical stretching over the whole
 discriminant:
 $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.$$
+A display can carry an equation number, flushed to the right margin with
+\italic{eqno}, while the formula stays centered:
+$$e^{i\pi} + 1 = 0 \eqno{(1)}$$
+$$\int_{-\infty}^{\infty} e^{-x^2}\, dx = \sqrt{\pi} \eqno{(2.7)}$$
 
 \vfill\eject
