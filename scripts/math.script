@@ -84,4 +84,20 @@ $\sqrt{1 + \sqrt{1 + x}}$.
 The quadratic formula draws it all together:
 $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
 
+\bold{Stage 5 — stretchy delimiters}
+
+An ordinary delimiter is fixed in size, but a pair marked with \italic{left}
+and \italic{right} grows to fit what it encloses. Around a tall fraction the
+parentheses stretch to span it, $\left( \frac{a + b}{c + d} \right)$, and so do
+brackets, $\left[ \frac{1}{x} \right]$, braces, $\left\{ \frac{n}{2} \right\}$,
+and angle brackets, $\left\langle \frac{p}{q} \right\rangle$.
+
+The fences scale to whatever they hold — a single symbol keeps them small,
+$\left( x \right)$, while a nested radical pushes them taller,
+$\left( \sqrt{\frac{a}{b}} \right)$. A delimiter may be left off one side with a
+period, as in the absolute value $\left| \frac{x}{y} \right.$ or the cases-like
+$\left\{ \frac{1}{2} \right.$, and floors and ceilings stretch as well:
+$\left\lfloor \frac{x}{2} \right\rfloor$ and $\left\lceil \frac{n}{k}
+\right\rceil$.
+
 \vfill\eject
