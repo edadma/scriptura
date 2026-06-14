@@ -81,6 +81,10 @@ $\sqrt{x^2 + y^2}$. Radicals combine with everything else — they take scripts,
 hold fractions, and nest: $\sqrt{a}^2$, $\sqrt{\frac{a}{b}}$, and
 $\sqrt{1 + \sqrt{1 + x}}$.
 
+A higher root carries a small index in the surd's kink: the cube root
+$\sqrt[3]{x}$, the fourth root $\sqrt[4]{16} = 2$, the $n$th root
+$\sqrt[n]{x}$, and an index that is itself an expression, $\sqrt[n+1]{x + 1}$.
+
 The quadratic formula draws it all together:
 $x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
 
