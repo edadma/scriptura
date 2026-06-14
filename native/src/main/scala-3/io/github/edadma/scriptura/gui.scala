@@ -119,6 +119,9 @@ private val App: Component[Init] =
     def requestDiscard(action: () => Unit): Unit =
       if dirty then { discardAction.current = action; setShowDiscard(true) }
       else action()
+    // Set while a Save As is the "Save" step of the discard guard, so the guarded action runs once
+    // the save completes (and is cleared if that Save As is cancelled).
+    val pendingContinue = useRef(false)
 
     // Typeset `text` into pages + log. `run` renders the current editor text on demand (the Run
     // button); the auto-render effect below renders the latest text whenever it changes. A failed
@@ -151,7 +154,11 @@ private val App: Component[Init] =
 
     def doSaveAs(): Unit =
       val p = pathInput.trim
-      if p.nonEmpty then { writeTo(new File(p)); setShowSaveAs(false) }
+      if p.nonEmpty then
+        writeTo(new File(p))
+        setShowSaveAs(false)
+        // If this save was the "Save" step of a discard guard, continue the guarded action now.
+        if pendingContinue.current then { pendingContinue.current = false; discardAction.current() }
 
     def doOpen(): Unit =
       val p = pathInput.trim
@@ -252,20 +259,20 @@ private val App: Component[Init] =
         ),
       )
 
-    // The unsaved-changes guard, shared by window-close and Open. "Save & Continue" only appears
-    // once there is a file to save into; otherwise the choice is to discard or cancel.
+    // The unsaved-changes guard, shared by window-close and Open. "Save & Continue" opens the Save
+    // dialog (so saving is visible and the location is the user's choice); the guarded action runs
+    // once that save completes.
     val discardModal: VNode =
       Dialog(open = showDiscard, onClose = () => setShowDiscard(false), width = 460)(
         col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 12)(
           text("Unsaved changes", color = theme.surfaceText, weight = FontWeight.SemiBold),
           text("The document has unsaved changes. Continue and discard them?", color = theme.surfaceText, maxLines = 0),
           row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
-            (currentFile
-              .map(f => Button("Save & Continue", () => { writeTo(f); setShowDiscard(false); discardAction.current() }))
-              .toSeq ++ Seq(
+            Seq(
+              Button("Save & Continue", () => { setShowDiscard(false); pendingContinue.current = true; openPathModal(setShowSaveAs) }),
               Button("Discard & Continue", () => { setShowDiscard(false); discardAction.current() }),
               Button("Cancel", () => setShowDiscard(false)),
-            ))*,
+            )*,
           ),
         ),
       )
@@ -316,7 +323,7 @@ private val App: Component[Init] =
               ),
             ),
           ),
-          pathModal("Save As", "Save", () => doSaveAs(), showSaveAs, () => setShowSaveAs(false)),
+          pathModal("Save As", "Save", () => doSaveAs(), showSaveAs, () => { setShowSaveAs(false); pendingContinue.current = false }),
           pathModal("Open file", "Open", () => doOpen(), showOpen, () => setShowOpen(false)),
           discardModal,
         ),
