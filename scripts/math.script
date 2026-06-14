@@ -60,4 +60,28 @@ the polynomial $a_0 + a_1 x + a_2 x^2 + a_3 x^3$, the limit $\lim x_n = L$, a
 power tower against a falling index in $x_1^2 + x_2^2 + \cdots + x_n^2$, and a
 bound integral $\int_a^b$.
 
+\bold{Stage 4 — fractions}
+
+A fraction sets a numerator over a denominator, stacked over a bar centered on
+the math axis and set, inline, at script size: $\frac{1}{2}$,
+$\frac{a + b}{c}$, $\frac{x^2 + 1}{x - 1}$. The parts are themselves math, so
+they take scripts and nest: $\frac{1}{1 + \frac{1}{1 + \frac{1}{x}}}$ and the
+binomial-like $\frac{n!}{k! \, (n - k)!}$.
+
+Fractions sit in running math like any other atom: the derivative
+$\frac{dy}{dx}$, the slope $m = \frac{y_2 - y_1}{x_2 - x_1}$, and a sum of
+fractions $\frac{1}{2} + \frac{1}{3} = \frac{5}{6}$.
+
+\bold{Stage 4 — radicals}
+
+A square root sets a surd glyph, chosen tall enough to span its radicand, with
+a bar drawn across the top. The radicand is set cramped, so
+a superscript inside it sits a touch lower: $\sqrt{2}$, $\sqrt{x + 1}$,
+$\sqrt{x^2 + y^2}$. Radicals combine with everything else — they take scripts,
+hold fractions, and nest: $\sqrt{a}^2$, $\sqrt{\frac{a}{b}}$, and
+$\sqrt{1 + \sqrt{1 + x}}$.
+
+The quadratic formula draws it all together:
+$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$.
+
 \vfill\eject
