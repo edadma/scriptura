@@ -127,4 +127,18 @@ Named operators take limits too: the limit $\lim\limits_{x \to 0}
 \frac{\sin x}{x} = 1$ and a supremum $\sup\limits_{n} a_n$. The integral keeps
 its bounds at the side even with $\int\nolimits$, reading $\int_a^b f(x)\, dx$.
 
+\bold{Stage 6 — display math}
+
+A display is set on its own centered line, larger than the inline form, with the
+big operators stacking their bounds automatically — no \italic{limits} needed.
+Compare the inline geometric series $\sum_{n=0}^{\infty} \frac{1}{2^n} = 2$ with
+its display:
+$$\sum_{n=0}^{\infty} \frac{1}{2^n} = 2.$$
+The fraction opens up and the sum grows. An integral keeps its bounds to the
+side even in display, as it should:
+$$\int_0^1 \frac{1}{1 + x^2}\, dx = \frac{\pi}{4}.$$
+The quadratic formula, displayed, shows the radical stretching over the whole
+discriminant:
+$$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.$$
+
 \vfill\eject
