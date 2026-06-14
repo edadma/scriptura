@@ -1,0 +1,46 @@
+% Math mode demonstration. Grows one section per math-mode stage as it lands.
+%   Stage 2 (done): inline $...$ — atom classes, inter-atom spacing, symbols.
+\def headline {\italic{Math mode demo} \hfil page \the\pageno}
+\def footline {\hfil — \the\pageno — \hfil}
+
+\bold{Math mode — Stage 2: atoms and spacing}
+
+Inline mathematics is written between dollar signs and flows inside a line of
+ordinary text, like $a + b = c$ or the inequality $x \leq y$, set in Latin
+Modern Math through the glyph seam while the surrounding prose keeps to the
+string seam.
+
+\bold{Variables and Greek}
+
+Latin and Greek letters are \italic{variables}, set in mathematical italic:
+$x$, $y$, $z$, $\alpha$, $\beta$, $\gamma$, $\lambda$, $\mu$, $\pi$, $\omega$.
+Capital Greek letters stay upright: $\Gamma$, $\Delta$, $\Theta$, $\Sigma$,
+$\Omega$. A short formula mixes them freely: $\alpha x + \beta y = \gamma$.
+
+\bold{Spacing follows the atom classes}
+
+The space around a symbol depends on what kind of symbol it is. A binary
+operator takes a medium space, $a + b - c$; a relation takes a thick space,
+$a = b \neq c \approx d$; punctuation a thin space, $a, b, c$; and two
+ordinary letters touch with none at all, $xy$ versus $x \cdot y$.
+
+A binary operator that cannot really be binary is quietly reclassified, so a
+sign reads tightly while a true operator gets its space: compare the unary
+$-x$ and $+y$ against the binary $a - x$ and $p + q$, and note the minus in
+$n = -1$ hugs its operand.
+
+\bold{Operators, fences and sets}
+
+Named functions are upright operators: $\sin x$, $\cos\theta$, $\log n$,
+$\exp x$, $\lim$, $\max$, $\min$. Large operators print at their text size:
+$\sum$, $\prod$, $\int$, $\oint$. Fences and sets behave too:
+$(a + b)$, $[x]$, $\langle u \rangle$, $x \in S$, $A \subset B$,
+$p \wedge q \vee r$.
+
+\bold{Explicit spacing}
+
+The author can tune spacing by hand with a thin space $a\,b$, a medium space
+$a\:b$, a thick space $a\;b$, a negative thin space $a\!b$, and the wider
+$a\quad b$ and $a\qquad b$.
+
+\vfill\eject
