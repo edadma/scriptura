@@ -251,7 +251,7 @@ private val App: Component[Init] =
         col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 12)(
           text(title, color = theme.surfaceText, weight = FontWeight.SemiBold),
           text("File path", color = muted),
-          TextField(pathInput, setPathInput),
+          TextField(pathInput, setPathInput, onSubmit = () => action()),
           row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
             Button("Cancel", close),
             Button(actionLabel, action),
