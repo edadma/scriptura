@@ -4,7 +4,7 @@ import io.github.edadma.suit.*
 import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
-import io.github.edadma.typesetter.{CairoImageTypesetter, Hyphenation}
+import io.github.edadma.typesetter.{CairoImageTypesetter, Hyphenation, standardPrelude}
 import io.github.edadma.typesetter.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.{ByteArrayOutputStream, File, FileOutputStream}
@@ -50,6 +50,8 @@ private[scriptura] def typeset(source: String): (Vector[Page], String, Boolean) 
     val proc    = new Processor(handler)
 
     registerTypesettingPrimitives(proc, handler)
+    // Load the standard macro prelude (\TeX, …) on top of the primitives, then the document.
+    proc.process(standardPrelude)
 
     Console.withOut(out) {
       proc.process(source)
@@ -345,7 +347,7 @@ private val SampleSource: String =
     |
     |\vskip 12pt
     |
-    |The typesetter breaks paragraphs into lines and lines into pages, justifying the text and balancing the page just as TeX does.
+    |The typesetter breaks paragraphs into lines and lines into pages, justifying the text and balancing the page just as \TeX does.
     |
     |\vfill
     |""".stripMargin
