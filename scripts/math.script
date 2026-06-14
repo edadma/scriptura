@@ -158,4 +158,19 @@ $$n! \over k! \, (n - k)!$$
 The bar-less \italic{atop} stacks the two without a rule — the binomial
 coefficient $\left( {n \atop k} \right)$ is set this way.
 
+\vskip 12pt
+A matrix is a grid of cells, columns separated by an ampersand and rows by
+\italic{cr}. The cells align into columns and the whole array centers on the
+math axis, with fences sized to span it: the identity $\pmatrix{1 & 0 \cr 0 &
+1}$ and a column vector $\bmatrix{x \cr y \cr z}$ inline, and a larger one
+displayed,
+$$A = \pmatrix{a_{11} & a_{12} & a_{13} \cr a_{21} & a_{22} & a_{23} \cr a_{31}
+& a_{32} & a_{33}}.$$
+The cells are math in their own right, so they hold fractions, scripts and
+roots:
+$$\pmatrix{\frac{1}{2} & \sqrt{2} \cr x^2 & \sum_{i} a_i}.$$
+A \italic{cases} sets a left brace over rows aligned flush left — a sign
+function, say:
+$$f(x) = \cases{+1 & x > 0 \cr 0 & x = 0 \cr -1 & x < 0}.$$
+
 \vfill\eject
