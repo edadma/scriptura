@@ -221,7 +221,7 @@ private val App: Component[Init] =
     // The toolbar at the top of the editor pane: run + live-render on one line, file actions on the
     // next, with the document's saved state and name at the trailing edge.
     val toolbar: VNode =
-      col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 6)(
+      col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 6)(
         row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
           Button("Run", () => run()),
           Switch(autoRender, setAutoRender),
@@ -241,7 +241,7 @@ private val App: Component[Init] =
     // A path-prompt modal, shared in shape by Save As and Open (they differ only in title/action).
     def pathModal(title: String, actionLabel: String, action: () => Unit, open: Boolean, close: () => Unit): VNode =
       Dialog(open = open, onClose = close, width = 540)(
-        col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 12)(
+        col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 12)(
           text(title, color = theme.surfaceText, weight = FontWeight.SemiBold),
           text("File path", color = muted),
           TextField(pathInput, setPathInput),
@@ -256,7 +256,7 @@ private val App: Component[Init] =
     // otherwise the choice is to discard or cancel (Save As is a click away in the toolbar).
     val exitModal: VNode =
       Dialog(open = showExit, onClose = () => setShowExit(false), width = 460)(
-        col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 12)(
+        col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 12)(
           text("Unsaved changes", color = theme.surfaceText, weight = FontWeight.SemiBold),
           text("The document has unsaved changes. Close anyway?", color = theme.surfaceText, maxLines = 0),
           row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
