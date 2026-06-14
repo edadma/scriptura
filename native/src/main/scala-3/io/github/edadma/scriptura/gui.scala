@@ -7,7 +7,7 @@ import io.github.edadma.libcairo.Surface
 import io.github.edadma.typesetter.{CairoImageTypesetter, Hyphenation}
 import io.github.edadma.typesetter.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
-import java.io.{ByteArrayOutputStream, PrintWriter, StringWriter}
+import java.io.ByteArrayOutputStream
 import java.nio.file.Files
 
 /** One typeset page held between renders: the Cairo surface the engine drew (owned here, so the
@@ -69,10 +69,11 @@ private[scriptura] def typeset(source: String): (Vector[Page], String, Boolean) 
 
     (pages, out.toString, true)
   catch
+    // Show just the engine's diagnostic (it already carries the line/column and a caret), not a
+    // Java stack trace — a half-typed command is an ordinary, expected state, not a crash.
     case err: Throwable =>
-      val sw = new StringWriter
-      err.printStackTrace(new PrintWriter(sw))
-      (Vector.empty, out.toString + sw.toString, false)
+      val message = Option(err.getMessage).getOrElse(err.toString)
+      (Vector.empty, out.toString + message, false)
 
 /** The preview editor. The source lives in component state and drives the whole window: pressing
   * Run typesets it into page surfaces, which the right pane blits. An effect keyed on the page
