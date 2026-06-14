@@ -259,9 +259,15 @@ private val App: Component[Init] =
         ),
       )
 
-    // The unsaved-changes guard, shared by window-close and Open. "Save & Continue" opens the Save
-    // dialog (so saving is visible and the location is the user's choice); the guarded action runs
-    // once that save completes.
+    // The unsaved-changes guard, shared by window-close and Open. "Save & Continue" saves straight
+    // to the current file when there is one (no prompt) and continues; for a never-saved document
+    // it opens the Save dialog to name the file first, then continues once that save completes.
+    def saveThenContinue(): Unit =
+      setShowDiscard(false)
+      currentFile match
+        case Some(f) => writeTo(f); discardAction.current()
+        case None    => { pendingContinue.current = true; openPathModal(setShowSaveAs) }
+
     val discardModal: VNode =
       Dialog(open = showDiscard, onClose = () => setShowDiscard(false), width = 460)(
         col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 12)(
@@ -269,7 +275,7 @@ private val App: Component[Init] =
           text("The document has unsaved changes. Continue and discard them?", color = theme.surfaceText, maxLines = 0),
           row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
             Seq(
-              Button("Save & Continue", () => { setShowDiscard(false); pendingContinue.current = true; openPathModal(setShowSaveAs) }),
+              Button("Save & Continue", () => saveThenContinue()),
               Button("Discard & Continue", () => { setShowDiscard(false); discardAction.current() }),
               Button("Cancel", () => setShowDiscard(false)),
             )*,
