@@ -1,5 +1,6 @@
 % Math mode demonstration. Grows one section per math-mode stage as it lands.
 %   Stage 2 (done): inline $...$ — atom classes, inter-atom spacing, symbols.
+%   Stage 3 (done): super/subscripts and the four math styles.
 \def headline {\italic{Math mode demo} \hfil page \the\pageno}
 \def footline {\hfil — \the\pageno — \hfil}
 
@@ -42,5 +43,21 @@ $p \wedge q \vee r$.
 The author can tune spacing by hand with a thin space $a\,b$, a medium space
 $a\:b$, a thick space $a\;b$, a negative thin space $a\!b$, and the wider
 $a\quad b$ and $a\qquad b$.
+
+\bold{Stage 3 — superscripts and subscripts}
+
+A superscript is written with a caret and a subscript with an underscore, each
+set smaller than the symbol it rides on: $x^2$, $a_i$, $x^2 + y^2 = z^2$. A single
+character is taken as the script, so $x^2y$ scripts only the two; a braced group
+scripts the whole thing, as in $e^{x + y}$ and $a_{i j}$.
+
+An atom can carry both at once, kept clear of each other: $x_i^2$, $a_n^k$, and
+the Riemann sum $\sum f(x_i)\,\Delta x_i$. Scripts nest, stepping down to
+scriptscript size: $2^{2^{2^x}}$ and $a_{i_{j}}$.
+
+Subscripts and superscripts read naturally on operators and variables alike:
+the polynomial $a_0 + a_1 x + a_2 x^2 + a_3 x^3$, the limit $\lim x_n = L$, a
+power tower against a falling index in $x_1^2 + x_2^2 + \cdots + x_n^2$, and a
+bound integral $\int_a^b$.
 
 \vfill\eject
