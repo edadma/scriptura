@@ -85,7 +85,7 @@ private val App: Component[String] =
     val (source, setSource, _)         = useState(initial)
     val (pages, setPages, _)           = useState(Vector.empty[Page])
     val (logText, setLog, _)           = useState("")
-    val (autoRender, setAutoRender, _) = useState(false)
+    val (autoRender, setAutoRender, _) = useState(true)
     val (hasError, setError, _)        = useState(false)
 
     // Typeset `text` into pages + log. `run` renders the current editor text on demand (the Run
