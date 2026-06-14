@@ -100,10 +100,10 @@ private val App: Component[Init] =
 
     // Modal state: the Save-As / Open path prompt (sharing one path field) and the unsaved-changes
     // exit confirmation.
-    val (showSaveAs, setShowSaveAs, _) = useState(false)
-    val (showOpen, setShowOpen, _)     = useState(false)
-    val (showExit, setShowExit, _)     = useState(false)
-    val (pathInput, setPathInput, _)   = useState("")
+    val (showSaveAs, setShowSaveAs, _)   = useState(false)
+    val (showOpen, setShowOpen, _)       = useState(false)
+    val (showDiscard, setShowDiscard, _) = useState(false)
+    val (pathInput, setPathInput, _)     = useState("")
 
     // The document is dirty when the editor text differs from what was last saved or loaded.
     val dirty    = source != savedText
@@ -113,7 +113,12 @@ private val App: Component[Init] =
     // flag and the runtime's "proceed" thunk through refs kept current each render.
     val dirtyRef = useRef(dirty)
     dirtyRef.current = dirty
-    val exitProceed = useRef[() => Unit](() => ())
+    // What to run once the user agrees to discard unsaved changes — quit (window close) or load
+    // another file (Open). `requestDiscard` gates an action behind the confirmation when dirty.
+    val discardAction = useRef[() => Unit](() => ())
+    def requestDiscard(action: () => Unit): Unit =
+      if dirty then { discardAction.current = action; setShowDiscard(true) }
+      else action()
 
     // Typeset `text` into pages + log. `run` renders the current editor text on demand (the Run
     // button); the auto-render effect below renders the latest text whenever it changes. A failed
@@ -179,11 +184,17 @@ private val App: Component[Init] =
     useEffect(
       () => {
         WindowControl.onCloseRequest = proceed =>
-          if dirtyRef.current then { exitProceed.current = proceed; setShowExit(true) }
+          if dirtyRef.current then { discardAction.current = proceed; setShowDiscard(true) }
           else proceed()
         () => { WindowControl.onCloseRequest = p => p() }
       },
       Array(),
+    )
+
+    // The title bar shows the document name, with a leading * while there are unsaved edits.
+    useEffect(
+      () => { WindowControl.setTitle(s"${if dirty then "*" else ""}$fileName — Scriptura"); () => () },
+      Array(fileName, dirty),
     )
 
     val previewPages: Seq[VNode] =
@@ -215,27 +226,16 @@ private val App: Component[Init] =
           ),
         )
 
-    val statusText  = if dirty then "● Unsaved" else "✓ Saved"
-    val statusColor = if dirty then theme.danger else theme.success
-
-    // The toolbar at the top of the editor pane: run + live-render on one line, file actions on the
-    // next, with the document's saved state and name at the trailing edge.
+    // The toolbar at the top of the editor pane — run, live-render, and the file actions. The
+    // document's name and saved state live in the window title (a leading * means unsaved).
     val toolbar: VNode =
-      col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 6)(
-        row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
-          Button("Run", () => run()),
-          Switch(autoRender, setAutoRender),
-          text("Auto-render", color = theme.surfaceText),
-          spacer(),
-          text(statusText, color = statusColor),
-        ),
-        row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 8)(
-          Button("Open", () => openPathModal(setShowOpen)),
-          Button("Save", () => doSave()),
-          Button("Save As", () => openPathModal(setShowSaveAs)),
-          spacer(),
-          text(fileName, color = muted),
-        ),
+      row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
+        Button("Run", () => run()),
+        Switch(autoRender, setAutoRender),
+        text("Auto-render", color = theme.surfaceText),
+        Button("Open", () => requestDiscard(() => openPathModal(setShowOpen))),
+        Button("Save", () => doSave()),
+        Button("Save As", () => openPathModal(setShowSaveAs)),
       )
 
     // A path-prompt modal, shared in shape by Save As and Open (they differ only in title/action).
@@ -252,19 +252,19 @@ private val App: Component[Init] =
         ),
       )
 
-    // The unsaved-changes guard. "Save & Close" only appears once there is a file to save into;
-    // otherwise the choice is to discard or cancel (Save As is a click away in the toolbar).
-    val exitModal: VNode =
-      Dialog(open = showExit, onClose = () => setShowExit(false), width = 460)(
+    // The unsaved-changes guard, shared by window-close and Open. "Save & Continue" only appears
+    // once there is a file to save into; otherwise the choice is to discard or cancel.
+    val discardModal: VNode =
+      Dialog(open = showDiscard, onClose = () => setShowDiscard(false), width = 460)(
         col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 12)(
           text("Unsaved changes", color = theme.surfaceText, weight = FontWeight.SemiBold),
-          text("The document has unsaved changes. Close anyway?", color = theme.surfaceText, maxLines = 0),
+          text("The document has unsaved changes. Continue and discard them?", color = theme.surfaceText, maxLines = 0),
           row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
             (currentFile
-              .map(f => Button("Save & Close", () => { writeTo(f); setShowExit(false); exitProceed.current() }))
+              .map(f => Button("Save & Continue", () => { writeTo(f); setShowDiscard(false); discardAction.current() }))
               .toSeq ++ Seq(
-              Button("Discard & Close", () => { setShowExit(false); exitProceed.current() }),
-              Button("Cancel", () => setShowExit(false)),
+              Button("Discard & Continue", () => { setShowDiscard(false); discardAction.current() }),
+              Button("Cancel", () => setShowDiscard(false)),
             ))*,
           ),
         ),
@@ -318,7 +318,7 @@ private val App: Component[Init] =
           ),
           pathModal("Save As", "Save", () => doSaveAs(), showSaveAs, () => setShowSaveAs(false)),
           pathModal("Open file", "Open", () => doOpen(), showOpen, () => setShowOpen(false)),
-          exitModal,
+          discardModal,
         ),
       ),
     )
