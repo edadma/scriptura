@@ -7,7 +7,7 @@ import io.github.edadma.libcairo.Surface
 import io.github.edadma.typesetter.{CairoImageTypesetter, Hyphenation}
 import io.github.edadma.typesetter.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
-import java.io.ByteArrayOutputStream
+import java.io.{ByteArrayOutputStream, File, FileOutputStream}
 import java.nio.file.Files
 
 /** One typeset page held between renders: the Cairo surface the engine drew (owned here, so the
@@ -75,19 +75,45 @@ private[scriptura] def typeset(source: String): (Vector[Page], String, Boolean) 
       val message = Option(err.getMessage).getOrElse(err.toString)
       (Vector.empty, out.toString + message, false)
 
+/** What the editor opens with: the initial text and the file it came from (`None` for the built-in
+  * sample or a brand-new document). */
+private case class Init(text: String, file: Option[File])
+
 /** The preview editor. The source lives in component state and drives the whole window: pressing
   * Run typesets it into page surfaces, which the right pane blits. An effect keyed on the page
   * list re-blits each new page and, on its way out, destroys the surfaces of the run it replaced —
-  * so the engine's pages never outlive the widgets that show them.
+  * so the engine's pages never outlive the widgets that show them. The toolbar runs the typesetter,
+  * toggles live rendering, and loads/saves the document; an unsaved-changes guard confirms before
+  * the window closes.
   */
-private val App: Component[String] =
-  component[String] { initial =>
-    val theme                          = Theme.violetLight
-    val (source, setSource, _)         = useState(initial)
-    val (pages, setPages, _)           = useState(Vector.empty[Page])
-    val (logText, setLog, _)           = useState("")
-    val (autoRender, setAutoRender, _) = useState(true)
-    val (hasError, setError, _)        = useState(false)
+private val App: Component[Init] =
+  component[Init] { init =>
+    val theme                            = Theme.violetLight
+    val muted                            = Color.lerp(theme.surfaceText, theme.surface, 0.4)
+    val (source, setSource, _)           = useState(init.text)
+    val (savedText, setSavedText, _)     = useState(init.text)
+    val (currentFile, setCurrentFile, _) = useState(init.file)
+    val (pages, setPages, _)             = useState(Vector.empty[Page])
+    val (logText, setLog, _)             = useState("")
+    val (autoRender, setAutoRender, _)   = useState(true)
+    val (hasError, setError, _)          = useState(false)
+
+    // Modal state: the Save-As / Open path prompt (sharing one path field) and the unsaved-changes
+    // exit confirmation.
+    val (showSaveAs, setShowSaveAs, _) = useState(false)
+    val (showOpen, setShowOpen, _)     = useState(false)
+    val (showExit, setShowExit, _)     = useState(false)
+    val (pathInput, setPathInput, _)   = useState("")
+
+    // The document is dirty when the editor text differs from what was last saved or loaded.
+    val dirty    = source != savedText
+    val fileName = currentFile.map(_.getName).getOrElse("Untitled")
+
+    // The close handler is installed once but consulted at close time, so it reads the live dirty
+    // flag and the runtime's "proceed" thunk through refs kept current each render.
+    val dirtyRef = useRef(dirty)
+    dirtyRef.current = dirty
+    val exitProceed = useRef[() => Unit](() => ())
 
     // Typeset `text` into pages + log. `run` renders the current editor text on demand (the Run
     // button); the auto-render effect below renders the latest text whenever it changes. A failed
@@ -103,6 +129,40 @@ private val App: Component[String] =
 
     def run(): Unit = renderSource(source)
 
+    // --- file operations -----------------------------------------------------
+
+    def writeTo(file: File): Unit =
+      val fos = new FileOutputStream(file)
+      try fos.write(source.getBytes("UTF-8"))
+      finally fos.close()
+      setSavedText(source)
+      setCurrentFile(Some(file))
+
+    // Save writes straight to the current file; with no file yet it falls back to Save As.
+    def doSave(): Unit =
+      currentFile match
+        case Some(f) => writeTo(f)
+        case None    => { setPathInput(""); setShowSaveAs(true) }
+
+    def doSaveAs(): Unit =
+      val p = pathInput.trim
+      if p.nonEmpty then { writeTo(new File(p)); setShowSaveAs(false) }
+
+    def doOpen(): Unit =
+      val p = pathInput.trim
+      if p.nonEmpty then
+        val f = new File(p)
+        if Files.exists(f.toPath) then
+          val text = new String(Files.readAllBytes(f.toPath), "UTF-8")
+          setSource(text)
+          setSavedText(text)
+          setCurrentFile(Some(f))
+          setShowOpen(false)
+
+    def openPathModal(setShow: Boolean => Unit): Unit =
+      setPathInput(currentFile.map(_.getPath).getOrElse(""))
+      setShow(true)
+
     // typeset once on mount so the preview is populated from the start
     useEffect(() => { run(); () => () }, Array())
 
@@ -113,6 +173,18 @@ private val App: Component[String] =
     // re-blit the current pages; the cleanup (run when the page list changes or the app unmounts)
     // frees the surfaces of the run being replaced, after its widgets have already been removed
     useEffect(() => { pages.foreach(_.handle.repaint()); () => pages.foreach(_.surf.destroy()) }, Array(pages))
+
+    // Guard the window close: with unsaved changes, raise the confirmation modal and stash the
+    // runtime's proceed thunk to run only if the user confirms; otherwise let the close through.
+    useEffect(
+      () => {
+        WindowControl.onCloseRequest = proceed =>
+          if dirtyRef.current then { exitProceed.current = proceed; setShowExit(true) }
+          else proceed()
+        () => { WindowControl.onCloseRequest = p => p() }
+      },
+      Array(),
+    )
 
     val previewPages: Seq[VNode] =
       if pages.isEmpty then Seq(text("No pages — press Run.", color = Color.rgb(0x222222)))
@@ -143,56 +215,110 @@ private val App: Component[String] =
           ),
         )
 
+    val statusText  = if dirty then "● Unsaved" else "✓ Saved"
+    val statusColor = if dirty then theme.danger else theme.success
+
+    // The toolbar at the top of the editor pane: run + live-render on one line, file actions on the
+    // next, with the document's saved state and name at the trailing edge.
+    val toolbar: VNode =
+      col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 6)(
+        row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
+          Button("Run", () => run()),
+          Switch(autoRender, setAutoRender),
+          text("Auto-render", color = theme.surfaceText),
+          spacer(),
+          text(statusText, color = statusColor),
+        ),
+        row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 8)(
+          Button("Open", () => openPathModal(setShowOpen)),
+          Button("Save", () => doSave()),
+          Button("Save As", () => openPathModal(setShowSaveAs)),
+          spacer(),
+          text(fileName, color = muted),
+        ),
+      )
+
+    // A path-prompt modal, shared in shape by Save As and Open (they differ only in title/action).
+    def pathModal(title: String, actionLabel: String, action: () => Unit, open: Boolean, close: () => Unit): VNode =
+      Dialog(open = open, onClose = close, width = 540)(
+        col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 12)(
+          text(title, color = theme.surfaceText, weight = FontWeight.SemiBold),
+          text("File path", color = muted),
+          TextField(pathInput, setPathInput),
+          row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
+            Button("Cancel", close),
+            Button(actionLabel, action),
+          ),
+        ),
+      )
+
+    // The unsaved-changes guard. "Save & Close" only appears once there is a file to save into;
+    // otherwise the choice is to discard or cancel (Save As is a click away in the toolbar).
+    val exitModal: VNode =
+      Dialog(open = showExit, onClose = () => setShowExit(false), width = 460)(
+        col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 12)(
+          text("Unsaved changes", color = theme.surfaceText, weight = FontWeight.SemiBold),
+          text("The document has unsaved changes. Close anyway?", color = theme.surfaceText, maxLines = 0),
+          row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
+            (currentFile
+              .map(f => Button("Save & Close", () => { writeTo(f); setShowExit(false); exitProceed.current() }))
+              .toSeq ++ Seq(
+              Button("Discard & Close", () => { setShowExit(false); exitProceed.current() }),
+              Button("Cancel", () => setShowExit(false)),
+            ))*,
+          ),
+        ),
+      )
+
     ThemeProvider(theme)(
       box(bg = theme.background, padding = EdgeInsets.all(8))(
-        splitter(axis = Axis.Horizontal, initial = 0.4)(
-          // editor pane: a scrolling source editor, a message log, and the Run button. A right
-          // inset keeps the editors off the splitter gutter so they read as their own panel.
-          padding(EdgeInsets(top = 0, right = 8, bottom = 0, left = 0))(
-          col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 8)(
-            box(flex = 1, clip = true)(
-              scrollArea(Axis.Vertical)(
-                col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min)(
-                  TextArea(source, setSource),
-                ),
-              ),
-            ),
-            sizedBox(height = 140)(
-              box(
-                bg          = theme.surface,
-                border      = theme.border,
-                borderWidth = 1,
-                radius      = theme.radius,
-                clip        = true,
-                padding     = EdgeInsets.all(8),
-              )(
-                scrollArea(Axis.Vertical)(
-                  text(if logText.isEmpty then "(no messages)" else logText, color = theme.surfaceText, maxLines = 0),
-                ),
-              ),
-            ),
-            row(mainAxisAlignment = MainAxisAlignment.Center, crossAxisAlignment = CrossAxisAlignment.Center, spacing = 12)(
-              Button("Run", () => run()),
-              Switch(autoRender, setAutoRender),
-              text("Auto-render", color = theme.surfaceText),
-            ),
-          ),
-          ),
-          // preview pane: the typeset pages on a neutral backdrop. The pages keep their true pixel
-          // size, so the viewport scrolls both ways — vertically through the pages, horizontally
-          // when a page is wider than the pane — rather than scaling them to fit. A small inset
-          // frames the pages without wasting space, so the document reads close to edge-to-edge.
-          box(flex = 1, clip = true, bg = Color.rgb(0x9aa0a6))(
-            stack(Alignment.topLeft)(
-              (scrollArea(both = true)(
-                padding(EdgeInsets.all(8))(
-                  col(crossAxisAlignment = CrossAxisAlignment.Start, mainAxisSize = MainAxisSize.Min, spacing = 12)(
-                    previewPages*,
+        // The splitter fills the window; the modals sit alongside it in the stack, taking no space
+        // until opened (a closed Dialog renders nothing), then portal over the whole window.
+        stack(Alignment.topLeft)(
+          splitter(axis = Axis.Horizontal, initial = 0.4)(
+            padding(EdgeInsets(top = 0, right = 8, bottom = 0, left = 0))(
+              col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 8)(
+                toolbar,
+                box(flex = 1, clip = true)(
+                  scrollArea(Axis.Vertical)(
+                    col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min)(
+                      TextArea(source, setSource),
+                    ),
                   ),
                 ),
-              ) +: errorOverlay)*,
+                sizedBox(height = 140)(
+                  box(
+                    bg          = theme.surface,
+                    border      = theme.border,
+                    borderWidth = 1,
+                    radius      = theme.radius,
+                    clip        = true,
+                    padding     = EdgeInsets.all(8),
+                  )(
+                    scrollArea(Axis.Vertical)(
+                      text(if logText.isEmpty then "(no messages)" else logText, color = theme.surfaceText, maxLines = 0),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // preview pane: the typeset pages on a neutral backdrop, scrolling both ways so a page
+            // keeps its true size; a danger badge floats over the last good render on an error.
+            box(flex = 1, clip = true, bg = Color.rgb(0x9aa0a6))(
+              stack(Alignment.topLeft)(
+                (scrollArea(both = true)(
+                  padding(EdgeInsets.all(8))(
+                    col(crossAxisAlignment = CrossAxisAlignment.Start, mainAxisSize = MainAxisSize.Min, spacing = 12)(
+                      previewPages*,
+                    ),
+                  ),
+                ) +: errorOverlay)*,
+              ),
             ),
           ),
+          pathModal("Save As", "Save", () => doSaveAs(), showSaveAs, () => setShowSaveAs(false)),
+          pathModal("Open file", "Open", () => doOpen(), showOpen, () => setShowOpen(false)),
+          exitModal,
         ),
       ),
     )
@@ -215,9 +341,10 @@ private val SampleSource: String =
   * given on the command line, or the sample document otherwise.
   */
 def scripturaGui(c: Config): Unit =
-  val initial =
+  val init =
     c.input match
-      case Some(file) if Files.exists(file.toPath) => new String(Files.readAllBytes(file.toPath))
-      case _                                       => SampleSource
+      case Some(file) if Files.exists(file.toPath) =>
+        Init(new String(Files.readAllBytes(file.toPath), "UTF-8"), Some(file))
+      case _ => Init(SampleSource, None)
 
-  Suit.run("Scriptura", 1600, 1000)(App(initial))
+  Suit.run("Scriptura", 1600, 1000)(App(init))
