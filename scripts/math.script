@@ -148,4 +148,14 @@ A display can carry an equation number, flushed to the right margin with
 $$e^{i\pi} + 1 = 0 \eqno{(1)}$$
 $$\int_{-\infty}^{\infty} e^{-x^2}\, dx = \sqrt{\pi} \eqno{(2.7)}$$
 
+\vskip 12pt
+The infix \italic{over} is the older way to write a fraction: everything in the
+group before it is the numerator, everything after the denominator. Inline it
+sets the parts at script size, $x + {a + b \over c + d}$, and braces keep it from
+sweeping in its neighbours, ${1 \over 2} + {3 \over 4}$. In a display it opens up
+to full size, exactly as a $\frac$ does:
+$$n! \over k! \, (n - k)!$$
+The bar-less \italic{atop} stacks the two without a rule — the binomial
+coefficient $\left( {n \atop k} \right)$ is set this way.
+
 \vfill\eject
