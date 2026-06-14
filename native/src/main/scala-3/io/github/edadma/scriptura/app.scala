@@ -1,7 +1,7 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.typesetter.{CairoPDFTypesetter, Typesetter}
-import io.github.edadma.typesetter.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
+import io.github.edadma.texish.{CairoPDFTypesetter, Typesetter}
+import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.nio.file.{Files, Paths}
 

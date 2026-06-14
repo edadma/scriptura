@@ -4,8 +4,8 @@ import io.github.edadma.suit.*
 import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
-import io.github.edadma.typesetter.{CairoImageTypesetter, Hyphenation, standardPrelude}
-import io.github.edadma.typesetter.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
+import io.github.edadma.texish.{CairoImageTypesetter, Hyphenation, standardPrelude}
+import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.{ByteArrayOutputStream, File, FileOutputStream}
 import java.nio.file.Files

@@ -1,7 +1,7 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.typesetter.Graphics2DTypesetter
-import io.github.edadma.typesetter.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
+import io.github.edadma.texish.Graphics2DTypesetter
+import io.github.edadma.texish.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.File
 import javax.imageio.ImageIO

@@ -3,9 +3,9 @@ ThisBuild / versionScheme      := Some("semver-spec")
 ThisBuild / evictionErrorLevel := Level.Warn
 ThisBuild / scalaVersion       := "3.8.4"
 
-lazy val typesetter = ProjectRef(file("../typesetter"), "typesetterJVM")
+lazy val texish = ProjectRef(file("../texish"), "texishJVM")
 
-lazy val typesetterNative = ProjectRef(file("../typesetter"), "typesetterNative")
+lazy val texishNative = ProjectRef(file("../texish"), "texishNative")
 
 lazy val suitNative = ProjectRef(file("../suit"), "suitNative")
 
@@ -34,14 +34,14 @@ lazy val scriptura = crossProject( /*JSPlatform,*/ JVMPlatform, NativePlatform)
     ),
     resolvers += "Sonatype OSS Releases" at "https://s01.oss.sonatype.org/content/repositories/releases",
   )
-  .jvmConfigure(_.dependsOn(typesetter))
+  .jvmConfigure(_.dependsOn(texish))
   .jvmSettings(
     libraryDependencies += "org.scala-js" %% "scalajs-stubs" % "1.1.0" % "provided",
     libraryDependencies ++= Seq(
       "org.scala-lang.modules" %% "scala-swing" % "3.0.0" % "test",
     ),
   )
-  .nativeConfigure(_.dependsOn(typesetterNative, suitNative))
+  .nativeConfigure(_.dependsOn(texishNative, suitNative))
   .nativeSettings(
     // suit ships a demo `@main def main` in its native main sources, so its launcher lands on the
     // classpath alongside this app's CLI entry point; name the CLI explicitly so `run`/`nativeLink`
