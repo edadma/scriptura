@@ -4,6 +4,8 @@
 \def headline {\italic{Math mode demo} \hfil page \the\pageno}
 \def footline {\hfil — \the\pageno — \hfil}
 
+\font lmroman 12 regular
+
 \bold{Math mode — Stage 2: atoms and spacing}
 
 This document is typeset by \TeXish, whose math mode follows \TeX{} closely.
