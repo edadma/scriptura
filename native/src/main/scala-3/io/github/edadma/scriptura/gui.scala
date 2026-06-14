@@ -5,7 +5,7 @@ import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
 import io.github.edadma.typesetter.{CairoImageTypesetter, Hyphenation}
-import io.github.edadma.typesetter.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
+import io.github.edadma.typesetter.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.ByteArrayOutputStream
 import java.nio.file.Files
