@@ -104,4 +104,16 @@ $\left\{ \frac{1}{2} \right.$, and floors and ceilings stretch as well:
 $\left\lfloor \frac{x}{2} \right\rfloor$ and $\left\lceil \frac{n}{k}
 \right\rceil$.
 
+\bold{Stage 5 — accents}
+
+An accent rides above the symbol it marks, centered on it and resting just above:
+a hat $\hat{x}$, a bar $\bar{y}$, a vector $\vec{v}$, a tilde $\tilde{a}$, a dot
+$\dot{x}$ and double dot $\ddot{x}$, an acute $\acute{e}$ and grave $\grave{e}$,
+a check $\check{s}$ and a breve $\breve{u}$. Over a taller letter the accent
+lifts to clear it: $\hat{b}$, $\vec{d}$, $\bar{l}$.
+
+A wide accent stretches to span several symbols: $\widehat{x + y}$ and
+$\widehat{ABC}$, $\widetilde{abc}$. Accents combine with the rest of math —
+$\hat{x}^2$, $\vec{v} \cdot \vec{w}$, and $\bar{x} = \frac{1}{n} \sum x_i$.
+
 \vfill\eject
