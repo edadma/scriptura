@@ -1,6 +1,6 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.texish.Graphics2DTypesetter
+import io.github.edadma.texish.{Graphics2DTypesetter, standardPrelude}
 import io.github.edadma.texish.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.File
@@ -22,6 +22,7 @@ import scala.io.Source
   val proc = new Processor(handler)
   registerTypesettingPrimitives(proc, handler)
 
+  proc.process(standardPrelude) // standard macro definitions (\TeX, \TeXish, …) before the document
   proc.process(scriptContent)
   t.end()
 

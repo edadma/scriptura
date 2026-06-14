@@ -6,6 +6,7 @@
 
 \bold{Math mode — Stage 2: atoms and spacing}
 
+This document is typeset by \TeXish, whose math mode follows \TeX{} closely.
 Inline mathematics is written between dollar signs and flows inside a line of
 ordinary text, like $a + b = c$ or the inequality $x \leq y$, set in Latin
 Modern Math through the glyph seam while the surrounding prose keeps to the
