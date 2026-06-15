@@ -4,7 +4,7 @@ import io.github.edadma.suit.*
 import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
-import io.github.edadma.texish.{CairoImageTypesetter, Hyphenation, standardPrelude}
+import io.github.edadma.texish.{CairoImageTypesetter, Hyphenation, standardPrelude, Color as TexColor}
 import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.{ByteArrayOutputStream, File, FileOutputStream}
@@ -34,8 +34,16 @@ private val ScreenDpi = 96.0
   * (and any failure's stack trace) as the message log. The returned surfaces belong to the caller.
   * The boolean is whether typesetting succeeded: on failure the page list is empty and the caller
   * keeps showing its last good render rather than blanking the preview.
+  *
+  * `pageColor` paints the page and `ink` is the default pen, so a dark-scheme preview passes a dark
+  * page with light ink; any author-specified `\color` survives unchanged. The defaults are the
+  * white paper and black ink that print output expects.
   */
-private[scriptura] def typeset(source: String): (Vector[Page], String, Boolean) =
+private[scriptura] def typeset(
+    source:    String,
+    pageColor: TexColor = TexColor("white"),
+    ink:       TexColor = TexColor("black"),
+): (Vector[Page], String, Boolean) =
   val scale = { val s = DevicePixelRatio.scaleX; if s <= 0 then 1.0 else s }
   val dpi   = ScreenDpi * scale
   val out   = new ByteArrayOutputStream
@@ -46,6 +54,8 @@ private[scriptura] def typeset(source: String): (Vector[Page], String, Boolean) 
 
   try
     val t       = new CairoImageTypesetter(dpi)
+    t.backgroundColor = pageColor
+    t.currentColor    = ink
     val handler = new TypesetterHandler(t)
     val proc    = new Processor(handler)
 
@@ -90,8 +100,17 @@ private case class Init(text: String, file: Option[File])
   */
 private val App: Component[Init] =
   component[Init] { init =>
-    val theme                            = Theme.violetLight
+    // The active theme lives in state so the Theme menu can switch it; the window opens dark.
+    val (theme, setTheme, _)             = useState[Theme](Theme.dark)
     val muted                            = Color.lerp(theme.surfaceText, theme.surface, 0.4)
+
+    // The preview follows the theme. A dark theme renders the page itself dark with light ink (the
+    // engine paints `docPage` and uses `docInk` as the default pen, so author-set colours survive),
+    // and floats it on a dark backdrop; a light theme keeps black-on-white paper on a neutral grey.
+    val docPage    = if theme.isDark then TexColor("#24282c") else TexColor("white")
+    val docInk     = if theme.isDark then TexColor("#e9ecef") else TexColor("black")
+    val backdrop   = if theme.isDark then theme.background else Color.rgb(0x9aa0a6)
+    val pageBorder = if theme.isDark then theme.border else Color.rgb(0x333333)
     val (source, setSource, _)           = useState(init.text)
     val (savedText, setSavedText, _)     = useState(init.text)
     val (currentFile, setCurrentFile, _) = useState(init.file)
@@ -130,7 +149,7 @@ private val App: Component[Init] =
     // typeset (common while a command is half-typed) keeps the last good pages on screen and just
     // raises the error flag — an overlaid badge — rather than blanking the preview, which is jarring.
     def renderSource(text: String): Unit =
-      val (ps, log, ok) = typeset(text)
+      val (ps, log, ok) = typeset(text, docPage, docInk)
       setLog(log)
       if ok then
         setPages(ps)
@@ -184,6 +203,14 @@ private val App: Component[Init] =
     // toggle is switched on — so the preview tracks every keystroke; with it off, only Run renders.
     useEffect(() => { if autoRender then renderSource(source); () => () }, Array(source, autoRender))
 
+    // When the theme flips between light and dark, re-typeset so the page colours follow it at once
+    // — regardless of auto-render. The first mount is skipped; the initial render already ran.
+    val themedOnce = useRef(false)
+    useEffect(
+      () => { if themedOnce.current then renderSource(source) else themedOnce.current = true; () => () },
+      Array(theme.isDark),
+    )
+
     // re-blit the current pages; the cleanup (run when the page list changes or the app unmounts)
     // frees the surfaces of the run being replaced, after its widgets have already been removed
     useEffect(() => { pages.foreach(_.handle.repaint()); () => pages.foreach(_.surf.destroy()) }, Array(pages))
@@ -207,10 +234,10 @@ private val App: Component[Init] =
     )
 
     val previewPages: Seq[VNode] =
-      if pages.isEmpty then Seq(text("No pages — press Run.", color = Color.rgb(0x222222)))
+      if pages.isEmpty then Seq(text("No pages — press Run.", color = theme.surfaceText))
       else
         pages.map(p =>
-          box(border = Color.rgb(0x333333), borderWidth = 1)(
+          box(border = pageBorder, borderWidth = 1)(
             surface(p.image, p.handle, width = p.w, height = p.h),
           ),
         )
@@ -235,20 +262,31 @@ private val App: Component[Init] =
           ),
         )
 
-    // The toolbar at the top of the editor pane — a File menu for the document actions, then Run
-    // and the live-render toggle beside it. The document's name and saved state live in the window
-    // title (a leading * means unsaved).
-    val toolbar: VNode =
-      row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
-        menuBar(
-          menu("File")(close =>
-            Seq(
-              MenuItem("Open…", () => { requestDiscard(() => openPathModal(setShowOpen)); close() }),
-              MenuItem("Save", () => { doSave(); close() }),
-              MenuItem("Save As…", () => { openPathModal(setShowSaveAs); close() }),
-            ),
+    // The menu bar across the top of the editor pane — the File actions and the Theme switcher.
+    // The document's name and saved state live in the window title (a leading * means unsaved).
+    val menuBarNode: VNode =
+      menuBar(
+        menu("File")(close =>
+          Seq(
+            MenuItem("Open…", () => { requestDiscard(() => openPathModal(setShowOpen)); close() }),
+            MenuItem("Save", () => { doSave(); close() }),
+            MenuItem("Save As…", () => { openPathModal(setShowSaveAs); close() }),
           ),
         ),
+        menu("Theme")(close =>
+          Seq(
+            MenuItem("Dark", () => { setTheme(Theme.dark); close() }),
+            MenuItem("Light", () => { setTheme(Theme.light); close() }),
+            MenuItem("Violet Dark", () => { setTheme(Theme.violetDark); close() }),
+            MenuItem("Violet Light", () => { setTheme(Theme.violetLight); close() }),
+          ),
+        ),
+      )
+
+    // The toolbar sits just below the menu bar: Run typesets on demand, the toggle drives live
+    // rendering.
+    val controls: VNode =
+      row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
         Button("Run", () => run()),
         Switch(autoRender, setAutoRender),
         text("Auto-render", color = theme.surfaceText),
@@ -300,7 +338,12 @@ private val App: Component[Init] =
           splitter(axis = Axis.Horizontal, initial = 0.4)(
             padding(EdgeInsets(top = 0, right = 8, bottom = 0, left = 0))(
               col(crossAxisAlignment = CrossAxisAlignment.Stretch, spacing = 8)(
-                toolbar,
+                // The menu bar and the toolbar form one tight header block, set close together and
+                // held apart from the editor by the column's usual gap.
+                col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 2)(
+                  menuBarNode,
+                  controls,
+                ),
                 box(flex = 1, clip = true)(
                   scrollArea(Axis.Vertical)(
                     col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min)(
@@ -326,7 +369,7 @@ private val App: Component[Init] =
             ),
             // preview pane: the typeset pages on a neutral backdrop, scrolling both ways so a page
             // keeps its true size; a danger badge floats over the last good render on an error.
-            box(flex = 1, clip = true, bg = Color.rgb(0x9aa0a6))(
+            box(flex = 1, clip = true, bg = backdrop)(
               stack(Alignment.topLeft)(
                 (scrollArea(both = true)(
                   padding(EdgeInsets.all(8))(
