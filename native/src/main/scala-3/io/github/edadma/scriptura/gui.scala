@@ -4,11 +4,13 @@ import io.github.edadma.suit.*
 import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
-import io.github.edadma.texish.{CairoImageTypesetter, Hyphenation, standardPrelude, Color as TexColor}
+import io.github.edadma.texish.{CairoImageTypesetter, CairoPDFTypesetter, Hyphenation, standardPrelude, Color as TexColor}
 import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.{ByteArrayOutputStream, File, FileOutputStream}
-import java.nio.file.Files
+import java.nio.file.{Files, Paths}
+
+import scala.scalanative.unsafe.*
 
 /** One typeset page held between renders: the Cairo surface the engine drew (owned here, so the
   * effect that installs the page is also responsible for freeing it), the same surface presented
@@ -87,6 +89,54 @@ private[scriptura] def typeset(
       val message = Option(err.getMessage).getOrElse(err.toString)
       (Vector.empty, out.toString + message, false)
 
+/** Typeset the source to a print-quality PDF at `path`: a white page with black ink — the colours
+  * print output expects, independent of the screen theme. Returns the engine's captured output and
+  * whether it succeeded, so the caller can surface warnings or a failure in the log.
+  */
+private[scriptura] def typesetPdf(source: String, path: String): (String, Boolean) =
+  Hyphenation.enableEnglish()
+  val out = new ByteArrayOutputStream
+
+  try
+    val t       = new CairoPDFTypesetter(path)
+    val handler = new TypesetterHandler(t)
+    val proc    = new Processor(handler)
+
+    registerTypesettingPrimitives(proc, handler)
+
+    Console.withOut(out) {
+      proc.process(standardPrelude)
+      proc.process(source)
+      t.end()
+    }
+    t.destroy()
+    (out.toString, true)
+  catch
+    case err: Throwable =>
+      (out.toString + Option(err.getMessage).getOrElse(err.toString), false)
+
+/** A C `system` binding, used to launch the platform's file opener. */
+@extern
+private object Libc:
+  def system(command: CString): CInt = extern
+
+/** The CUPS print destinations (`lpstat -e`), one per line, or empty if none are configured or the
+  * query fails. Output is captured through a temp file since the launcher cannot pipe it back.
+  */
+private def listPrinters(): List[String] =
+  val tmp = Paths.get(System.getProperty("java.io.tmpdir"), "scriptura-printers.txt").toString
+  Zone(Libc.system(toCString(s"lpstat -e > '$tmp' 2>/dev/null")))
+  try
+    val src = scala.io.Source.fromFile(tmp)
+    try src.getLines().map(_.trim).filter(_.nonEmpty).toList
+    finally src.close()
+  catch case _: Throwable => Nil
+
+/** Send a file to a named CUPS destination via `lp`; returns the launcher exit status (0 on success).
+  * A named queue prints over the network the same as a local one — CUPS hides the difference. */
+private def lpPrint(path: String, printer: String): Int =
+  Zone(Libc.system(toCString(s"lp -d '$printer' '$path'")))
+
 /** What the editor opens with: the initial text and the file it came from (`None` for the built-in
   * sample or a brand-new document). */
 private case class Init(text: String, file: Option[File])
@@ -125,6 +175,14 @@ private val App: Component[Init] =
     val (showOpen, setShowOpen, _)       = useState(false)
     val (showDiscard, setShowDiscard, _) = useState(false)
     val (pathInput, setPathInput, _)     = useState("")
+
+    // Print: the chosen CUPS destination (remembered after the first pick, so Print is one click
+    // thereafter), the printer-picker modal and the destinations it lists, and the rendered PDF the
+    // pick will send.
+    val (printer, setPrinter, _)         = useState(Option.empty[String])
+    val (showPrint, setShowPrint, _)     = useState(false)
+    val (printers, setPrinters, _)       = useState(List.empty[String])
+    val printPdfRef                      = useRef("")
 
     // The document is dirty when the editor text differs from what was last saved or loaded.
     val dirty    = source != savedText
@@ -195,6 +253,40 @@ private val App: Component[Init] =
     def openPathModal(setShow: Boolean => Unit): Unit =
       setPathInput(currentFile.map(_.getPath).getOrElse(""))
       setShow(true)
+
+    // Print: typeset a print-quality PDF (white page, black ink, independent of the screen theme)
+    // into a temp file named after the document, ready for a destination to be chosen. Returns
+    // whether it succeeded; a failure (or engine warnings) goes to the log.
+    def renderPdfForPrint(): Boolean =
+      val base = currentFile.map(_.getName.replaceFirst("\\.[^.]*$", "")).getOrElse("document")
+      val pdf  = Paths.get(System.getProperty("java.io.tmpdir"), s"$base.pdf").toString
+      val (elog, ok) = typesetPdf(source, pdf)
+      if !ok then { setLog(s"Print failed:\n$elog"); false }
+      else { printPdfRef.current = pdf; if elog.nonEmpty then setLog(elog); true }
+
+    // Send the rendered PDF to a destination, remembering it as the printer for next time.
+    def sendTo(p: String): Unit =
+      val rc   = lpPrint(printPdfRef.current, p)
+      val name = p.replace('_', ' ')
+      setPrinter(Some(p))
+      setLog(if rc == 0 then s"Sent to $name." else s"Could not print to $name (lp status $rc).")
+
+    def openPrinterPicker(): Unit =
+      val ps = listPrinters()
+      if ps.isEmpty then setLog("No printers found. Add one in System Settings ▸ Printers & Scanners.")
+      else { setPrinters(ps); setShowPrint(true) }
+
+    // The Print button: render, then send straight to the remembered printer, or raise the picker
+    // the first time (or whenever none is remembered).
+    def doPrint(): Unit =
+      if renderPdfForPrint() then
+        printer match
+          case Some(p) => sendTo(p)
+          case None    => openPrinterPicker()
+
+    // File ▸ Print to… always raises the picker, so the destination can be changed.
+    def doChoosePrinter(): Unit =
+      if renderPdfForPrint() then openPrinterPicker()
 
     // typeset once on mount so the preview is populated from the start
     useEffect(() => { run(); () => () }, Array())
@@ -271,6 +363,7 @@ private val App: Component[Init] =
             MenuItem("Open…", () => { requestDiscard(() => openPathModal(setShowOpen)); close() }),
             MenuItem("Save", () => { doSave(); close() }),
             MenuItem("Save As…", () => { openPathModal(setShowSaveAs); close() }),
+            MenuItem("Print to…", () => { doChoosePrinter(); close() }),
           ),
         ),
         menu("Theme")(close =>
@@ -288,6 +381,7 @@ private val App: Component[Init] =
     val controls: VNode =
       row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
         Button("Run", () => run()),
+        Button("Print", () => doPrint()),
         Switch(autoRender, setAutoRender),
         text("Auto-render", color = theme.surfaceText),
       )
@@ -327,6 +421,19 @@ private val App: Component[Init] =
               Button("Cancel", () => setShowDiscard(false)),
             )*,
           ),
+        ),
+      )
+
+    // The printer picker: one button per CUPS destination, choosing one prints to it (and remembers
+    // it as the printer). The PDF is already rendered; the buttons only dispatch it.
+    val printModal: VNode =
+      Dialog(open = showPrint, onClose = () => setShowPrint(false), width = 460)(
+        col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 10)(
+          (Seq[VNode](text("Choose a printer", color = theme.surfaceText, weight = FontWeight.SemiBold))
+            ++ printers.map(p => Button(p.replace('_', ' '), () => { setShowPrint(false); sendTo(p) }))
+            ++ Seq[VNode](
+              row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(Button("Cancel", () => setShowPrint(false))),
+            ))*,
         ),
       )
 
@@ -384,6 +491,7 @@ private val App: Component[Init] =
           pathModal("Save As", "Save", () => doSaveAs(), showSaveAs, () => { setShowSaveAs(false); pendingContinue.current = false }),
           pathModal("Open file", "Open", () => doOpen(), showOpen, () => setShowOpen(false)),
           discardModal,
+          printModal,
         ),
       ),
     )
