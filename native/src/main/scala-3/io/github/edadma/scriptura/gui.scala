@@ -235,16 +235,23 @@ private val App: Component[Init] =
           ),
         )
 
-    // The toolbar at the top of the editor pane — run, live-render, and the file actions. The
-    // document's name and saved state live in the window title (a leading * means unsaved).
+    // The toolbar at the top of the editor pane — a File menu for the document actions, then Run
+    // and the live-render toggle beside it. The document's name and saved state live in the window
+    // title (a leading * means unsaved).
     val toolbar: VNode =
       row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
+        menuBar(
+          menu("File")(close =>
+            Seq(
+              MenuItem("Open…", () => { requestDiscard(() => openPathModal(setShowOpen)); close() }),
+              MenuItem("Save", () => { doSave(); close() }),
+              MenuItem("Save As…", () => { openPathModal(setShowSaveAs); close() }),
+            ),
+          ),
+        ),
         Button("Run", () => run()),
         Switch(autoRender, setAutoRender),
         text("Auto-render", color = theme.surfaceText),
-        Button("Open", () => requestDiscard(() => openPathModal(setShowOpen))),
-        Button("Save", () => doSave()),
-        Button("Save As", () => openPathModal(setShowSaveAs)),
       )
 
     // A path-prompt modal, shared in shape by Save As and Open (they differ only in title/action).
