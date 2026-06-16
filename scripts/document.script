@@ -115,14 +115,14 @@
 } {}
 \newcounter{enumi}
 
-// \item starts one list item. The marker hangs in a zero-width box at the line
-// start, then \hskip moves in by one indent step so the text begins exactly at the
-// hanging-indent position; hangindent (reverted by the engine after the paragraph)
+// \item starts one list item: a fixed-width marker box one indent step wide, with
+// the marker at its left and the rest filled, so the text begins exactly at the
+// hanging-indent position. hangindent (reverted by the engine after the paragraph)
 // pulls the continuation lines to that same position, so every line of the item
-// aligns. The closing \ignorespaces drops the space before the item's text so it
-// does not open the line a space too far to the right.
+// aligns under the text. The closing \ignorespaces drops the space before the
+// item's text so the first line does not open a space too far to the right.
 \def item {
   \set hangindent {\calc{listindent}}
   \set hangafter {1}
-  \noindent\rlap{\itemmark}\hskip \listindent\ignorespaces
+  \noindent\hbox to:\listindent {\itemmark\hfil}\ignorespaces
 }
