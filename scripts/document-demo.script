@@ -75,6 +75,6 @@ Usually the format you are using will have the page margins and paper size set
 correctly for that use-case. In these cases, it is best not to alter the margins
 directly. This format follows the proportions of a 10-point \LaTeX article: a
 serif body on a tight type scale, with roman titles and \textbf{bold} headings.
-The same engine that sets \TeX and \LaTeX logos sets this document.
+The same engine that sets the \TeX, \LaTeX and \TeXish logos sets this document.
 
 \vfill\eject

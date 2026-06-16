@@ -61,7 +61,7 @@
 // a little smaller, suited to the 10pt body. \TeXish is this engine's own mark —
 // \TeX with a small slanted "ish" raised against the X.
 \def TeX {T\kern-.1667em\lower.5ex\hbox{E}\kern-.125em X}
-\def LaTeX {L\kern-.36em\raise.3ex\hbox{\font lmroman 7 regular A}\kern-.15em\TeX}
+\def LaTeX {L\kern-.36em\raise.21em\hbox{\font lmroman 7 regular A}\kern-.15em\TeX}
 \def TeXish {\TeX\kern-.14em\raise.22em\hbox{\font lmroman 7 slanted ish}}
 
 // ---- Title block ---------------------------------------------------------------
