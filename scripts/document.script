@@ -27,6 +27,12 @@
 \def leftline t {\hbox to:\hsize {\t\hfil}}
 \def rightline t {\hbox to:\hsize {\hfil\t}}
 
+// Zero-width overlap boxes (the plain-TeX definitions): \rlap draws its content to
+// the right of the current point, \llap to the left, neither advancing the pen.
+// A list marker placed with one of these hangs beside the text without pushing it.
+\def rlap m {\hbox to:0 {\m\hss}}
+\def llap m {\hbox to:0 {\hss\m}}
+
 // ---- Title block ---------------------------------------------------------------
 // \title / \author / \date record their argument (markup preserved) in a macro;
 // \maketitle typesets whichever of them were given, centred.
@@ -109,11 +115,14 @@
 } {}
 \newcounter{enumi}
 
-// \item starts one list item: a marker box the width of one indent step, then the
-// text. hangindent (which the engine reverts after the paragraph) pulls the
-// continuation lines in to align under the text after the marker.
+// \item starts one list item. The marker hangs in a zero-width box at the line
+// start, then \hskip moves in by one indent step so the text begins exactly at the
+// hanging-indent position; hangindent (reverted by the engine after the paragraph)
+// pulls the continuation lines to that same position, so every line of the item
+// aligns. The closing \ignorespaces drops the space before the item's text so it
+// does not open the line a space too far to the right.
 \def item {
   \set hangindent {\calc{listindent}}
   \set hangafter {1}
-  \noindent\hbox to:\listindent {\itemmark\hfil}
+  \noindent\rlap{\itemmark}\hskip \listindent\ignorespaces
 }
