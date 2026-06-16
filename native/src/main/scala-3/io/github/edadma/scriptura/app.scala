@@ -1,6 +1,6 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.texish.{CairoPDFTypesetter, Typesetter, standardPrelude}
+import io.github.edadma.texish.{CairoPDFTypesetter, Typesetter}
 import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.nio.file.{Files, Paths}
@@ -58,7 +58,6 @@ def app(args: Config): Unit =
       val handler = new TypesetterHandler(t)
       val proc = new Processor(handler)
       registerTypesettingPrimitives(proc, handler)
-      proc.process(standardPrelude) // standard macro definitions (\TeX, \TeXish, …) before the document
       proc.process(input)
     end if
 

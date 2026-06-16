@@ -4,7 +4,7 @@ import io.github.edadma.suit.*
 import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
-import io.github.edadma.texish.{CairoImageTypesetter, CairoPDFTypesetter, Hyphenation, standardPrelude, Color as TexColor}
+import io.github.edadma.texish.{CairoImageTypesetter, CairoPDFTypesetter, Hyphenation, Color as TexColor}
 import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.{ByteArrayOutputStream, File, FileOutputStream}
@@ -62,8 +62,6 @@ private[scriptura] def typeset(
     val proc    = new Processor(handler)
 
     registerTypesettingPrimitives(proc, handler)
-    // Load the standard macro prelude (\TeX, …) on top of the primitives, then the document.
-    proc.process(standardPrelude)
 
     Console.withOut(out) {
       proc.process(source)
@@ -105,7 +103,6 @@ private[scriptura] def typesetPdf(source: String, path: String): (String, Boolea
     registerTypesettingPrimitives(proc, handler)
 
     Console.withOut(out) {
-      proc.process(standardPrelude)
       proc.process(source)
       t.end()
     }

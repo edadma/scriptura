@@ -54,6 +54,16 @@
 \def textbf t {\bold{\t}}
 \def dots {…}
 
+// ---- TeX-family logos ----------------------------------------------------------
+// The classic logos, assembled from the engine's box primitives (\kern, \lower,
+// \raise, \hbox) exactly as plain TeX and LaTeX define them. The kerns are
+// em-relative so they scale with the surrounding font; the lifted letters are set
+// a little smaller, suited to the 10pt body. \TeXish is this engine's own mark —
+// \TeX with a small slanted "ish" raised against the X.
+\def TeX {T\kern-.1667em\lower.5ex\hbox{E}\kern-.125em X}
+\def LaTeX {L\kern-.36em\raise.3ex\hbox{\font lmroman 7 regular A}\kern-.15em\TeX}
+\def TeXish {\TeX\kern-.14em\raise.22em\hbox{\font lmroman 7 slanted ish}}
+
 // ---- Title block ---------------------------------------------------------------
 // \title / \author / \date record their argument (markup preserved) in a macro;
 // \maketitle typesets whichever of them were given, centred. The title is roman,
@@ -130,33 +140,31 @@
 
 // ---- Lists ---------------------------------------------------------------------
 // Lists nest: listdepth is a scoped variable, so each environment sees one more
-// than its parent and the value restores when the environment closes. leftskip
-// indents the whole list by the depth; an \item hangs its continuation lines so
-// they align under the text rather than under the marker.
+// than its parent and the value restores when the environment closes. Each level
+// indents the whole block by listindent (so even a first-level list sits in from
+// the margin, as in LaTeX); the marker hangs to the left of the text.
 \set listdepth {0}
-\set listindent {20}
+\set listindent {22}
+\set labelsep {5}
 
 \newenvironment itemize {
   \set listdepth {\calc{listdepth + 1}}
-  \set leftskip {\calc{(listdepth - 1) * listindent}}
+  \set leftskip {\calc{listdepth * listindent}}
   \def itemmark {•}
 } {}
 
 \newenvironment enumerate {
   \set listdepth {\calc{listdepth + 1}}
-  \set leftskip {\calc{(listdepth - 1) * listindent}}
+  \set leftskip {\calc{listdepth * listindent}}
   \setcounter{enumi}{0}
   \def itemmark {\stepcounter{enumi}\arabic{\value{enumi}}.}
 } {}
 \newcounter{enumi}
 
-// \item starts one list item: a fixed-width marker box one indent step wide, with
-// the marker at its left and the rest filled, so the text begins exactly at the
-// hanging-indent position. hangindent (reverted by the engine after the paragraph)
-// pulls the continuation lines to that same position, so every line of the item
-// aligns under the text. The closing \ignorespaces drops the space before the
-// item's text so the first line does not open a space too far to the right.
+// \item starts one list item. The item text begins at the list's left margin
+// (leftskip), so wrapped continuation lines align under it automatically. The
+// marker is set in a zero-width \llap box that hangs to the left, a labelsep gap
+// before the text, exactly as a LaTeX list label does. The closing \ignorespaces
+// drops the space before the item's text.
 \def item {
-  \set hangindent {\calc{listindent}}
-  \set hangafter {1}
-  \noindent\hbox to:\listindent {\itemmark\hfil}\ignorespaces}
+  \noindent\llap{\itemmark\hskip\labelsep}\ignorespaces}
