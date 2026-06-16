@@ -124,5 +124,4 @@
 \def item {
   \set hangindent {\calc{listindent}}
   \set hangafter {1}
-  \noindent\hbox to:\listindent {\itemmark\hfil}\ignorespaces
-}
+  \noindent\hbox to:\listindent {\itemmark\hfil}\ignorespaces}
