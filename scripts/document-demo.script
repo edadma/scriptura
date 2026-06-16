@@ -1,0 +1,75 @@
+\include scripts/document.script
+
+\def headline {\italic{A Basic Document}\hfil The document format}
+\def footline {\hfil — \the\pageno —\hfil}
+
+\title {A Basic Document Format}
+\author {Edward A. Maxedon}
+\date {June 2026}
+\maketitle
+
+\section {Introduction}
+
+This document exercises the basic format provided by \emph{document.script}. It
+shows the title block above, automatically numbered sections, ordinary justified
+paragraphs, emphasis, quotations, and both kinds of list. The body is set in
+Latin Modern Roman, the default serif face.
+
+A second paragraph follows to show the normal first-line indent that separates
+one paragraph from the next. There is no extra vertical space between body
+paragraphs; the indent alone marks the boundary, in the traditional book style.
+
+\subsection {Emphasis}
+
+Words can be set in \emph{italic} for emphasis, and whole phrases such as
+\emph{this clause set apart from the rest} are handled the same way.
+
+\subsection {Quotations}
+
+A quotation block is indented on both sides and remains fully justified:
+
+\begin{quote}
+The art of writing is the art of discovering what you believe. Good prose is
+like a windowpane, clear enough that the reader forgets it is there at all and
+sees only what lies beyond it.
+\end{quote}
+
+The text returns to the full measure after the block closes.
+
+\section {Lists}
+
+Bulleted and numbered lists are available, and they nest.
+
+\subsection {Bulleted lists}
+
+\begin{itemize}
+\item The first item is short.
+
+\item The second item is deliberately long so that it wraps onto more than one
+line, which lets you see that the continuation lines align neatly under the text
+rather than under the bullet marker.
+
+\item A third item, with a nested list inside it:
+
+\begin{itemize}
+\item A nested bullet.
+
+\item Another nested bullet, also long enough to wrap so that the deeper hanging
+indent is visible against the outer level.
+\end{itemize}
+
+\item Back out at the first level for the final item.
+\end{itemize}
+
+\subsection {Numbered lists}
+
+\begin{enumerate}
+\item Numbered items work the same way, with an arabic numeral and a period in
+place of the bullet.
+
+\item The numbering is automatic and restarts at one for each new list.
+
+\item A final numbered item to round out the example.
+\end{enumerate}
+
+\vfill\eject

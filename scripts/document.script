@@ -1,0 +1,119 @@
+// document.script — a very basic document format for scriptura, layered over texish.
+//
+// Include it at the top of a document:
+//
+//     \include scripts/document.script
+//
+// It provides a title block, numbered sections, spacing and alignment helpers,
+// emphasis, quotation blocks, and bulleted / numbered lists. The body font is the
+// default lmroman (serif); headings use lmroman bold.
+
+\use{counters}
+
+// ---- Page and paragraph defaults ----------------------------------------------
+// Traditional book style: paragraphs marked by a first-line indent, no extra gap
+// between them, and a ragged (un-stretched) page bottom.
+\set parindent {18}
+\set parskip {0}
+\set raggedbottom {1}
+
+// ---- Vertical spacing ----------------------------------------------------------
+\def smallskip {\vskip 3pt plus 1pt minus 1pt}
+\def medskip {\vskip 6pt plus 2pt minus 2pt}
+\def bigskip {\vskip 12pt plus 4pt minus 4pt}
+
+// ---- Horizontal alignment of a single line ------------------------------------
+\def centerline t {\hbox to:\hsize {\hss\t\hss}}
+\def leftline t {\hbox to:\hsize {\t\hfil}}
+\def rightline t {\hbox to:\hsize {\hfil\t}}
+
+// ---- Title block ---------------------------------------------------------------
+// \title / \author / \date record their argument (markup preserved) in a macro;
+// \maketitle typesets whichever of them were given, centred.
+\def doctitle {}
+\def docauthor {}
+\def docdate {}
+\def title t {\def doctitle {\t}}
+\def author a {\def docauthor {\a}}
+\def date d {\def docdate {\d}}
+
+\def maketitle {
+  \bigskip
+  \centerline{\font lmroman 20 bold \doctitle}
+  \medskip
+  \centerline{\font lmroman 12 regular \docauthor}
+  \smallskip
+  \centerline{\font lmroman 12 regular \docdate}
+  \bigskip
+}
+
+// ---- Sections ------------------------------------------------------------------
+// Two levels, auto-numbered. A subsection's number resets with each new section.
+// The paragraph that follows a heading is set flush left (no first-line indent).
+\newcounter{section}
+\newcounter{subsection}
+\counterwithin{subsection}{section}
+
+\def section t {
+  \stepcounter{section}
+  \bigskip
+  \leftline{\font lmroman 17 bold \arabic{\value{section}}\hskip 10 \t}
+  \medskip
+  \noindent
+}
+
+\def subsection t {
+  \stepcounter{subsection}
+  \medskip
+  \leftline{\font lmroman 14 bold \arabic{\value{section}}.\arabic{\value{subsection}}\hskip 10 \t}
+  \smallskip
+  \noindent
+}
+
+// ---- Emphasis ------------------------------------------------------------------
+\def emph t {\italic{\t}}
+
+// ---- Quotation block -----------------------------------------------------------
+// Indents the block on both sides. leftskip / rightskip are set inside the
+// environment's own group, so they revert automatically at \end{quote}.
+\newenvironment quote {
+  \set leftskip {30}
+  \set rightskip {30}
+} {}
+
+// \quotation is the same, with a wider indent.
+\newenvironment quotation {
+  \set leftskip {48}
+  \set rightskip {48}
+} {}
+
+// ---- Lists ---------------------------------------------------------------------
+// Lists nest: listdepth is a scoped variable, so each environment sees one more
+// than its parent and the value restores when the environment closes. leftskip
+// indents the whole list by the depth; an \item hangs its continuation lines so
+// they align under the text rather than under the marker.
+\set listdepth {0}
+\set listindent {18}
+
+\newenvironment itemize {
+  \set listdepth {\calc{listdepth + 1}}
+  \set leftskip {\calc{(listdepth - 1) * listindent}}
+  \def itemmark {•}
+} {}
+
+\newenvironment enumerate {
+  \set listdepth {\calc{listdepth + 1}}
+  \set leftskip {\calc{(listdepth - 1) * listindent}}
+  \setcounter{enumi}{0}
+  \def itemmark {\stepcounter{enumi}\arabic{\value{enumi}}.}
+} {}
+\newcounter{enumi}
+
+// \item starts one list item: a marker box the width of one indent step, then the
+// text. hangindent (which the engine reverts after the paragraph) pulls the
+// continuation lines in to align under the text after the marker.
+\def item {
+  \set hangindent {\calc{listindent}}
+  \set hangafter {1}
+  \noindent\hbox to:\listindent {\itemmark\hfil}
+}
