@@ -55,13 +55,14 @@
 \def dots {…}
 
 // ---- TeX-family logos ----------------------------------------------------------
-// The classic logos, assembled from the engine's box primitives (\kern, \lower,
-// \raise, \hbox) exactly as plain TeX and LaTeX define them. The kerns are
-// em-relative so they scale with the surrounding font; the lifted letters are set
-// a little smaller, suited to the 10pt body. \TeXish is this engine's own mark —
-// \TeX with a small slanted "ish" raised against the X.
+// The classic logos, assembled from the engine's box primitives exactly as plain
+// TeX and LaTeX define them. \LaTeX sets the small A in a \vbox whose height is the
+// measured height of a T, with \vss filling beneath, so the A's apex rides at the
+// cap height — Lamport's own construction. The kerns are em-relative so they scale
+// with the surrounding font. \TeXish is this engine's own mark — \TeX with a small
+// slanted "ish" raised against the X.
 \def TeX {T\kern-.1667em\lower.5ex\hbox{E}\kern-.125em X}
-\def LaTeX {L\kern-.36em\raise.21em\hbox{\font lmroman 7 regular A}\kern-.15em\TeX}
+\def LaTeX {L\kern-.36em\setbox latexAbox \hbox{T}\vbox to:\ht latexAbox {\hbox{\font lmroman 7 regular A}\vss}\kern-.15em\TeX}
 \def TeXish {\TeX\kern-.14em\raise.22em\hbox{\font lmroman 7 slanted ish}}
 
 // ---- Title block ---------------------------------------------------------------
