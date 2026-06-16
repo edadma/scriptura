@@ -10,7 +10,40 @@
 // roman title, bold headings on a tight type scale, and a centred page number at
 // the foot of every page.
 
-\use{counters}
+// ---- Counters (LaTeX-style, in the document language) -------------------------
+// Named document counters over the engine's global keyed store. Two global maps
+// hold the state — counterStore (name → value) and counterParent (child → parent)
+// — so counters survive groups. Stepping a counter zeroes every counter declared
+// \counterwithin it, recursively (LaTeX reset lists). Display a counter by
+// formatting its value, e.g. \arabic{\value section}. Each line ends with // so its
+// newline is stripped and the macros emit no stray whitespace in running text.
+\def newcounter n {{//
+\global\mapset counterStore {\n} {0}//
+}}//
+\def setcounter n v {{//
+\global\mapset counterStore {\n} {\v}//
+}}//
+\def addtocounter n amt {{//
+\set counterCur {\mapget counterStore {\n}}//
+\global\mapset counterStore {\n} {\calc{counterCur + \amt}}//
+}}//
+\def value n {\mapget counterStore {\n}}//
+\def counterwithin child parent {{//
+\global\mapset counterParent {\child} {\parent}//
+}}//
+\def stepcounter n {{//
+\addtocounter {\n} {1}//
+\resetwithin {\n}//
+}}//
+\def resetwithin parent {{//
+\for\counterLink {\counterParent} {//
+\if {\= {\counterLink.value} {\parent}}//
+\set resetChild {\counterLink.key}//
+\setcounter \resetChild {0}//
+\resetwithin \resetChild//
+\fi//
+}//
+}}//
 
 // ---- Body font and leading ----------------------------------------------------
 // A 10pt body on a 12pt baseline, as in a default `article`. The heading and
@@ -169,3 +202,25 @@
 // drops the space before the item's text.
 \def item {
   \noindent\llap{\itemmark\hskip\labelsep}\ignorespaces}
+
+// ---- Floats (figures and tables) ----------------------------------------------
+// \figure / \table detach their body to a page edge (default top) over the engine's
+// \topinsert primitive; a \caption written inside numbers it as a figure or table
+// — each on its own counter — e.g. "Figure 1: …". An optional [htb] placement is
+// forwarded to \topinsert. Each line ends with // so its newline is stripped.
+\newcounter{figure}//
+\newcounter{table}//
+\def figure [placement:t] body {{//
+\set captionkind {Figure}//
+\set captioncounter {figure}//
+\topinsert[\placement]{\body}//
+}}//
+\def table [placement:t] body {{//
+\set captionkind {Table}//
+\set captioncounter {table}//
+\topinsert[\placement]{\body}//
+}}//
+\def caption text {{//
+\stepcounter \captioncounter//
+\the\captionkind \arabic{\value \captioncounter}: \text//
+}}//
