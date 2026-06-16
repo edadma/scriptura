@@ -1,7 +1,8 @@
 package io.github.edadma.scriptura
 
-import io.github.edadma.texish.{CairoPDFTypesetter, Typesetter}
+import io.github.edadma.texish.{CairoImageTypesetter, CairoPDFTypesetter, Typesetter}
 import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
+import io.github.edadma.libcairo.Surface
 
 import java.nio.file.{Files, Paths}
 
@@ -28,39 +29,50 @@ def app(args: Config): Unit =
 
     if !Files.isWritable(output.getParent) then problem(s"'$output' is not writable")
 
-    val t: Typesetter =
-      args match
-        case Config(_, _, "pdf", Some("a4"), _, _, _, _, _) =>
-          new CairoPDFTypesetter(output.toString) {
-            set("paperwidth", 210 * mm)
-            set("paperheight", 297 * mm)
-          }
-        case Config(_, _, "pdf", Some("letter"), _, _, _, _, _) =>
-          new CairoPDFTypesetter(output.toString) {
-            set("paperwidth", 8.5 * in)
-            set("paperheight", 11 * in)
-          }
-        case Config(_, _, "pdf", None, _, _, _, _, _) =>
-          new CairoPDFTypesetter(output.toString)
+    // Page size in points (1in = 72pt, 1mm = 72/25.4pt): A4 210x297mm, else US Letter 8.5x11in.
+    val (paperW, paperH) =
+      if args.paper.contains("a4") then (210 * 72 / 25.4, 297 * 72 / 25.4)
+      else (8.5 * 72, 11.0 * 72)
 
-//        case Config(_, _, "png", _, resolution, size, _, _) =>
-//          val (width, height) =
-//            resolution match
-//              case "sd"  => (720, 480)
-//              case "hd"  => (1280, 720)
-//              case "fhd" => (1920, 1080)
-//
-//          Compositor.png(output.toString, width, height, ppi(width, height, size), simplePageFactory())
-        case _ => sys.error("error")
+    // Feed the document through a fresh processor and flush the typesetter; the engine ships only primitives,
+    // so a document pulls in any higher-level macros (sectioning, lists, logos) by including a format itself.
+    def typeset(t: Typesetter): Unit =
+      if args.usfx then () // USFX.fromString(doc, in)
+      else
+        val handler = new TypesetterHandler(t)
+        val proc    = new Processor(handler)
+        registerTypesettingPrimitives(proc, handler)
+        proc.process(input)
+      end if
+      t.end()
 
-    if args.usfx then () // USFX.fromString(doc, in)
-    else
-      val handler = new TypesetterHandler(t)
-      val proc = new Processor(handler)
-      registerTypesettingPrimitives(proc, handler)
-      proc.process(input)
-    end if
+    args.typ match
+      case "png" =>
+        // One ARGB32 surface per shipped page, rasterised at the chosen device resolution.
+        val dpi = args.resolution match
+          case "sd"  => 96.0
+          case "fhd" => 300.0
+          case _     => 150.0 // hd
+        val t = new CairoImageTypesetter(dpi)
+        t.set("paperwidth", paperW)
+        t.set("paperheight", paperH)
+        typeset(t)
 
-    t.end()
-    t.destroy()
+        val pages = t.getDocument.printedPages
+        val base  = output.toString.stripSuffix(".png")
+        pages.zipWithIndex.foreach { case (page, i) =>
+          val name    = if pages.length == 1 then s"$base.png" else s"${base}_${i + 1}.png"
+          val surface = page.asInstanceOf[Surface]
+          surface.writeToPNG(name)
+          surface.destroy()
+          println(s"wrote $name")
+        }
+        t.destroy()
+
+      case _ => // pdf
+        val t = new CairoPDFTypesetter(output.toString)
+        t.set("paperwidth", paperW)
+        t.set("paperheight", paperH)
+        typeset(t)
+        t.destroy()
   end process
