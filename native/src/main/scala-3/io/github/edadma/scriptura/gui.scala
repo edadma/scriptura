@@ -45,6 +45,7 @@ private[scriptura] def typeset(
     source:    String,
     pageColor: TexColor = TexColor("white"),
     ink:       TexColor = TexColor("black"),
+    baseDir:   String = ".",
 ): (Vector[Page], String, Boolean) =
   val scale = { val s = DevicePixelRatio.scaleX; if s <= 0 then 1.0 else s }
   val dpi   = ScreenDpi * scale
@@ -62,6 +63,7 @@ private[scriptura] def typeset(
     val proc    = new Processor(handler)
 
     registerTypesettingPrimitives(proc, handler)
+    proc.setBaseDir(baseDir)
 
     Console.withOut(out) {
       proc.process(source)
@@ -91,7 +93,7 @@ private[scriptura] def typeset(
   * print output expects, independent of the screen theme. Returns the engine's captured output and
   * whether it succeeded, so the caller can surface warnings or a failure in the log.
   */
-private[scriptura] def typesetPdf(source: String, path: String): (String, Boolean) =
+private[scriptura] def typesetPdf(source: String, path: String, baseDir: String = "."): (String, Boolean) =
   Hyphenation.enableEnglish()
   val out = new ByteArrayOutputStream
 
@@ -101,6 +103,7 @@ private[scriptura] def typesetPdf(source: String, path: String): (String, Boolea
     val proc    = new Processor(handler)
 
     registerTypesettingPrimitives(proc, handler)
+    proc.setBaseDir(baseDir)
 
     Console.withOut(out) {
       proc.process(source)
@@ -204,7 +207,9 @@ private val App: Component[Init] =
     // typeset (common while a command is half-typed) keeps the last good pages on screen and just
     // raises the error flag — an overlaid badge — rather than blanking the preview, which is jarring.
     def renderSource(text: String): Unit =
-      val (ps, log, ok) = typeset(text, docPage, docInk)
+      // Resolve a document's relative \use and \include against its own directory (else the cwd).
+      val baseDir       = currentFile.flatMap(f => Option(f.getAbsoluteFile.getParent)).getOrElse(".")
+      val (ps, log, ok) = typeset(text, docPage, docInk, baseDir)
       setLog(log)
       if ok then
         setPages(ps)
@@ -257,7 +262,8 @@ private val App: Component[Init] =
     def renderPdfForPrint(): Boolean =
       val base = currentFile.map(_.getName.replaceFirst("\\.[^.]*$", "")).getOrElse("document")
       val pdf  = Paths.get(System.getProperty("java.io.tmpdir"), s"$base.pdf").toString
-      val (elog, ok) = typesetPdf(source, pdf)
+      val baseDir    = currentFile.flatMap(f => Option(f.getAbsoluteFile.getParent)).getOrElse(".")
+      val (elog, ok) = typesetPdf(source, pdf, baseDir)
       if !ok then { setLog(s"Print failed:\n$elog"); false }
       else { printPdfRef.current = pdf; if elog.nonEmpty then setLog(elog); true }
 
@@ -510,9 +516,9 @@ private val SampleSource: String =
 /** Launch the native preview window, seeding the editor with the input file's contents when one was
   * given on the command line, or the sample document otherwise.
   */
-def scripturaGui(c: Config): Unit =
+def scripturaGui(input: Option[File]): Unit =
   val init =
-    c.input match
+    input match
       case Some(file) if Files.exists(file.toPath) =>
         Init(new String(Files.readAllBytes(file.toPath), "UTF-8"), Some(file))
       case _ => Init(SampleSource, None)

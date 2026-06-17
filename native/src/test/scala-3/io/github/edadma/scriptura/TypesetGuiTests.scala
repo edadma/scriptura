@@ -10,7 +10,7 @@ import org.scalatest.matchers.should.Matchers
 class TypesetGuiTests extends AnyFreeSpec with Matchers:
 
   "typesetting a short document yields one letter page sized at the screen resolution" in {
-    val (pages, _) = typeset("Hello world\n\n")
+    val (pages, _, _) = typeset("Hello world\n\n")
 
     pages.length shouldBe 1
     // letter is 612x792pt; at the 96dpi screen resolution that is 816x1056 logical pixels
@@ -19,11 +19,22 @@ class TypesetGuiTests extends AnyFreeSpec with Matchers:
   }
 
   "typesetting a multi-page document ships one page surface per page" in {
-    val (pages, _) = typeset("first\n\n\\vfill\\eject second\n\n\\vfill\\eject third\n\n")
+    val (pages, _, _) = typeset("first\n\n\\vfill\\eject second\n\n\\vfill\\eject third\n\n")
 
     pages.length shouldBe 3
     pages.foreach { p =>
       p.w should be > 0.0
       p.h should be > 0.0
     }
+  }
+
+  // The app sets TEXISHHOME in the running process so texish's \use resolver finds the formats that
+  // ship with the engine under $TEXISHHOME/packages. This checks the whole round-trip on Native: the
+  // programmatic setenv is visible to the engine, and \use{document} (which itself \use{logos}) loads.
+  "with TEXISHHOME set, \\use{document} resolves the shipped format" in {
+    setTexishHome()
+    val (pages, log, ok) = typeset("\\use{document}\n\\title{T}\\maketitle\nHello.\n\n")
+
+    withClue(s"log: $log") { ok shouldBe true }
+    pages.length should be >= 1
   }
