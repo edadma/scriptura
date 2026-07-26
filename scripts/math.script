@@ -1,6 +1,8 @@
-% Math mode demonstration. Grows one section per math-mode stage as it lands.
-%   Stage 2 (done): inline $...$ — atom classes, inter-atom spacing, symbols.
-%   Stage 3 (done): super/subscripts and the four math styles.
+// Math mode demonstration. Grows one section per math-mode stage as it lands.
+//   Stage 2 (done): inline $...$ — atom classes, inter-atom spacing, symbols.
+//   Stage 3 (done): super/subscripts and the four math styles.
+\use{base}
+
 \def headline {\italic{Math mode demo} \hfil page \the\pageno}
 \def footline {\hfil — \the\pageno — \hfil}
 
