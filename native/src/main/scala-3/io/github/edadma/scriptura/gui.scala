@@ -4,7 +4,7 @@ import io.github.edadma.suit.*
 import io.github.edadma.suit.dsl.*
 import io.github.edadma.suit.widgets.*
 import io.github.edadma.libcairo.Surface
-import io.github.edadma.texish.{CairoImageTypesetter, CairoPDFTypesetter, Hyphenation, Color as TexColor}
+import io.github.edadma.texish.{CairoImageTypesetter, CairoPDFTypesetter, Color as TexColor}
 import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.io.{ByteArrayOutputStream, File, FileOutputStream}
@@ -32,6 +32,61 @@ private[scriptura] final class Page(
   */
 private val ScreenDpi = 96.0
 
+/** The zoom levels the preview offers, as `(factor, label)`. The factor is carried as its own text so
+  * the value round-trips through the `Select` exactly, with no float formatting to agree on. 100% is
+  * the page at its true size: one point becomes `ScreenDpi / 72` logical pixels.
+  */
+private[scriptura] val ZoomLevels: Seq[(String, String)] =
+  Seq("0.5" -> "50%", "0.75" -> "75%", "1" -> "100%", "1.25" -> "125%", "1.5" -> "150%", "2" -> "200%")
+
+private[scriptura] val DefaultZoom = "1"
+
+/** How long the editor must be still before auto-render typesets it. Long enough that a burst of
+  * typing collapses into one render, short enough to still feel live.
+  */
+private val AutoRenderDelayMs = 250
+
+/** The preview column's geometry, which the page offsets below are computed from: the padding around
+  * the whole column, the gap between pages, and each page's border.
+  */
+private val PreviewPad      = 8.0
+private val PageGap         = 12.0
+private val PageBorderWidth = 1.0
+
+/** The source position a texish diagnostic points at, as a 1-based `(line, column)`. The engine
+  * prints it in the message itself — "Unknown command: \TeX (line 7, column 118)" — so the first
+  * such position in the log is the one to jump to. `None` when the log carries no position (an
+  * ordinary message, or a failure that happened outside the document).
+  */
+private[scriptura] def errorPosition(log: String): Option[(Int, Int)] =
+  """\(line (\d+), column (\d+)\)""".r.findFirstMatchIn(log).map(m => (m.group(1).toInt, m.group(2).toInt))
+
+/** The character offset of a 1-based `(line, column)` in `text`, clamped to the text — a position
+  * from a stale diagnostic may point past an edited source, and that should land at the end rather
+  * than throw. The column is clamped within its own line, so it cannot spill onto the next one.
+  */
+private[scriptura] def offsetOf(text: String, line: Int, column: Int): Int =
+  val lines = text.linesWithSeparators.toVector
+
+  if lines.isEmpty then 0
+  else
+    val li      = math.max(0, math.min(line - 1, lines.length - 1))
+    val base    = lines.take(li).map(_.length).sum
+    val lineLen = lines(li).stripLineEnd.length
+    math.max(0, math.min(text.length, base + math.max(0, math.min(column - 1, lineLen))))
+
+/** The y offset of every page's top within the preview column, from the page heights. The column
+  * pads its start, and each page adds its own border above and below plus the gap to the next.
+  */
+private[scriptura] def pageTops(heights: Seq[Double]): Vector[Double] =
+  heights.scanLeft(PreviewPad)((y, h) => y + h + 2 * PageBorderWidth + PageGap).toVector.init
+
+/** Which page a scroll offset is showing: the last one whose top has reached the top of the
+  * viewport. The tolerance absorbs the fractional offsets a wheel leaves behind.
+  */
+private[scriptura] def pageAt(tops: Seq[Double], offset: Double): Int =
+  if tops.isEmpty then 0 else math.max(0, tops.lastIndexWhere(_ <= offset + 1.0))
+
 /** Typeset the editor's source into a list of page surfaces, capturing whatever the engine prints
   * (and any failure's stack trace) as the message log. The returned surfaces belong to the caller.
   * The boolean is whether typesetting succeeded: on failure the page list is empty and the caller
@@ -40,21 +95,24 @@ private val ScreenDpi = 96.0
   * `pageColor` paints the page and `ink` is the default pen, so a dark-scheme preview passes a dark
   * page with light ink; any author-specified `\color` survives unchanged. The defaults are the
   * white paper and black ink that print output expects.
+  *
+  * `zoom` scales the device resolution rather than the finished image, so the engine lays the page
+  * out afresh at the larger size and the glyphs are drawn — not magnified — at every level.
   */
 private[scriptura] def typeset(
     source:    String,
     pageColor: TexColor = TexColor("white"),
     ink:       TexColor = TexColor("black"),
     baseDir:   String = ".",
+    zoom:      Double = 1.0,
 ): (Vector[Page], String, Boolean) =
   val scale = { val s = DevicePixelRatio.scaleX; if s <= 0 then 1.0 else s }
-  val dpi   = ScreenDpi * scale
+  val dpi   = ScreenDpi * scale * zoom
   val out   = new ByteArrayOutputStream
 
-  // TeX loads hyphenation patterns from its format; do the same so long words break across lines
-  // instead of stretching a paragraph's spaces. Idempotent — the en-US patterns parse once.
-  Hyphenation.enableEnglish()
-
+  // Hyphenation is the document's choice, not the previewer's: a source selects a language with
+  // \usehyphenation{en-us} (or \loadhyphenation for an unbundled one), exactly as it does under the
+  // texish CLI. Forcing a language here would make the preview disagree with the rendered output.
   try
     val t       = new CairoImageTypesetter(dpi)
     t.backgroundColor = pageColor
@@ -94,7 +152,6 @@ private[scriptura] def typeset(
   * whether it succeeded, so the caller can surface warnings or a failure in the log.
   */
 private[scriptura] def typesetPdf(source: String, path: String, baseDir: String = "."): (String, Boolean) =
-  Hyphenation.enableEnglish()
   val out = new ByteArrayOutputStream
 
   try
@@ -168,6 +225,21 @@ private val App: Component[Init] =
     val (logText, setLog, _)             = useState("")
     val (autoRender, setAutoRender, _)   = useState(true)
     val (hasError, setError, _)          = useState(false)
+    val (zoomKey, setZoomKey, _)         = useState(DefaultZoom)
+
+    val zoom = zoomKey.toDoubleOption.getOrElse(1.0)
+
+    // The editor's viewport and a pending caret placement, so a diagnostic can be jumped to: the
+    // request moves the caret, and the widget reports back where it landed so the viewport can
+    // bring it into view. The token makes a repeat jump to the same spot take effect again.
+    val editorRef                          = useRef[RenderObject | Null](null)
+    val (caretReq, setCaretReq, _)         = useState(Option.empty[CaretRequest])
+    val (jumpCount, setJumpCount, _)       = useState(0L)
+
+    // The preview's viewport and the page it is showing, tracked from its scroll offset so the
+    // indicator follows a wheel or a bar drag as well as the page buttons.
+    val previewRef                         = useRef[RenderObject | Null](null)
+    val (currentPage, setCurrentPage, _)   = useState(0)
 
     // Modal state: the Save-As / Open path prompt (sharing one path field) and the unsaved-changes
     // exit confirmation.
@@ -209,7 +281,7 @@ private val App: Component[Init] =
     def renderSource(text: String): Unit =
       // Resolve a document's relative \use and \include against its own directory (else the cwd).
       val baseDir       = currentFile.flatMap(f => Option(f.getAbsoluteFile.getParent)).getOrElse(".")
-      val (ps, log, ok) = typeset(text, docPage, docInk, baseDir)
+      val (ps, log, ok) = typeset(text, docPage, docInk, baseDir, zoom)
       setLog(log)
       if ok then
         setPages(ps)
@@ -291,12 +363,63 @@ private val App: Component[Init] =
     def doChoosePrinter(): Unit =
       if renderPdfForPrint() then openPrinterPicker()
 
+    // --- jumping to a diagnostic ---------------------------------------------
+
+    // Where in the source the current log points, if anywhere — also what decides whether the log
+    // pane offers itself as a target to click.
+    val errorOffset: Option[Int] =
+      errorPosition(logText).map((line, col) => offsetOf(source, line, col))
+
+    /** Put the caret on the position the log names. The editor answers through `onCaretAt` below,
+      * which is what actually scrolls it into view — only the editor knows which wrapped row an
+      * offset falls on.
+      */
+    def jumpToError(): Unit =
+      errorOffset.foreach { off =>
+        setJumpCount(jumpCount + 1)
+        setCaretReq(Some(CaretRequest(off, jumpCount + 1)))
+      }
+
+    /** Scroll the editor so a caret at `top` (of height `h`) is inside the viewport, moving only
+      * when it is actually out of view, and leaving a line of margin so it does not sit against
+      * the edge.
+      */
+    def revealCaret(top: Double, h: Double): Unit =
+      editorRef.current match
+        case r: RenderScroll =>
+          val margin = h * 2
+          val view   = r.size.height
+          if top - margin < r.scrollOffset then r.scrollOffset = top - margin
+          else if top + h + margin > r.scrollOffset + view then r.scrollOffset = top + h + margin - view
+        case _ => ()
+
+    // --- page navigation -----------------------------------------------------
+
+    val tops     = pageTops(pages.map(_.h))
+    val pageCount = pages.length
+
+    /** Scroll the preview to a page's top, clamped to the pages that exist. The scroll reports back
+      * through `onScroll`, which is what updates the indicator — so the two cannot disagree.
+      */
+    def goToPage(i: Int): Unit =
+      if tops.nonEmpty then
+        val target = tops(math.max(0, math.min(i, tops.length - 1)))
+        previewRef.current match
+          case r: RenderScroll => r.scrollByY(target - r.offsetY): Unit
+          case _               => ()
+
     // typeset once on mount so the preview is populated from the start
     useEffect(() => { run(); () => () }, Array())
 
-    // With auto-render on, re-typeset whenever the source changes — and immediately when the
-    // toggle is switched on — so the preview tracks every keystroke; with it off, only Run renders.
-    useEffect(() => { if autoRender then renderSource(source); () => () }, Array(source, autoRender))
+    // With auto-render on, re-typeset as the source changes — and immediately when the toggle is
+    // switched on; with it off, only Run renders. The source is debounced first: typesetting is a
+    // whole-document job, so driving it from every keystroke makes a document of any size stutter
+    // under the typing. Settling for a beat means one render per pause instead of one per key.
+    val debouncedSource = useDebouncedValue(source, AutoRenderDelayMs)
+    useEffect(
+      () => { if autoRender then renderSource(debouncedSource); () => () },
+      Array(debouncedSource, autoRender),
+    )
 
     // When the theme flips between light and dark, re-typeset so the page colours follow it at once
     // — regardless of auto-render. The first mount is skipped; the initial render already ran.
@@ -304,6 +427,14 @@ private val App: Component[Init] =
     useEffect(
       () => { if themedOnce.current then renderSource(source) else themedOnce.current = true; () => () },
       Array(theme.isDark),
+    )
+
+    // Changing the zoom re-typesets at the new resolution — regardless of auto-render, since the
+    // pages on screen are the wrong size until it does. The first mount is skipped, as above.
+    val zoomedOnce = useRef(false)
+    useEffect(
+      () => { if zoomedOnce.current then renderSource(source) else zoomedOnce.current = true; () => () },
+      Array(zoomKey),
     )
 
     // re-blit the current pages; the cleanup (run when the page list changes or the app unmounts)
@@ -332,7 +463,7 @@ private val App: Component[Init] =
       if pages.isEmpty then Seq(text("No pages — press Run.", color = theme.surfaceText))
       else
         pages.map(p =>
-          box(border = pageBorder, borderWidth = 1)(
+          box(border = pageBorder, borderWidth = PageBorderWidth)(
             surface(p.image, p.handle, width = p.w, height = p.h),
           ),
         )
@@ -383,10 +514,25 @@ private val App: Component[Init] =
     // rendering.
     val controls: VNode =
       row(crossAxisAlignment = CrossAxisAlignment.Center, spacing = 10)(
-        Button("Run", () => run()),
-        Button("Print", () => doPrint()),
-        Switch(autoRender, setAutoRender),
-        text("Auto-render", color = theme.surfaceText),
+        Seq
+          .concat(
+            Seq(
+              Button("Run", () => run()),
+              Button("Print", () => doPrint()),
+              Switch(autoRender, setAutoRender),
+              text("Auto-render", color = theme.surfaceText),
+              text("Zoom", color = theme.surfaceText),
+              Select(ZoomLevels, zoomKey, setZoomKey, width = 110),
+            ),
+            // Page navigation, shown only when there is more than one page to move between.
+            if pageCount > 1 then
+              Seq(
+                Button("◀", () => goToPage(currentPage - 1)),
+                text(s"Page ${currentPage + 1} of $pageCount", color = theme.surfaceText),
+                Button("▶", () => goToPage(currentPage + 1)),
+              )
+            else Nil,
+          )*,
       )
 
     // A path-prompt modal, shared in shape by Save As and Open (they differ only in title/action).
@@ -455,23 +601,42 @@ private val App: Component[Init] =
                   controls,
                 ),
                 box(flex = 1, clip = true)(
-                  scrollArea(Axis.Vertical)(
+                  scrollArea(Axis.Vertical, ref = editorRef)(
                     col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min)(
-                      TextArea(source, setSource),
+                      TextArea(source, setSource, caretRequest = caretReq, onCaretAt = revealCaret),
                     ),
                   ),
                 ),
+                // The log pane. When the message carries a source position, the pane becomes a
+                // target: clicking it puts the caret on the offending character, so a diagnostic
+                // is one click from the place that caused it.
                 sizedBox(height = 140)(
                   box(
                     bg          = theme.surface,
-                    border      = theme.border,
+                    border      = if errorOffset.isDefined then theme.accent else theme.border,
                     borderWidth = 1,
                     radius      = theme.radius,
                     clip        = true,
                     padding     = EdgeInsets.all(8),
+                    cursor      = if errorOffset.isDefined then Cursor.Pointer else Cursor.Default,
+                    onMouseDown = _ => jumpToError(),
                   )(
                     scrollArea(Axis.Vertical)(
-                      text(if logText.isEmpty then "(no messages)" else logText, color = theme.surfaceText, maxLines = 0),
+                      col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 4)(
+                        Seq
+                          .concat(
+                            Seq(
+                              text(
+                                if logText.isEmpty then "(no messages)" else logText,
+                                color    = theme.surfaceText,
+                                maxLines = 0,
+                              ),
+                            ),
+                            errorPosition(logText).map((line, col) =>
+                              text(s"Click to go to line $line, column $col.", color = muted),
+                            ),
+                          )*,
+                      ),
                     ),
                   ),
                 ),
@@ -481,9 +646,22 @@ private val App: Component[Init] =
             // keeps its true size; a danger badge floats over the last good render on an error.
             box(flex = 1, clip = true, bg = backdrop)(
               stack(Alignment.topLeft)(
-                (scrollArea(both = true)(
-                  padding(EdgeInsets.all(8))(
-                    col(crossAxisAlignment = CrossAxisAlignment.Start, mainAxisSize = MainAxisSize.Min, spacing = 12)(
+                (scrollArea(
+                  both     = true,
+                  ref      = previewRef,
+                  // Only on a real change: the offset ticks continuously through a scroll, and
+                  // setting the same page each tick would re-render the window for nothing.
+                  onScroll = off => {
+                    val p = pageAt(tops, off.y)
+                    if p != currentPage then setCurrentPage(p)
+                  },
+                )(
+                  padding(EdgeInsets.all(PreviewPad))(
+                    col(
+                      crossAxisAlignment = CrossAxisAlignment.Start,
+                      mainAxisSize       = MainAxisSize.Min,
+                      spacing            = PageGap,
+                    )(
                       previewPages*,
                     ),
                   ),
@@ -502,7 +680,10 @@ private val App: Component[Init] =
 
 /** A small starter document so the preview has something to show before the user types anything. */
 private val SampleSource: String =
-  """Welcome to Scriptura.
+  """// \TeX and the other logo macros are defined in the engine's base package.
+    |\use{base}
+    |
+    |Welcome to Scriptura.
     |
     |Edit the source on the left and press Run to typeset the document. Each page is rendered to a Cairo image surface and shown on the right.
     |
