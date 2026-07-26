@@ -49,6 +49,19 @@ class TypesetGuiTests extends AnyFreeSpec with Matchers:
     finally io.github.edadma.texish.Typesetter.fontsDir = restore
   }
 
+  // The families beyond the core are opt-in per typesetter, so the preview has to ask for them. If it stops
+  // asking, a document that sets Hebrew or Chinese does not fail loudly — it fails only for the person who
+  // wrote it, at the point they try, which is exactly the kind of regression nobody notices for months.
+  // Skipped where this machine has no texish font tree to offer; there is nothing to load and nothing to check.
+  "the preview offers the bundled families, not only the core" in {
+    assume(io.github.edadma.texish.Typesetter.fontsDir.nonEmpty, "no texish font tree on this machine")
+
+    val (pages, log, ok) = typeset("\\font{hebrew}{12}\nבְּרֵאשִׁית\n\n")
+
+    withClue(s"log: $log") { ok shouldBe true }
+    pages.length shouldBe 1
+  }
+
   "zoom scales the page, because it scales the resolution the engine lays out at" in {
     val (base, _, _)  = typeset("Hello world\n\n")
     val (big, _, _)   = typeset("Hello world\n\n", zoom = 2.0)

@@ -124,6 +124,7 @@ private[scriptura] def typeset(
     val t       = new CairoImageTypesetter(dpi)
     t.backgroundColor = pageColor
     t.currentColor    = ink
+    t.loadBundledCatalogue() // the preview offers every family the machine has, as the CLI does
     val handler = new TypesetterHandler(t)
     val proc    = new Processor(handler)
 
@@ -163,6 +164,9 @@ private[scriptura] def typesetPdf(source: String, path: String, baseDir: String 
 
   try
     val t       = new CairoPDFTypesetter(path)
+
+    t.loadBundledCatalogue() // as in the preview, so what is exported matches what was shown
+
     val handler = new TypesetterHandler(t)
     val proc    = new Processor(handler)
 
