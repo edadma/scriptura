@@ -53,6 +53,13 @@ private val PreviewPad      = 8.0
 private val PageGap         = 12.0
 private val PageBorderWidth = 1.0
 
+/** The file types the Open and Save panels offer. Scriptura documents are `.script`; the all-files
+  * entry is there because a filter is only ever a hint to the platform, and a document may well be
+  * kept under some other name.
+  */
+private val DocumentFilters: Seq[FileDialog.Filter] =
+  Seq(FileDialog.Filter("Scriptura documents", "script"), FileDialog.Filter("All files", "*"))
+
 /** The source position a texish diagnostic points at, as a 1-based `(line, column)`. The engine
   * prints it in the message itself — "Unknown command: \TeX (line 7, column 118)" — so the first
   * such position in the log is the one to jump to. `None` when the log carries no position (an
@@ -241,12 +248,9 @@ private val App: Component[Init] =
     val previewRef                         = useRef[RenderObject | Null](null)
     val (currentPage, setCurrentPage, _)   = useState(0)
 
-    // Modal state: the Save-As / Open path prompt (sharing one path field) and the unsaved-changes
-    // exit confirmation.
-    val (showSaveAs, setShowSaveAs, _)   = useState(false)
-    val (showOpen, setShowOpen, _)       = useState(false)
+    // Modal state: the unsaved-changes exit confirmation. Open and Save As are the platform's own
+    // file panels, which hold their own state, so nothing is kept for them here.
     val (showDiscard, setShowDiscard, _) = useState(false)
-    val (pathInput, setPathInput, _)     = useState("")
 
     // Print: the chosen CUPS destination (remembered after the first pick, so Print is one click
     // thereafter), the printer-picker modal and the destinations it lists, and the rendered PDF the
@@ -299,34 +303,50 @@ private val App: Component[Init] =
       setSavedText(source)
       setCurrentFile(Some(file))
 
+    // Where a file panel opens. A save panel is given the document's own path, which pre-fills the
+    // name field as well as the directory; an open panel is given the directory alone, and the
+    // trailing separator is what marks it as a directory rather than a name. Null on a document
+    // that has never been saved, leaving the platform to choose.
+    def saveLocation: String = currentFile.map(_.getPath).orNull
+    def openLocation: String =
+      currentFile.flatMap(f => Option(f.getAbsoluteFile.getParent)).map(_ + File.separator).orNull
+
     // Save writes straight to the current file; with no file yet it falls back to Save As.
     def doSave(): Unit =
       currentFile match
         case Some(f) => writeTo(f)
-        case None    => { setPathInput(""); setShowSaveAs(true) }
+        case None    => doSaveAs()
 
+    // Save As raises the platform's save panel, which runs its own overwrite prompt. Dismissing the
+    // panel also abandons a discard guard that was waiting on the save: backing out of naming the
+    // file means backing out of the action the save was clearing the way for, not discarding after
+    // all. The callback arrives on the UI thread, so it sets state directly.
     def doSaveAs(): Unit =
-      val p = pathInput.trim
-      if p.nonEmpty then
-        writeTo(new File(p))
-        setShowSaveAs(false)
-        // If this save was the "Save" step of a discard guard, continue the guarded action now.
-        if pendingContinue.current then { pendingContinue.current = false; discardAction.current() }
+      FileDialog.save(filters = DocumentFilters, defaultLocation = saveLocation, title = "Save As") {
+        case FileDialog.Result.Chosen(paths) =>
+          writeTo(new File(paths.head))
+          // If this save was the "Save" step of a discard guard, continue the guarded action now.
+          if pendingContinue.current then { pendingContinue.current = false; discardAction.current() }
+        case FileDialog.Result.Cancelled   => pendingContinue.current = false
+        case FileDialog.Result.Failed(msg) => { pendingContinue.current = false; setLog(s"Save failed: $msg") }
+      }
 
+    // Open raises the platform's open panel and loads what comes back. The panel only offers files
+    // that exist, but one can still be moved or deleted between the pick and the read, so the load
+    // checks rather than assuming.
     def doOpen(): Unit =
-      val p = pathInput.trim
-      if p.nonEmpty then
-        val f = new File(p)
-        if Files.exists(f.toPath) then
-          val text = new String(Files.readAllBytes(f.toPath), "UTF-8")
-          setSource(text)
-          setSavedText(text)
-          setCurrentFile(Some(f))
-          setShowOpen(false)
-
-    def openPathModal(setShow: Boolean => Unit): Unit =
-      setPathInput(currentFile.map(_.getPath).getOrElse(""))
-      setShow(true)
+      FileDialog.open(filters = DocumentFilters, defaultLocation = openLocation, title = "Open") {
+        case FileDialog.Result.Chosen(paths) =>
+          val f = new File(paths.head)
+          if !Files.exists(f.toPath) then setLog(s"Could not open ${f.getPath} — no such file.")
+          else
+            val text = new String(Files.readAllBytes(f.toPath), "UTF-8")
+            setSource(text)
+            setSavedText(text)
+            setCurrentFile(Some(f))
+        case FileDialog.Result.Cancelled   => ()
+        case FileDialog.Result.Failed(msg) => setLog(s"Open failed: $msg")
+      }
 
     // Print: typeset a print-quality PDF (white page, black ink, independent of the screen theme)
     // into a temp file named after the document, ready for a destination to be chosen. Returns
@@ -348,7 +368,7 @@ private val App: Component[Init] =
 
     def openPrinterPicker(): Unit =
       val ps = listPrinters()
-      if ps.isEmpty then setLog("No printers found. Add one in System Settings ▸ Printers & Scanners.")
+      if ps.isEmpty then setLog("No printers found. Add one in System Settings › Printers & Scanners.")
       else { setPrinters(ps); setShowPrint(true) }
 
     // The Print button: render, then send straight to the remembered printer, or raise the picker
@@ -494,9 +514,9 @@ private val App: Component[Init] =
       menuBar(
         menu("File")(close =>
           Seq(
-            MenuItem("Open…", () => { requestDiscard(() => openPathModal(setShowOpen)); close() }),
+            MenuItem("Open…", () => { requestDiscard(() => doOpen()); close() }),
             MenuItem("Save", () => { doSave(); close() }),
-            MenuItem("Save As…", () => { openPathModal(setShowSaveAs); close() }),
+            MenuItem("Save As…", () => { doSaveAs(); close() }),
             MenuItem("Print to…", () => { doChoosePrinter(); close() }),
           ),
         ),
@@ -535,28 +555,14 @@ private val App: Component[Init] =
           )*,
       )
 
-    // A path-prompt modal, shared in shape by Save As and Open (they differ only in title/action).
-    def pathModal(title: String, actionLabel: String, action: () => Unit, open: Boolean, close: () => Unit): VNode =
-      Dialog(open = open, onClose = close, width = 540)(
-        col(crossAxisAlignment = CrossAxisAlignment.Stretch, mainAxisSize = MainAxisSize.Min, spacing = 12)(
-          text(title, color = theme.surfaceText, weight = FontWeight.SemiBold),
-          text("File path", color = muted),
-          TextField(pathInput, setPathInput, onSubmit = () => action()),
-          row(mainAxisAlignment = MainAxisAlignment.End, spacing = 8)(
-            Button("Cancel", close),
-            Button(actionLabel, action),
-          ),
-        ),
-      )
-
     // The unsaved-changes guard, shared by window-close and Open. "Save & Continue" saves straight
-    // to the current file when there is one (no prompt) and continues; for a never-saved document
-    // it opens the Save dialog to name the file first, then continues once that save completes.
+    // to the current file when there is one (no panel) and continues; for a never-saved document it
+    // raises the save panel to name the file first, then continues once that save completes.
     def saveThenContinue(): Unit =
       setShowDiscard(false)
       currentFile match
         case Some(f) => writeTo(f); discardAction.current()
-        case None    => { pendingContinue.current = true; openPathModal(setShowSaveAs) }
+        case None    => { pendingContinue.current = true; doSaveAs() }
 
     val discardModal: VNode =
       Dialog(open = showDiscard, onClose = () => setShowDiscard(false), width = 460)(
@@ -669,8 +675,6 @@ private val App: Component[Init] =
               ),
             ),
           ),
-          pathModal("Save As", "Save", () => doSaveAs(), showSaveAs, () => { setShowSaveAs(false); pendingContinue.current = false }),
-          pathModal("Open file", "Open", () => doOpen(), showOpen, () => setShowOpen(false)),
           discardModal,
           printModal,
         ),
