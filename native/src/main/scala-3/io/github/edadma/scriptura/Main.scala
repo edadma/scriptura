@@ -2,16 +2,20 @@ package io.github.edadma.scriptura
 
 import java.io.File
 
-import scala.scalanative.unsafe.{Zone, toCString}
-import scala.scalanative.posix.stdlib.setenv
+import io.github.edadma.texish.Typesetter
 
-/** Point TEXISHHOME at the texish checkout, so texish's package resolver finds the formats that ship
-  * with the engine (`\use{document}`, `\use{logos}`, …) under `$TEXISHHOME/packages` no matter where
-  * the app was launched from. Set in the running process's environment, so the engine reads it when a
-  * document's `\use` runs. */
-private[scriptura] def setTexishHome(): Unit =
-  val texishHome = s"${System.getProperty("user.home")}/dev/texish"
-  Zone(setenv(toCString("TEXISHHOME"), toCString(texishHome), 1))
+/** Offer texish the wider bundled font set if a texish source tree is sitting where this machine keeps
+  * one. Nothing depends on it: the Latin Modern core and the standard packages are compiled into the
+  * texish artifact, so the engine renders — and `\use{document}` resolves — with no configuration at
+  * all. This only adds the families that are too large to ship inside the artifact: the complex-script
+  * faces, the CJK cuts, the alternative text families. Pointed at nothing, texish simply does without
+  * them and a document naming one gets a clear "typeface not found".
+  *
+  * Set before any typesetter is constructed — texish registers its bundled faces in the constructor. */
+private[scriptura] def offerBundledFonts(): Unit =
+  val checkout = new File(System.getProperty("user.home"), "dev/texish")
+
+  if new File(checkout, "fonts").isDirectory then Typesetter.fontsDir = checkout.getPath
 
 /** Scriptura is a GUI front-end to the texish typesetting engine. It opens a preview window: edit a
   * document's source on the left and see the typeset pages on the right. The headless renderer is the
@@ -21,5 +25,5 @@ private[scriptura] def setTexishHome(): Unit =
   * with a short sample.
   */
 @main def run(args: String*): Unit =
-  setTexishHome()
+  offerBundledFonts()
   scripturaGui(args.headOption.map(new File(_)))

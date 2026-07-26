@@ -1,7 +1,7 @@
 package io.github.edadma.scriptura
 
 import io.github.edadma.texish.Graphics2DTypesetter
-import io.github.edadma.texish.texish.{Processor, TypesetterHandler, registerTypesettingPrimitives}
+import io.github.edadma.texish.parser.{Processor, TypesetterHandler, registerTypesettingPrimitives}
 
 import java.awt.event.{ActionEvent, InputEvent, KeyEvent}
 import java.awt.image.BufferedImage

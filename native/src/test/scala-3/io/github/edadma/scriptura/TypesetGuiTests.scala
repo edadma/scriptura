@@ -9,10 +9,10 @@ import org.scalatest.matchers.should.Matchers
   */
 class TypesetGuiTests extends AnyFreeSpec with Matchers:
 
-  // The bundled fonts ship with the engine, not with this app, so the typesetter can only open them
-  // once TEXISHHOME points at the texish checkout. The app does this at startup; do it here too,
-  // before any test typesets, so no test depends on having been run after another one that set it.
-  setTexishHome()
+  // Nothing here needs a font tree — texish carries the Latin Modern core and the standard packages
+  // inside its own artifact — but the app offers the wider set when a texish checkout is at hand, so
+  // do the same before any test typesets and exercise the path the app actually takes.
+  offerBundledFonts()
 
   "typesetting a short document yields one letter page sized at the screen resolution" in {
     val (pages, _, _) = typeset("Hello world\n\n")
@@ -33,15 +33,20 @@ class TypesetGuiTests extends AnyFreeSpec with Matchers:
     }
   }
 
-  // The app sets TEXISHHOME in the running process so texish's \use resolver finds the formats that
-  // ship with the engine under $TEXISHHOME/packages. This checks the whole round-trip on Native: the
-  // programmatic setenv is visible to the engine, and \use{document} (which itself \use{logos}) loads.
-  "with TEXISHHOME set, \\use{document} resolves the shipped format" in {
-    setTexishHome()
-    val (pages, log, ok) = typeset("\\use{document}\n\\title{T}\\maketitle\nHello.\n\n")
+  // The formats that ship with the engine (\use{document}, which itself \use{logos}) are compiled into
+  // the texish artifact, so they resolve with nothing configured — no TEXISHHOME, no package folder on
+  // disk. This is the round-trip on Native, and it is what lets scriptura be installed on a machine
+  // that has no texish source tree.
+  "\\use{document} resolves the shipped format with nothing configured" in {
+    val restore = io.github.edadma.texish.Typesetter.fontsDir
 
-    withClue(s"log: $log") { ok shouldBe true }
-    pages.length should be >= 1
+    io.github.edadma.texish.Typesetter.fontsDir = ""
+    try
+      val (pages, log, ok) = typeset("\\use{document}\n\\title{T}\\maketitle\nHello.\n\n")
+
+      withClue(s"log: $log") { ok shouldBe true }
+      pages.length should be >= 1
+    finally io.github.edadma.texish.Typesetter.fontsDir = restore
   }
 
   "zoom scales the page, because it scales the resolution the engine lays out at" in {
