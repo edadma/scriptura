@@ -61,6 +61,20 @@ class TypesetGuiTests extends AnyFreeSpec with Matchers:
     pages.length shouldBe 1
   }
 
+  // Only `base` and `document` are compiled into the texish artifact; every other package — diagram, plot,
+  // book, usfm, … — lives in a packages/ folder on disk. Loading one exercises the other half of what the
+  // texish home is for, and it is a separate code path from the font search: pointing the engine at a tree
+  // used to configure the fonts and leave \use unable to find anything, which reads as a broken install.
+  // Skipped where this machine has no texish tree to offer; there is nothing to resolve and nothing to check.
+  "a package that is not compiled into the engine resolves in the preview" in {
+    assume(io.github.edadma.texish.Typesetter.home.nonEmpty, "no texish tree on this machine")
+
+    val (pages, log, ok) = typeset("\\use{document}\n\\use{diagram}\nHello.\n\n")
+
+    withClue(s"log: $log") { ok shouldBe true }
+    pages.length should be >= 1
+  }
+
   "zoom scales the page, because it scales the resolution the engine lays out at" in {
     val (base, _, _)  = typeset("Hello world\n\n")
     val (big, _, _)   = typeset("Hello world\n\n", zoom = 2.0)
