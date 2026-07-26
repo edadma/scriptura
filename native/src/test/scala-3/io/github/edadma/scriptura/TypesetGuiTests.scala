@@ -9,9 +9,9 @@ import org.scalatest.matchers.should.Matchers
   */
 class TypesetGuiTests extends AnyFreeSpec with Matchers:
 
-  // Nothing here needs a font tree — texish carries the Latin Modern core and the standard packages
-  // inside its own artifact — but the app offers the wider set when a texish checkout is at hand, so
-  // do the same before any test typesets and exercise the path the app actually takes.
+  // Nothing here needs a texish tree — the core faces and the base/document packages are inside the
+  // texish artifact — but the app points the engine at one when there is one to point at, so do the
+  // same before any test typesets and exercise the path the app actually takes.
   offerBundledFonts()
 
   "typesetting a short document yields one letter page sized at the screen resolution" in {
@@ -33,20 +33,19 @@ class TypesetGuiTests extends AnyFreeSpec with Matchers:
     }
   }
 
-  // The formats that ship with the engine (\use{document}, which itself \use{logos}) are compiled into
-  // the texish artifact, so they resolve with nothing configured — no TEXISHHOME, no package folder on
-  // disk. This is the round-trip on Native, and it is what lets scriptura be installed on a machine
-  // that has no texish source tree.
+  // The format that ships with the engine is compiled into the texish artifact, so it resolves with
+  // nothing configured — no TEXISHHOME, no texish home, no package folder on disk. This is the
+  // round-trip on Native, and it is what lets scriptura run on a machine that has no texish tree.
   "\\use{document} resolves the shipped format with nothing configured" in {
-    val restore = io.github.edadma.texish.Typesetter.fontsDir
+    val restore = io.github.edadma.texish.Typesetter.home
 
-    io.github.edadma.texish.Typesetter.fontsDir = ""
+    io.github.edadma.texish.Typesetter.home = ""
     try
       val (pages, log, ok) = typeset("\\use{document}\n\\title{T}\\maketitle\nHello.\n\n")
 
       withClue(s"log: $log") { ok shouldBe true }
       pages.length should be >= 1
-    finally io.github.edadma.texish.Typesetter.fontsDir = restore
+    finally io.github.edadma.texish.Typesetter.home = restore
   }
 
   // The families beyond the core are opt-in per typesetter, so the preview has to ask for them. If it stops
@@ -54,7 +53,7 @@ class TypesetGuiTests extends AnyFreeSpec with Matchers:
   // wrote it, at the point they try, which is exactly the kind of regression nobody notices for months.
   // Skipped where this machine has no texish font tree to offer; there is nothing to load and nothing to check.
   "the preview offers the bundled families, not only the core" in {
-    assume(io.github.edadma.texish.Typesetter.fontsDir.nonEmpty, "no texish font tree on this machine")
+    assume(io.github.edadma.texish.Typesetter.home.nonEmpty, "no texish font tree on this machine")
 
     val (pages, log, ok) = typeset("\\font{hebrew}{12}\nבְּרֵאשִׁית\n\n")
 

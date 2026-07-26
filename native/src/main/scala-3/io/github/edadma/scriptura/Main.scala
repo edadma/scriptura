@@ -2,21 +2,32 @@ package io.github.edadma.scriptura
 
 import java.io.File
 
-import io.github.edadma.texish.Typesetter
+import io.github.edadma.texish.{Install, Typesetter}
 
-/** Offer texish the wider bundled font set if a texish source tree is sitting where this machine keeps
-  * one. Nothing depends on it: the core faces and the standard packages are compiled into the texish
-  * artifact, so the engine renders — and `\use{document}` resolves — with no configuration at all. This
-  * only adds the families that are too large to ship inside the artifact: the complex-script faces, the
-  * CJK cuts, the alternative text families. Pointed at nothing, texish does without them and a document
-  * naming one is told the files were not found rather than left to guess.
+/** Point texish at the `fonts/` and `packages/` an installation ships, so a document can set Hebrew or draw a
+  * diagram without the user configuring anything.
   *
-  * Set before any typesetter is constructed — texish reads it when one is built. Asking for the families
-  * themselves is separate, and happens per typesetter (see typeset and typesetPdf in gui.scala). */
+  * Two places are tried. First the installation: `Install.configure()` locates this executable and looks for a
+  * texish tree beside it, which is how a packaged scriptura finds the texish package it depends on — a package
+  * manager links both programs into one prefix and links texish's data alongside them, so the tree is there even
+  * though it belongs to a different package. Then, failing that, a texish source tree where this machine keeps
+  * one, which is the case when scriptura is being run from a build.
+  *
+  * Nothing depends on either succeeding: the core faces and the `base` and `document` packages are compiled into
+  * the texish artifact, so the preview renders an ordinary document with no tree at all. What a tree adds is the
+  * wider font families and the packages beyond those two — and where there is none, a document naming one is told
+  * which file was missing rather than left to guess.
+  *
+  * Set before any typesetter is constructed — texish reads it when one is built. Asking for the wider font
+  * families is separate and happens per typesetter (see typeset and typesetPdf in gui.scala).
+  */
 private[scriptura] def offerBundledFonts(): Unit =
-  val checkout = new File(System.getProperty("user.home"), "dev/texish")
+  Install.configure()
 
-  if new File(checkout, "fonts").isDirectory then Typesetter.fontsDir = checkout.getPath
+  if Typesetter.home.isEmpty then
+    val checkout = new File(System.getProperty("user.home"), "dev/texish")
+
+    if new File(checkout, "fonts").isDirectory then Typesetter.home = checkout.getPath
 
 /** Scriptura is a GUI front-end to the texish typesetting engine. It opens a preview window: edit a
   * document's source on the left and see the typeset pages on the right. The headless renderer is the
